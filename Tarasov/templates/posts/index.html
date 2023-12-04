@@ -1,0 +1,17 @@
+<html>
+    <h1>Главная страница</h1>
+    <h2>Вы вошли под: {{ user }}</h2>
+    <table>
+        <tr>
+            <td>
+                <a href={% url 'users:signup' %}>Регистрация</a>
+            </td>
+            <td>
+                <a href={% url 'users:login' %}>Вход</a>
+            </td>
+            <td>
+                <a class="nav-link {% if view_name  == 'users:logout' %}active{% endif %}" href="{% url 'users:logout' %}">Выйти</a>
+            </td>
+        </tr>
+    </table>
+</html>
