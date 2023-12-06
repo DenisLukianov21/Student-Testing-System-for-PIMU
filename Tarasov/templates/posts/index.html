@@ -13,5 +13,8 @@
                 <a class="nav-link {% if view_name  == 'users:logout' %}active{% endif %}" href="{% url 'users:logout' %}">Выйти</a>
             </td>
         </tr>
+        <p>
+            <a href={% url 'posts:tests' %}>Доступны следующие тесты</a>
+        </p>
     </table>
 </html>
