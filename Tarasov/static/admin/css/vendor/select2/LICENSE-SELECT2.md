@@ -1,0 +1,1 @@
+/home/denis/DEV/Tarasov/env/lib/python3.12/site-packages/django/contrib/admin/static/admin/css/vendor/select2/LICENSE-SELECT2.md

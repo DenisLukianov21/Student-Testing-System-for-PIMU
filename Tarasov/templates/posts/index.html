@@ -1,20 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
 <html>
-    <h1>Главная страница</h1>
-    <h2>Вы вошли под: {{ user }}</h2>
-    <table>
-        <tr>
-            <td>
-                <a href={% url 'users:signup' %}>Регистрация</a>
-            </td>
-            <td>
-                <a href={% url 'users:login' %}>Вход</a>
-            </td>
-            <td>
-                <a class="nav-link {% if view_name  == 'users:logout' %}active{% endif %}" href="{% url 'users:logout' %}">Выйти</a>
-            </td>
-        </tr>
-        <p>
-            <a href={% url 'posts:tests' %}>Доступны следующие тесты</a>
-        </p>
-    </table>
+	<head>
+		<meta charset="utf-8">
+		<!-- name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"-->
+		<title>Система электронного обучения</title>
+		<link rel="stylesheet" href="{% static 'style.css' %}">
+	    <link rel="icon" href="{% static 'image/favicon.ico' %}">
+	</head>
+	<body>
+		<img class="general-img" src="{% static 'image/skeleton.png' %}">
+		<ul style="left:0;">
+			<li class="left-sections">
+				<div class="left-frames">
+					<a href="https://pimunn.ru/university/priority-2030/"><img class="content-logo" src="{% static 'image/logo.svg' %}"></a>
+				</div>
+				<hr style="width: calc(225 / 1366 * 100vw); left: calc(100% - (100% - (400 / 1366 * 100vw)) / 2);">
+			</li>
+			<li class="left-sections">
+				<div class="left-frames">
+					<p><a class="content" href={% url 'posts:course' %} style="color: #D35150;">Мои курсы</a></p>
+				</div>
+				<hr style="width: calc(240 / 1366 * 100vw); left: calc(100% - (100% - (400 / 1366 * 100vw)) / 2);">
+			</li>
+			<li class="left-sections">
+				<div class="left-frames">
+					<p><a class="content" href={% url 'users:about' %} style="color: #91474C;">Моя страница</a></p>
+				</div>
+				<hr style="width: calc(190 / 1366 * 100vw); left: calc(100% - (100% - (400 / 1366 * 100vw)) / 2);">
+			</li>
+			<li class="left-sections">
+				<div class="left-frames">
+					<p><a class="content" href="#" style="color: #D35150;">Статистика</a></p>
+				</div>
+				<hr style="width: calc(205 / 1366 * 100vw); left: calc(100% - (100% - (400 / 1366 * 100vw)) / 2);">
+			</li>
+			<li class="left-sections">
+				<div class="left-frames">
+					<p><a class="content" href="#" style="color: #91474C;">Выход</a></p>
+				</div>
+				<hr style="width: calc(210 / 1366 * 100vw); left: calc(100% - (100% - (400 / 1366 * 100vw)) / 2);">
+			</li>
+		</ul>
+		<ul style="right:0;">
+			<li class="right-sections" style="margin-top: calc((20vh - (95 / 768 * 100vh)) / 2);">
+				<div class="right-frames">
+					<a href="https://pimunn.ru/"><img class="content-logo" src="{% static 'image/PIMU_logo.svg' %}"></a>
+				</div>
+				<hr style="width: calc(300 / 1366 * 100vw); right: calc(100% - (100% - (278 / 1366 * 100vw)) / 2);">
+			</li>
+			<li class="right-sections">
+				<div class="right-frames" style="height: calc(95 / 768 * 100vh);">
+					<p><a class="content" href="#" style="color: black;">Справка</a></p>
+				</div>
+				<hr style="width: calc(290 / 1366 * 100vw); right: calc(100% - (100% - (278 / 1366 * 100vw)) / 2);">
+			</li>
+			<li class="right-sections">
+				<div class="right-frames" style="margin-bottom: calc((20vh - (95 / 768 * 100vh)) / 2);">
+					<p class="text base">Ранее Нижегородская государственная медицинская академия (НижГМА). Основан в 1920 году.</p><br><br>
+					<p class="text abbrev">© 2009-2023 ПИМУ</p>
+				</div>
+				<hr style="width: calc(257 / 1366 * 100vw); right: calc(100% - (100% - (278 / 1366 * 100vw)) / 2);">
+			</li class="right-sections">
+		</ul>
+		<!--<div class="left-sections">
+			<div class="left-frames">
+				<img class="content" src="image/logo.svg">
+			</div>
+			<hr style="">
+		</div>
+		<div class="right-sections">
+			<div class="right-frames">
+				<img class="content" src="image/PIMU_logo.svg">
+			</div>
+			<hr style="">
+		</div>
+		<div class="left-sections">
+			<div class="left-frames">
+				<img class="content" src="image/logo.svg">
+			</div>
+			<hr style="">
+		</div>
+		<div class="left-sections">
+			<div class="left-frames">
+				<img class="content" src="image/logo.svg">
+			</div>
+			<hr style="">
+		</div>
+		<div class="right-sections">
+			<div class="right-frames">
+				<img class="content" src="image/PIMU_logo.svg">
+			</div>
+			<hr style="">
+		</div>
+		<div class="left-sections">
+			<div class="left-frames">
+				<img class="content" src="image/logo.svg">
+			</div>
+			<hr style="">
+		</div>
+		<div class="right-sections">
+			<div class="right-frames">
+				<img class="content" src="image/PIMU_logo.svg">
+			</div>
+			<hr style="">
+		</div>
+		<div class="left-sections">
+			<div class="left-frames">
+				<img class="content" src="image/logo.svg">
+			</div>
+			<hr style="">
+		</div>-->
+		<!--<hr style="position:absolute; top:50%; left:50%; border-color:red; border-width:2px;">
+
+		<div style="display:flex; justify-content:center; align-items:center; height:100vh; width:100vw;">
+			<img class="general-img" src="image/skeleton.png" alt="general-img" style="max-width:100%; max-height:100%; position: relative;" >
+	  			<hr style="position:absolute; top:50%; left:100%; border-color:red; border-width:2px;">
+		</div>-->
+
+	</body>
 </html>

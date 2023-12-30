@@ -1,12 +1,10 @@
 from django.db import models
-from django.contrib.auth import get_user_model
-
-
-User = get_user_model()
+from user.models import Cource
 
 
 class Test(models.Model):
     id = models.AutoField(primary_key=True)
+    test_in_cource = models.ForeignKey(Cource, on_delete=models.CASCADE)
     test_name = models.TextField()
     question = models.ForeignKey(
         'Questions',
@@ -16,11 +14,6 @@ class Test(models.Model):
     answers = models.ManyToManyField(
         'Answers',
         related_name='answers'
-    )
-    author = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='tests'
     )
 
     def __str__(self):

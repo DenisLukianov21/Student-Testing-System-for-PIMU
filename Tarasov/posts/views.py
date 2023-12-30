@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from .forms import CheckBoxForm
+
+from user.models import UserGroup, Cource
 from .models import Test
 
 
@@ -16,6 +18,19 @@ def check_test(request, tests):
 
 def index(request):
     return render(request, 'posts/index.html')
+
+
+def courses(request):
+    user = request.user
+    if user.is_authenticated:
+        user_group = UserGroup.objects.filter(user=user)[0].group
+        page_obj = Cource.objects.filter(group_in_course=user_group)
+        context = {
+            'page_obj': page_obj,
+        }
+        return render(request, 'posts/courses.html', context)
+    else:
+        return render(request, 'posts/courses.html')
 
 
 def tests(request):

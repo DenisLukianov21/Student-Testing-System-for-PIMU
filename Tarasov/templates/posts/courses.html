@@ -1,0 +1,12 @@
+<html>
+    {% if user.is_authenticated %}
+        {% for course in page_obj %}
+        <h3> {{ course.name_cource }} </h3>
+        {% endfor %}
+    {% else %}
+        <p>Please log in.</p>
+    {% endif %}
+</html>
+
+
+    

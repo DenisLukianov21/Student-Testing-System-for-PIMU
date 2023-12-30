@@ -6,9 +6,8 @@ class TestAdmin(admin.ModelAdmin):
     list_display = (
         'test_name',
         'question',
-        'author',
     )
-    list_editable = ('question', 'author',)
+    list_editable = ('question',)
     empty_value_display = '-пусто-'
 
 
