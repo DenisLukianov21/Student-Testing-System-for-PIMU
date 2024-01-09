@@ -25,7 +25,11 @@
 			</li>
 			<li class="left-sections">
 				<div class="left-frames">
-					<p><a class="content" href={% url 'users:about' %} style="color: #91474C;">Моя страница</a></p>
+					{% if user.is_authenticated %}
+						<p><a class="content" href={% url 'users:about' %} style="color: #91474C;">Моя страница</a></p>
+					{% else %}
+						<p><a class="content" href={% url 'users:login' %} style="color: #91474C;">Войти/Зарегистрироваться</a></p>
+					{% endif %}
 				</div>
 				<hr style="width: calc(190 / 1366 * 100vw); left: calc(100% - (100% - (400 / 1366 * 100vw)) / 2);">
 			</li>
@@ -37,7 +41,7 @@
 			</li>
 			<li class="left-sections">
 				<div class="left-frames">
-					<p><a class="content" href="#" style="color: #91474C;">Выход</a></p>
+					<p><a class="content" href={% url 'users:logout' %} style="color: #91474C;">Выход</a></p>
 				</div>
 				<hr style="width: calc(210 / 1366 * 100vw); left: calc(100% - (100% - (400 / 1366 * 100vw)) / 2);">
 			</li>

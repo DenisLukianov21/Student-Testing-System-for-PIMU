@@ -1,34 +1,18 @@
 from django.contrib import admin
-from .models import Test, Questions, Answers
+from .models import Test, Question, Answer, Choice, Result
 
 
-class TestAdmin(admin.ModelAdmin):
-    list_display = (
-        'test_name',
-        'question',
-    )
-    list_editable = ('question',)
-    empty_value_display = '-пусто-'
+class AnswerInline(admin.TabularInline):
+    model = Answer
+    extra = 3
 
 
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = (
-        'id',
-        'text',
-    )
-    list_editable = ('text',)
-    empty_value_display = '-пусто-'
+    inlines = [AnswerInline]
 
 
-class AnswersAdmin(admin.ModelAdmin):
-    list_display = (
-        'id',
-        'text',
-    )
-    list_editable = ('text',)
-    empty_value_display = '-пусто-'
-
-
-admin.site.register(Test, TestAdmin)
-admin.site.register(Questions, QuestionAdmin)
-admin.site.register(Answers, AnswersAdmin)
+admin.site.register(Test)
+admin.site.register(Answer)
+admin.site.register(Question, QuestionAdmin)
+admin.site.register(Choice)
+admin.site.register(Result)

@@ -1,18 +1,9 @@
-
 <html>
-	<form method="POST">
-		{% csrf_token %}
-		{% for test in page_obj %}
-		<h1> {{ test.test_name }} </h1>
-		<tr>
-			<td> {{ form }} </td>
-		</tr>
-		{% endfor %}
-		<input type="submit" value="Submit">
-		{% if check == True %}
-			<p> Вы ответили правильно </p>
-		{% else %}
-			<p> Вы ответили НЕ правильно </p>
-		{% endif %}
-	</form>
+    {% if user.is_authenticated %}
+        {% for tests in page_obj %}
+        <h3> <a href={% url 'posts:display_quiz' tests.id %}> {{ tests.name }} </a> </h3>
+        {% endfor %}
+    {% else %}
+        <p>Please log in.</p>
+    {% endif %}
 </html>

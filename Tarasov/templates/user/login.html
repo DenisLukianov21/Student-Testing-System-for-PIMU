@@ -14,8 +14,8 @@
           <td>{{ form.password }}</td>
         </tr>
         </table>
-        
         <input type="submit" value="login" />
+        <a href={% url 'users:signup' %}> Новый пользователь </a>
         <input type="hidden" name="next" value="{% url 'posts:index' %}" />
     </form>
 </html>
