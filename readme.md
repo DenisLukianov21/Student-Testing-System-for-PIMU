@@ -13,19 +13,21 @@ python3 -m venv env && source env/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
--Выполните миграции
+- Выполните миграции
 ```bash
 python manage.py makemigrations
 python manage.py migrate
 ```
--Создайте админа
+- Создайте админа
 ```bash
 python manage.py createsuperuser
 ```
--Запустите приложение
+- Запустите приложение
 ```bash
 python manage.py runserver
 ```
+# Схема бд
+![database](/bd_image/bd_image.png)
 # Автор
 Денис Лукьянов, Петр Единорогов
 2024 г.
