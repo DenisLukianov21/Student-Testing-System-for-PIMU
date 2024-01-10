@@ -1,0 +1,8 @@
+<html>
+    <h1> Это страница стасистики </h1>
+    <p> Выберите необходимую группу
+        {% for obj in page_obj %}
+        <ul><a href={% url 'posts:static_group' obj %}> {{ obj }} </ul>
+        {% endfor %}
+    </p>
+</html>

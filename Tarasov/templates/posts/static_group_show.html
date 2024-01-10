@@ -1,0 +1,13 @@
+<html>
+    <h1>Здесь будет статистика</h1>
+    <p> Кто Состоит в группе:
+    {% for obj in page_obj%}
+     <ul> {{ obj.user }} </ul>
+    {% endfor %}
+    </p>
+    <p> Какие тесты есть в группе:
+    {% for obj in test_obj %}
+     <ul> {{obj.name}}  <a href={% url 'posts:static' obj.id %}> Смотреть статистику по тесту </a></ul>
+    {% endfor %}
+    </p>
+<htmL>

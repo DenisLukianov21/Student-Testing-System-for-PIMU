@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from user.models import Cource, UserGroup
+from user.models import Cource, UserGroup, Group
 from django.db.models import F
 
 from .models import Test, Question, Answer, Choice, Result
@@ -11,6 +11,7 @@ def index(request):
     return render(request, 'posts/index.html')
 
 
+@login_required
 def courses(request):
     user = request.user
     if user.is_authenticated:
@@ -24,6 +25,7 @@ def courses(request):
         return render(request, 'posts/courses.html')
 
 
+@login_required
 def test_by_slug(request, slug):
     cource = Cource.objects.filter(slug=slug)
     tests = Test.objects.filter(test_in_cource=cource[0])
@@ -63,10 +65,9 @@ def grade_question(request, quiz_id, question_id):
     can_answer = question.user_can_answer(request.user)
     try:
         if not can_answer:
-            return render(request, 
-                'posts/partial.html',  
-                {'question': question,
-                'error_message': 'Вы уже отвечали на этот вопрос.'})
+            return render(request, 'posts/partial.html',
+                          {'question': question,
+                           'error_message': 'Вы уже отвечали на этот вопрос.'})
 
         if question.qtype == 'single':
             correct_answer = question.get_answers()
@@ -95,14 +96,15 @@ def grade_question(request, quiz_id, question_id):
                                     question=question, answer=user_answer)
                     choice.save()
                 is_correct = correct_answer == user_answers
-                result, created = Result.objects.get_or_create(user=request.user,
-                                                               quiz=quiz)
+                result, created = Result.objects.get_or_create(
+                    user=request.user,
+                    quiz=quiz)
                 if is_correct is True:
                     result.correct = F('correct') + 1
                 else:
                     result.wrong = F('wrong') + 1
                 result.save()
-    except:
+    except ValueError:
         return render(request, 'posts/partial.html', {'question': question})
     return render(request, 'posts/partial.html',
                   {'is_correct': is_correct,
@@ -115,14 +117,54 @@ def quiz_results(request, quiz_id):
     profile = request.user
     quiz = get_object_or_404(Test, pk=quiz_id)
     questions = quiz.question_set.all()
-    results = Result.objects.filter(user=request.user, 
+    results = Result.objects.filter(user=request.user,
                                     quiz=quiz).values()
     correct = [i['correct'] for i in results][0]
     wrong = [i['wrong'] for i in results][0]
     context = {'quiz': quiz,
                'profile': profile,
-               'correct': correct, 
-               'wrong': wrong, 
-               'number': len(questions), 
+               'correct': correct,
+               'wrong': wrong,
+               'number': len(questions),
                'skipped': len(questions) - (correct + wrong)}
     return render(request, 'posts/results.html', context)
+
+
+@login_required
+def show_group(request):
+    group = Group.objects.all()
+    context = {
+        'page_obj': group
+    }
+    return render(request, 'posts/static_group.html', context)
+
+
+@login_required
+def show_static_group(request, name_group):
+    group = Group.objects.get(name_group=name_group)
+    user_group = UserGroup.objects.filter(group=group)
+    cource = Cource.objects.filter(group_in_course=group)
+    tests = Test.objects.filter(test_in_cource=cource[0])
+    context = {
+        'page_obj': user_group,
+        'test_obj': tests,
+    }
+    return render(request, 'posts/static_group_show.html', context)
+
+
+@login_required
+def show_static(request, quiz_id):
+    test = get_object_or_404(Test, pk=quiz_id)
+    result = Result.objects.filter(quiz=test)
+    num_student = len(result)
+    num_question = len(Question.objects.filter(test=test))
+    correct = 0
+    for i in result:
+        correct += i.correct
+    procentage = int((correct / (num_question*num_student) * 100))
+    context = {
+        'test': test,
+        'num': quiz_id,
+        'procentage': procentage,
+    }
+    return render(request, 'posts/static.html', context)
