@@ -17,8 +17,10 @@ def courses(request):
     if user.is_authenticated:
         user_group = UserGroup.objects.filter(user=user)[0].group
         page_obj = Cource.objects.filter(group_in_course=user_group)
+        middle_len_cource = round(len(page_obj)/2)
         context = {
             'page_obj': page_obj,
+            'middle_len_cource': middle_len_cource
         }
         return render(request, 'posts/courses.html', context)
     else:

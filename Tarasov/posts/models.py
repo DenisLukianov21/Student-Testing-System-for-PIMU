@@ -25,6 +25,7 @@ class Question(models.Model):
                              default=qtype.single)
     test = models.ForeignKey(Test, on_delete=models.CASCADE)
     eplanation = models.CharField(max_length=550)
+    image = models.ImageField(blank=True)
 
     def get_answers(self):
         if self.qtype == 'single':

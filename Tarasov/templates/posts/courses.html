@@ -1,12 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
 <html>
-    {% if user.is_authenticated %}
-        {% for course in page_obj %}
-        <h3> <a href={% url 'posts:slug' course.slug %}> {{ course.name_cource }} </a> </h3>
-        {% endfor %}
-    {% else %}
-        <p>Please log in.</p>
-    {% endif %}
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Мои курсы</title>
+		<link rel="stylesheet" href="{% static 'css/courses_style.css' %}">
+	    <link rel="icon" href="{% static 'image/favicon.ico' %}">
+	</head>
+	<body>
+		<img class="general-img" src="{% static 'image/spine.png' %}">
+		{% if user.is_authenticated %}
+			{% with middle_len_courses=middle_len_cource %}
+			{% for course in page_obj %}
+				{% if forloop.counter <= middle_len_courses %}
+					{% if forloop.counter == 1 %}
+						<ul style="left: 0;">
+					{% endif %}
+						<li class="left-sections" style="height: calc(100vh / {% middle_len_courses %});">
+							<div class="left-frames">
+								<a href={% url 'posts:slug' course.slug %}><p class="content">{{ course.name_cource }}</p></a>
+							</div>
+						</li>
+						<hr class="left-lines">
+					{% if forloop.counter == middle_len_courses %}
+						</ul>
+					{% endif %}
+				{% else %}
+					{% if forloop.counter == middle_len_courses|add:1 %}
+						<ul style="right: 0;">
+					{% endif %}
+						<li class="right-sections" style="height: calc(100vh / {% page_obj|length - middle_len_courses %});">
+							<div class="right-frames">
+								<a href={% url 'posts:slug' course.slug %}><p class="content">{{ course.name_cource }}</p></a>
+							</div>
+						</li>
+						<hr class="right-lines">
+					{% if forloop.counter == page_obj|length %}
+						</ul>
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+			{% endwith %}
+		{% else %}
+	        <p>Please log in.</p>
+	    {% endif %}
+		<div class="central-box">
+			<p>Тут что-то написано</p>
+		</div>
+	</body>
 </html>
-
-
     
