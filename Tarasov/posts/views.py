@@ -1,36 +1,39 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from user.models import Cource, UserGroup, Group
+from user.models import Course, UserGroup, Group
 from django.db.models import F
 
 from .models import Test, Question, Answer, Choice, Result
 
 
 def index(request):
+    """ Показывает главную страницу. """
     return render(request, 'posts/index.html')
 
 
 @login_required
 def courses(request):
-    user = request.user
-    if user.is_authenticated:
-        user_group = UserGroup.objects.filter(user=user)[0].group
-        page_obj = Cource.objects.filter(group_in_course=user_group)
-        middle_len_cource = round(len(page_obj)/2)
-        context = {
-            'page_obj': page_obj,
-            'middle_len_cource': middle_len_cource
-        }
-        return render(request, 'posts/courses.html', context)
-    else:
-        return render(request, 'posts/courses.html')
+    """ Показывает все курсы доступные пользователю. """
+    user_group = UserGroup.objects.filter(user=request.user)[0].group
+    page_obj = Course.objects.filter(group_in_course=user_group)
+    middle_len_course = round(len(page_obj)/2)
+    context = {
+        'page_obj': page_obj,
+        'middle_len_cource': middle_len_course
+    }
+    return render(request, 'posts/courses.html', context)
 
 
 @login_required
 def test_by_slug(request, slug):
-    cource = Cource.objects.filter(slug=slug)
-    tests = Test.objects.filter(test_in_cource=cource[0])
+    """
+    Показывает все тесты в курсе доступные пользователю.
+
+    ТODO: сделать пермишен
+    """
+    cource = Course.objects.filter(slug=slug)
+    tests = Test.objects.filter(test_in_course=cource[0])
     context = {
         'page_obj': tests,
     }
@@ -39,6 +42,11 @@ def test_by_slug(request, slug):
 
 @login_required
 def display_quiz(request, quiz_id):
+    """
+    Отображение вопроса.
+
+    ТODO: сделать пермишен
+    """
     quiz = get_object_or_404(Test, pk=quiz_id)
     question = quiz.question_set.first()
     return redirect(reverse('post:display_question', kwargs={
@@ -47,6 +55,10 @@ def display_quiz(request, quiz_id):
 
 @login_required
 def display_question(request, quiz_id, question_id):
+    """
+    Вспомогательная функция отображение вопроса
+    и переходу к следующему вопросу.
+    """
     quiz = get_object_or_404(Test, pk=quiz_id)
     questions = quiz.question_set.all()
     current_question, next_question = None, None
@@ -62,6 +74,10 @@ def display_question(request, quiz_id, question_id):
 
 @login_required
 def grade_question(request, quiz_id, question_id):
+    """
+    Вспомогательная функция перехода к следующему вопросу
+    и проверки ответов.
+    """
     question = get_object_or_404(Question, pk=question_id)
     quiz = get_object_or_404(Test, pk=quiz_id)
     can_answer = question.user_can_answer(request.user)
@@ -71,7 +87,7 @@ def grade_question(request, quiz_id, question_id):
                           {'question': question,
                            'error_message': 'Вы уже отвечали на этот вопрос.'})
 
-        if question.qtype == 'single':
+        if question.qtype == 'single':  # Тип теста где только один ответ
             correct_answer = question.get_answers()
             user_answer = question.answer_set.get(pk=request.POST['answer'])
             choice = Choice(user=request.user, question=question,
@@ -86,7 +102,7 @@ def grade_question(request, quiz_id, question_id):
                 result.wrong = F('wrong') + 1
             result.save()
 
-        elif question.qtype == 'multiple':
+        elif question.qtype == 'multiple':  # Тип теста где множество ответов
             correct_answer = question.get_answers()
             answers_ids = request.POST.getlist('answer')
             user_answers = []
@@ -116,6 +132,11 @@ def grade_question(request, quiz_id, question_id):
 
 @login_required
 def quiz_results(request, quiz_id):
+    """
+    Отображение результата теста.
+
+    ТODO: сделать пермишен
+    """
     profile = request.user
     quiz = get_object_or_404(Test, pk=quiz_id)
     questions = quiz.question_set.all()
@@ -134,6 +155,11 @@ def quiz_results(request, quiz_id):
 
 @login_required
 def show_group(request):
+    """
+    Отображение групп.
+
+    ТODO: сделать пермишен
+    """
     group = Group.objects.all()
     context = {
         'page_obj': group
@@ -143,10 +169,15 @@ def show_group(request):
 
 @login_required
 def show_static_group(request, name_group):
+    """
+    Отображение участников групп.
+
+    ТODO: сделать пермишен
+    """
     group = Group.objects.get(name_group=name_group)
     user_group = UserGroup.objects.filter(group=group)
-    cource = Cource.objects.filter(group_in_course=group)
-    tests = Test.objects.filter(test_in_cource=cource[0])
+    course = Course.objects.filter(group_in_course=group)
+    tests = Test.objects.filter(test_in_course=course[0])
     context = {
         'page_obj': user_group,
         'test_obj': tests,
@@ -156,6 +187,11 @@ def show_static_group(request, name_group):
 
 @login_required
 def show_static(request, quiz_id):
+    """
+    Отображение статистики группы по тесту.
+
+    ТODO: сделать пермишен
+    """
     test = get_object_or_404(Test, pk=quiz_id)
     result = Result.objects.filter(quiz=test)
     num_student = len(result)

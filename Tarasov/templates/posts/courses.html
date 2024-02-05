@@ -8,7 +8,7 @@
 		<link rel="stylesheet" href="{% static 'css/courses_style.css' %}">
 	    <link rel="icon" href="{% static 'image/favicon.ico' %}">
 	</head>
-	<body>
+	<body onload="centering()">
 		<img class="general-img" src="{% static 'image/spine.png' %}">
 		{% if user.is_authenticated %}
 			{% with middle_len_courses=middle_len_cource %}
@@ -17,9 +17,9 @@
 					{% if forloop.counter == 1 %}
 						<ul style="left: 0;">
 					{% endif %}
-						<li class="left-sections" style="height: calc(100vh / {% middle_len_courses %});">
+						<li class="left-sections">
 							<div class="left-frames">
-								<a href={% url 'posts:slug' course.slug %}><p class="content">{{ course.name_cource }}</p></a>
+								<a href={% url 'posts:slug' course.slug %}><p class="content">{{ course.name_course }}</p></a>
 							</div>
 						</li>
 						<hr class="left-lines">
@@ -30,9 +30,9 @@
 					{% if forloop.counter == middle_len_courses|add:1 %}
 						<ul style="right: 0;">
 					{% endif %}
-						<li class="right-sections" style="height: calc(100vh / {% page_obj|length - middle_len_courses %});">
+						<li class="right-sections">
 							<div class="right-frames">
-								<a href={% url 'posts:slug' course.slug %}><p class="content">{{ course.name_cource }}</p></a>
+								<a href={% url 'posts:slug' course.slug %}><p class="content">{{ course.name_course }}</p></a>
 							</div>
 						</li>
 						<hr class="right-lines">
