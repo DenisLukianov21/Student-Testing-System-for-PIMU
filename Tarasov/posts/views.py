@@ -1,8 +1,9 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from user.models import Course, UserGroup, Group
 from django.db.models import F
+from django.core.exceptions import PermissionDenied
 
 from .models import Test, Question, Answer, Choice, Result
 
@@ -29,11 +30,13 @@ def courses(request):
 def test_by_slug(request, slug):
     """
     Показывает все тесты в курсе доступные пользователю.
-
-    ТODO: сделать пермишен
     """
-    cource = Course.objects.filter(slug=slug)
-    tests = Test.objects.filter(test_in_course=cource[0])
+    group = UserGroup.objects.get(user=request.user).group
+    course = Course.objects.filter(slug=slug)
+    # Проверка доступа юзера
+    if group not in course[0].group_in_course.all():
+        raise PermissionDenied()
+    tests = Test.objects.filter(test_in_course=course[0])
     context = {
         'page_obj': tests,
     }
@@ -44,8 +47,6 @@ def test_by_slug(request, slug):
 def display_quiz(request, quiz_id):
     """
     Отображение вопроса.
-
-    ТODO: сделать пермишен
     """
     quiz = get_object_or_404(Test, pk=quiz_id)
     question = quiz.question_set.first()
@@ -60,6 +61,10 @@ def display_question(request, quiz_id, question_id):
     и переходу к следующему вопросу.
     """
     quiz = get_object_or_404(Test, pk=quiz_id)
+    user_group = UserGroup.objects.get(user=request.user).group
+    quiz_group = quiz.test_in_course.group_in_course.all()
+    if user_group not in quiz_group:
+        raise PermissionDenied()
     questions = quiz.question_set.all()
     current_question, next_question = None, None
     for ind, question in enumerate(questions):
@@ -154,11 +159,10 @@ def quiz_results(request, quiz_id):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_staff)
 def show_group(request):
     """
     Отображение групп.
-
-    ТODO: сделать пермишен
     """
     group = Group.objects.all()
     context = {
@@ -168,11 +172,10 @@ def show_group(request):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_staff)
 def show_static_group(request, name_group):
     """
     Отображение участников групп.
-
-    ТODO: сделать пермишен
     """
     group = Group.objects.get(name_group=name_group)
     user_group = UserGroup.objects.filter(group=group)
@@ -186,11 +189,10 @@ def show_static_group(request, name_group):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_staff)
 def show_static(request, quiz_id):
     """
-    Отображение статистики группы по тесту.
-
-    ТODO: сделать пермишен
+    Отображение общей статистики группы по тесту.
     """
     test = get_object_or_404(Test, pk=quiz_id)
     result = Result.objects.filter(quiz=test)
