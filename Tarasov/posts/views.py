@@ -1,13 +1,14 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.exceptions import PermissionDenied
+from django.db.models import F
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from user.models import Course, UserGroup, Group
-from django.db.models import F
-from django.core.exceptions import PermissionDenied
+from user.models import Course, Group, UserGroup
 
-from .models import Test, Question, Answer, Choice, Result
+from .models import Answer, Choice, Question, Result, Test
 
 
+@login_required
 def index(request):
     """ Показывает главную страницу. """
     return render(request, 'posts/index.html')
@@ -63,6 +64,7 @@ def display_question(request, quiz_id, question_id):
     quiz = get_object_or_404(Test, pk=quiz_id)
     user_group = UserGroup.objects.get(user=request.user).group
     quiz_group = quiz.test_in_course.group_in_course.all()
+    # Проверка доступа юзера
     if user_group not in quiz_group:
         raise PermissionDenied()
     questions = quiz.question_set.all()
@@ -139,8 +141,6 @@ def grade_question(request, quiz_id, question_id):
 def quiz_results(request, quiz_id):
     """
     Отображение результата теста.
-
-    ТODO: сделать пермишен
     """
     profile = request.user
     quiz = get_object_or_404(Test, pk=quiz_id)
@@ -159,7 +159,6 @@ def quiz_results(request, quiz_id):
 
 
 @login_required
-@user_passes_test(lambda u: u.is_staff)
 def show_group(request):
     """
     Отображение групп.
@@ -172,7 +171,6 @@ def show_group(request):
 
 
 @login_required
-@user_passes_test(lambda u: u.is_staff)
 def show_static_group(request, name_group):
     """
     Отображение участников групп.
@@ -189,22 +187,32 @@ def show_static_group(request, name_group):
 
 
 @login_required
-@user_passes_test(lambda u: u.is_staff)
 def show_static(request, quiz_id):
     """
     Отображение общей статистики группы по тесту.
     """
-    test = get_object_or_404(Test, pk=quiz_id)
-    result = Result.objects.filter(quiz=test)
-    num_student = len(result)
-    num_question = len(Question.objects.filter(test=test))
-    correct = 0
-    for i in result:
-        correct += i.correct
-    procentage = int((correct / (num_question*num_student) * 100))
-    context = {
-        'test': test,
-        'num': quiz_id,
-        'procentage': procentage,
-    }
+    if request.user.is_staff:
+        test = get_object_or_404(Test, pk=quiz_id)
+        questions = len(Question.objects.filter(test=test))
+        result = Result.objects.filter(quiz=test)
+        page_obj = []
+        for user in result:
+            procentage = (questions/user.correct) * 100
+            user_and_procentage = [user.user, procentage]
+            page_obj.append(user_and_procentage)
+        context = {
+            'page_obj': page_obj,
+            'test': test,
+        }
+    else:
+        result = Result.objects.filter(user=request.user)
+        page_obj = []
+        for obj in result:
+            name_course_and_tests = [obj.quiz.test_in_course, obj.quiz]
+            page_obj.append(name_course_and_tests)
+        print(page_obj)
+        context = {
+            'U_page_obj': page_obj
+        }
+
     return render(request, 'posts/static.html', context)

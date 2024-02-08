@@ -32,7 +32,6 @@
                                                 {% if question.image %}
                                                     <img src={{ question.image.url }}>
                                                 {% else %}
-                                                    <p> Картинки нет </p>
                                                 {% endif %}
                                                 <div class="text-center">Только один ответ здесь - правильный.</div>
                                                 {% for answer in question.answer_set.all %}

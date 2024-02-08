@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Авторизация в системе электронного обучения</title>
+		<link rel="stylesheet" href="{% static 'css/new_auth_style.css' %}">
+		<link rel="icon" href="{% static 'image/favicon.ico' %}">
+	</head>
+	<body>
+		<ul class="container">
+			<li class="main-area">
+				<div class="title">
+					<h1 class="title">СИСТЕМА ЭЛЕКТРОННОГО ОБУЧЕНИЯ</h1>
+					<p class="title">ПРИВОЛЖСКОГО ИССЛЕДОВАТЕЛЬСКОГО МЕДИЦИНСКОГО УНИВЕРСИТЕТА</p>
+				</div>
+				<div class="text-with-logo">
+					<p class="text-with-logo">СОЗДАНО ПО ПРОГРАММЕ:</p>
+					<a href="#" class="text-with-logo"><img src="{% static 'image/logo.svg' %}"></a>
+				</div>
+			</li>
+			<li>
+				<ul class="subcontainer">
+					<li class="sub-area logo-area"></li>
+					<li class="sub-area active-area">
+						<div class="active-area">
+							<div class="input-area">
+								<form method="post" action="{% url 'users:login' %}">
+								{% csrf_token %}
+								<input autocomplete="on" maxlength="10" type="text" placeholder="ВАШ ЛОГИН">
+								{{ form.username }}
+								<input autocomplete="on" type="password" placeholder="ВАШ ПАРОЛЬ">
+								{{ form.password }}
+							</div>
+						</div>
+						<button>></button>
+					</form> 
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</body>
+</html>

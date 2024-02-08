@@ -1,0 +1,150 @@
+body{
+	margin: 0;
+	padding: 0;	
+	background-image: url("../image/PIMU_background.png");
+}
+
+.container{
+	display: block;
+	width: calc(446 / 989 * 100vw);
+	height: calc(464 / 581 * 100vh);
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+ul{
+	margin: 0;
+	padding: 0;
+}
+
+li{
+	list-style-type: none;
+	text-align: center;
+	border-radius: calc(10 / 581 * 100vh);
+	position: relative;
+}
+
+.main-area{
+	width: 100%;
+	height: calc(227 / 581 * 100vh);
+	margin-bottom: calc(5 / 581 * 100vh);
+	background-color: rgb(235, 235, 235, 1.0);
+	border: 1px solid #000;
+}
+
+.subcontainer{
+	width: 100%;
+	height: calc(227 / 581 * 100vh);
+	display: flex;
+	justify-content: space-between;
+}
+
+.sub-area{
+	width: calc(214 / 989 * 100vw);
+	height: calc(227 / 581 * 100vh);
+	background-color: rgb(235, 235, 235, 1.0);
+	border: 1px solid #000;
+}
+
+li.active-area{
+	right: 0;
+	background-color: rgb(255, 75, 73, 1.0);
+	display: flex;
+}
+
+div.active-area{
+	height: 100%;
+}
+
+.input-area{
+	position: absolute;
+	right: 0;
+	top: 50%;
+	transform: translate(0, -50%);
+	text-align: center;
+}
+
+input{
+	width: calc(134 / 989 * 100vw);
+	margin: 10px;
+	padding: 0;
+	background-color: rgb(255, 75, 73, 1.0);
+	border: 0;
+	color: white;
+	font-family: Glober;
+	font-size: 20px;
+	text-align: center;
+}
+
+input::placeholder{
+	color: white;
+}
+
+.logo-area{
+	background-image: url(../image/PIMU_logo.svg);
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+button{
+	margin: 0;
+	position: absolute;
+	right: 0;
+	background-color: white;
+	width: 40px;
+	height: calc(227 / 581 * 100vh);
+	border: 1px solid #000;
+	border-top-right-radius: calc(10 / 581 * 100vh);
+	border-bottom-right-radius: calc(10 / 581 * 100vh);
+	font-size: 40px;
+	font-family: Glober;
+}
+
+.title{
+	font-family: Glober;
+}
+
+h1{
+	font-size: 30px;
+}
+
+p.title{
+	font-size: 20px;
+}
+
+div.title{
+	position: absolute;
+	width: 100%;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+div.text-with-logo{
+	display: flex;
+	height: 18px;
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	transform: translate(-50%);
+	margin-bottom: 2px;
+}
+
+p.text-with-logo{
+	font-family: Glober;
+	font-size: 18px;
+	white-space: nowrap;
+	margin: 0;
+}
+
+a.text-with-logo{
+	display: block;
+}
+
+img{
+	width: 100%;
+	height: 100%;
+	margin: 0;
+}
