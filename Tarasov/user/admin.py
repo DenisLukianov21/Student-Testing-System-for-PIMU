@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import Group, User, UserGroup, Course
+from .models import Group, User, UserGroup, Cource
 
 
 @admin.register(User)
@@ -24,6 +24,6 @@ class SubscribeAdmin(admin.ModelAdmin):
     list_display = ('user', 'group',)
 
 
-@admin.register(Course)
+@admin.register(Cource)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('name_course',)
+    list_display = ('name_cource',)
