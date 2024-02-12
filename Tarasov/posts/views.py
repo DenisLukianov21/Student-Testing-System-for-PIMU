@@ -1,43 +1,42 @@
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.core.exceptions import PermissionDenied
-from django.db.models import F
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from user.models import Course, Group, UserGroup
+from user.models import Cource, UserGroup, Group
+from django.db.models import F
 
-from .models import Answer, Choice, Question, Result, Test
+from .models import Test, Question, Answer, Choice, Result
 
 
-@login_required
 def index(request):
-    """ Показывает главную страницу. """
     return render(request, 'posts/index.html')
 
 
 @login_required
 def courses(request):
-    """ Показывает все курсы доступные пользователю. """
-    user_group = UserGroup.objects.filter(user=request.user)[0].group
-    page_obj = Course.objects.filter(group_in_course=user_group)
-    middle_len_course = round(len(page_obj)/2)
-    context = {
-        'page_obj': page_obj,
-        'middle_len_cource': middle_len_course
-    }
-    return render(request, 'posts/courses.html', context)
+    user = request.user
+    group = Group.objects.all()
+    if user.is_authenticated:
+        user_group = UserGroup.objects.filter(user=user)[0].group
+        page_obj = Cource.objects.filter(group_in_course=user_group)
+
+        for obj in page_obj:
+            cource = Cource.objects.filter(slug=obj.slug)
+            obj.tests = Test.objects.filter(test_in_cource=cource[0])
+
+        context = {
+            'user': user,
+            'group': group,
+            'page_obj': page_obj,
+        }
+        return render(request, 'posts/courses.html', context)
+    else:
+        return render(request, 'posts/courses.html')
 
 
 @login_required
 def test_by_slug(request, slug):
-    """
-    Показывает все тесты в курсе доступные пользователю.
-    """
-    group = UserGroup.objects.get(user=request.user).group
-    course = Course.objects.filter(slug=slug)
-    # Проверка доступа юзера
-    if group not in course[0].group_in_course.all():
-        raise PermissionDenied()
-    tests = Test.objects.filter(test_in_course=course[0])
+    cource = Cource.objects.filter(slug=slug)
+    tests = Test.objects.filter(test_in_cource=cource[0])
     context = {
         'page_obj': tests,
     }
@@ -46,9 +45,6 @@ def test_by_slug(request, slug):
 
 @login_required
 def display_quiz(request, quiz_id):
-    """
-    Отображение вопроса.
-    """
     quiz = get_object_or_404(Test, pk=quiz_id)
     question = quiz.question_set.first()
     return redirect(reverse('post:display_question', kwargs={
@@ -57,16 +53,7 @@ def display_quiz(request, quiz_id):
 
 @login_required
 def display_question(request, quiz_id, question_id):
-    """
-    Вспомогательная функция отображение вопроса
-    и переходу к следующему вопросу.
-    """
     quiz = get_object_or_404(Test, pk=quiz_id)
-    user_group = UserGroup.objects.get(user=request.user).group
-    quiz_group = quiz.test_in_course.group_in_course.all()
-    # Проверка доступа юзера
-    if user_group not in quiz_group:
-        raise PermissionDenied()
     questions = quiz.question_set.all()
     current_question, next_question = None, None
     for ind, question in enumerate(questions):
@@ -81,10 +68,6 @@ def display_question(request, quiz_id, question_id):
 
 @login_required
 def grade_question(request, quiz_id, question_id):
-    """
-    Вспомогательная функция перехода к следующему вопросу
-    и проверки ответов.
-    """
     question = get_object_or_404(Question, pk=question_id)
     quiz = get_object_or_404(Test, pk=quiz_id)
     can_answer = question.user_can_answer(request.user)
@@ -94,7 +77,7 @@ def grade_question(request, quiz_id, question_id):
                           {'question': question,
                            'error_message': 'Вы уже отвечали на этот вопрос.'})
 
-        if question.qtype == 'single':  # Тип теста где только один ответ
+        if question.qtype == 'single':
             correct_answer = question.get_answers()
             user_answer = question.answer_set.get(pk=request.POST['answer'])
             choice = Choice(user=request.user, question=question,
@@ -109,7 +92,7 @@ def grade_question(request, quiz_id, question_id):
                 result.wrong = F('wrong') + 1
             result.save()
 
-        elif question.qtype == 'multiple':  # Тип теста где множество ответов
+        elif question.qtype == 'multiple':
             correct_answer = question.get_answers()
             answers_ids = request.POST.getlist('answer')
             user_answers = []
@@ -139,9 +122,6 @@ def grade_question(request, quiz_id, question_id):
 
 @login_required
 def quiz_results(request, quiz_id):
-    """
-    Отображение результата теста.
-    """
     profile = request.user
     quiz = get_object_or_404(Test, pk=quiz_id)
     questions = quiz.question_set.all()
@@ -160,9 +140,6 @@ def quiz_results(request, quiz_id):
 
 @login_required
 def show_group(request):
-    """
-    Отображение групп.
-    """
     group = Group.objects.all()
     context = {
         'page_obj': group
@@ -172,13 +149,10 @@ def show_group(request):
 
 @login_required
 def show_static_group(request, name_group):
-    """
-    Отображение участников групп.
-    """
     group = Group.objects.get(name_group=name_group)
     user_group = UserGroup.objects.filter(group=group)
-    course = Course.objects.filter(group_in_course=group)
-    tests = Test.objects.filter(test_in_course=course[0])
+    cource = Cource.objects.filter(group_in_course=group)
+    tests = Test.objects.filter(test_in_cource=cource[0])
     context = {
         'page_obj': user_group,
         'test_obj': tests,
@@ -188,31 +162,17 @@ def show_static_group(request, name_group):
 
 @login_required
 def show_static(request, quiz_id):
-    """
-    Отображение общей статистики группы по тесту.
-    """
-    if request.user.is_staff:
-        test = get_object_or_404(Test, pk=quiz_id)
-        questions = len(Question.objects.filter(test=test))
-        result = Result.objects.filter(quiz=test)
-        page_obj = []
-        for user in result:
-            procentage = (questions/user.correct) * 100
-            user_and_procentage = [user.user, procentage]
-            page_obj.append(user_and_procentage)
-        context = {
-            'page_obj': page_obj,
-            'test': test,
-        }
-    else:
-        result = Result.objects.filter(user=request.user)
-        page_obj = []
-        for obj in result:
-            name_course_and_tests = [obj.quiz.test_in_course, obj.quiz]
-            page_obj.append(name_course_and_tests)
-        print(page_obj)
-        context = {
-            'U_page_obj': page_obj
-        }
-
+    test = get_object_or_404(Test, pk=quiz_id)
+    result = Result.objects.filter(quiz=test)
+    num_student = len(result)
+    num_question = len(Question.objects.filter(test=test))
+    correct = 0
+    for i in result:
+        correct += i.correct
+    procentage = int((correct / (num_question*num_student) * 100))
+    context = {
+        'test': test,
+        'num': quiz_id,
+        'procentage': procentage,
+    }
     return render(request, 'posts/static.html', context)

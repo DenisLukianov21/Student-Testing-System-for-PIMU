@@ -39,11 +39,12 @@ class UserGroup(models.Model):
     )
 
 
-class Course(models.Model):
-    name_course = models.CharField(max_length=50)
+class Cource(models.Model):
+    name_cource = models.CharField(max_length=50)
     slug = models.SlugField(max_length=255, unique=True)
+    tests = 0
     group_in_course = models.ManyToManyField("Group",
                                              related_name='Group_in_course')
 
     def __str__(self):
-        return self.name_course
+        return self.name_cource
