@@ -1,10 +1,10 @@
 from django.db import models
-from user.models import Cource, User
+from user.models import Course, User
 
 
 class Test(models.Model):
     name = models.CharField(max_length=120)
-    test_in_cource = models.ForeignKey(Cource, on_delete=models.CASCADE)
+    test_in_course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -25,6 +25,7 @@ class Question(models.Model):
                              default=qtype.single)
     test = models.ForeignKey(Test, on_delete=models.CASCADE)
     eplanation = models.CharField(max_length=550)
+    image = models.ImageField(blank=True)
 
     def get_answers(self):
         if self.qtype == 'single':

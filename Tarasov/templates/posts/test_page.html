@@ -1,5 +1,5 @@
 
-<!--<html>
+<html>
     <section>
         <main class="mt-5 mb-5">
             <div class="container">
@@ -29,6 +29,10 @@
                                             {% csrf_token %}
                                             {% if question.qtype == 'single' %}
                                                 <h1> {{ question }} </h1>
+                                                {% if question.image %}
+                                                    <img src={{ question.image.url }}>
+                                                {% else %}
+                                                {% endif %}
                                                 <div class="text-center">Только один ответ здесь - правильный.</div>
                                                 {% for answer in question.answer_set.all %}
                                                     <div class="form-check">
@@ -84,7 +88,7 @@
         </main>
     </section>
     <script>
-     /*const form = document.getElementById("question-form");
+     const form = document.getElementById("question-form");
     form.addEventListener("submit", (e) => {
         e.preventDefault();
         fetch(form.action, {method:'post', body: new FormData(form)})
@@ -92,231 +96,10 @@
             .then(text => {
                 document.getElementById("question-feedback").innerHTML = text;
             });
-    });*/
+    });
 
     
 
 
     </script>
-</html>-->
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Тест</title>
-		<link rel="stylesheet" href="new_tests_style.css">
-		<link rel="icon" href="image/favicon.ico">
-        <style>
-            body{
-                margin: 0;
-                padding: 0;	
-                background-image: url("image/PIMU_background.png");
-                display: flex;
-                justify-content: space-evenly;
-                align-items: center;
-                flex-wrap: wrap;
-            }
-
-            #global-container{
-                width: calc(680 / 989 * 100vw);
-                height: 100vh;
-                display: flex;
-                justify-content: space-evenly;
-                align-items: center;
-                flex-wrap: wrap;
-            }
-
-            .container{
-                display: flex;
-                justify-content: space-between;
-                flex-wrap: wrap;
-                width: calc(446 / 989 * 100vw);
-                height: calc(464 / 581 * 100vh);
-            }
-
-            ul{
-                margin: 0;
-                padding: 0;
-            }
-
-            li{
-                list-style-type: none;
-                text-align: center;
-                border-radius: calc(10 / 581 * 100vh);
-                position: relative;
-            }
-
-            a{
-                text-decoration-line: none;
-                display: block;
-            }
-
-            p{
-                font-family: Glober;
-            }
-
-            #image-area{
-                width: calc(214 / 989 * 100vw);
-                height: calc(464 / 581 * 100vh);
-                background-color: rgb(235, 235, 235, 1.0);
-                border: 1px solid #000;
-                border-radius: calc(10 / 581 * 100vh);
-                display: block;
-            }
-
-            #question-area{
-                width: calc(446 / 989 * 100vw);
-                height: calc(227 / 581 * 100vh);
-                display: block;
-                background-color: rgb(255, 75, 73, 1.0);
-                border: 1px solid #000;
-            }
-
-            .subcontainer{
-                width: calc(446 / 989 * 100vw);
-                height: calc(227 / 581 * 100vh);
-                display: flex;
-                justify-content: space-between;
-            }
-
-            .sub-area{
-                width: calc(214 / 989 * 100vw);
-                height: calc(227 / 581 * 100vh);
-                background-color: #66CCCC;
-                border: 1px solid #000;
-                border-radius: calc(10 / 581 * 100vh);
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                color: white;
-            }
-
-            label > input{
-            visibility: hidden;
-            position: absolute;
-            }
-
-            label > input + p{
-            cursor:pointer;
-            color: #66CC66;
-            }
-
-            label > input:checked + p{
-            color: rgb(211, 81, 80, 1.0);
-            }
-
-            .question{
-                color: white;
-                font-size: 20px;
-            }
-
-            .text{
-                font-size: 18px;
-            }
-
-            #prev-page, #next-page, .submit{
-                font-family: Glober;
-                font-size: 30px;
-            }
-
-            .submit{
-                display: none;
-                padding: 0;
-                background-color: rgb(255, 75, 73, 1.0);
-            }
-        </style>
-	</head>
-	<body>
-		<script src="tests_scripts.js"></script>
-        <script>
-            function checkCheckbox() {
-                const checkboxes = document.querySelectorAll('.answer');
-                let flag = false; 
-
-                for (var i = 0; i < checkboxes.length; i++) {
-                    if (checkboxes[i].checked) {
-                        flag = true;
-                    }
-                }
-
-                if (flag) {
-                    viewSubmit('check');
-                } else {
-                    document.getElementById('next-page').style.display = 'flex';
-                    document.getElementById('submit-form-check').style.display = 'none';
-                    document.getElementById('question-area').style.background = 'rgb(255, 75, 73, 1.0)';
-                    document.getElementById('question-check').style.color = 'white';
-                }
-            }
-
-            function checkRadiobox() {
-                const checkboxes = document.querySelectorAll('.answer');
-                let flag = false; 
-
-                for (var i = 0; i < checkboxes.length; i++) {
-                    if (checkboxes[i].checked) {
-                        flag = true;
-                    }
-                }
-
-                if (flag) {
-                    viewSubmit('radio');
-                }
-            }
-
-            function viewSubmit(submitType) {
-                document.getElementById('next-page').style.display = 'none';
-                document.getElementById('submit-form-' + submitType).style.display = 'flex';
-                document.getElementById('question-area').style.background = 'rgb(235, 235, 235, 1.0)';
-                document.getElementById('question-' + submitType).style.color = 'black';
-            }
-        </script>
-		<div id="global-container">
-            {% if question.image %}                                   
-			    <div id="image-area"><img src="{{ question.image.url }}"></div>
-            {% else %}
-            {% endif %}
-			<ul class="container">
-				<li id="question-area">
-                    {% if question.qtype == 'single' %}
-                        <form id="form-radio"  action="{% url 'posts:grade_question' quiz.id question.id %}" method="post">
-                                <p id="question-radio" class="question">{{ question }}</p>
-                                {% csrf_token %}
-                                {% for answer in question.answer_set.all %}           
-                                    <label>
-                                        <input class="answer" type="radio" name="answer" value="{{ answer.id }}" onchange="checkRadiobox()">
-                                        <p class="text">{{ answer.name }}</p>
-                                    </label>
-                                {% endfor %}
-                        </form>
-                    {% else %}     
-                        <form id="form-check" action="{% url 'posts:grade_question' quiz.id question.id %}" method="post">
-                            <p id="question-check" class="question">{{ question }}</p>
-                            {% csrf_token %}
-                            {% for answer in question.answer_set.all %}
-                                <label>
-                                    <input class="answer" type="checkbox" name="answer" value="{{ answer.id }}" onchange="checkCheckbox()">
-                                    <p class="text">{{ answer.name }}</p>
-                                </label>
-                            {% endfor %}
-                        </form>
-                    {% endif %}
-                    
-				</li>
-				<li>
-					<div class="subcontainer">
-						<a id="prev-page" class="sub-area" href="javascript:history.back()"">Предыдущий вопрос</a>
-                        {% if next_question %}
-						    <a id="next-page" class="sub-area" href="{% url 'posts:display_question' quiz.id next_question.id %}">Следующий вопрос</a>
-                        {% else %}
-                            <a id="next-page" class="sub-area" href="{% url 'posts:quiz_results' quiz.id %}">Это последний вопрос теста. После ответа нажмите кнопку</a>
-                        {% endif %}
-                            <input id="submit-form-radio" class="sub-area submit" type="submit" form="form-radio" placeholder="Ответить">
-						<input id="submit-form-check" class="sub-area submit" type="submit" form="form-check" placeholder="Ответить">
-					</div>
-				</li>
-			</ul>
-		</div>
-	</body>
 </html>

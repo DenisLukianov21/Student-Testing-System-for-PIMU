@@ -1,4 +1,12 @@
 <html>
-    <h1> Статистика по тесту {{ num }}</h1>
-    <h3> {{ test }} - Группа прошла тест на {{ procentage }}% </h3>
+    <h1> Статистика по тесту</h1>
+    <h3> Название теста {{ test }} </h3>
+    {% for user, procentage in page_obj %}
+        <ul>Имя студента {{ user }}, правильных ответов {{ procentage }}<ul>
+    {% endfor %}
+    {% for course, tests in U_page_obj %}
+        <ul>Название курса {{ course }}, тесты <a href="{% url 'posts:quiz_results' tests.pk %}"> {{tests}} </a><ul>
+    {% endfor %}
+
+
 </html>
