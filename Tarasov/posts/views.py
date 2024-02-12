@@ -10,7 +10,7 @@ from .models import Answer, Choice, Question, Result, Test
 
 @login_required
 def index(request):
-    """ Показывает главную страницу. """
+    """ Показывает главную страницу.1 """
     return render(request, 'posts/index.html')
 
 
