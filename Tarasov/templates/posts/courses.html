@@ -1,4 +1,5 @@
 {% load static %}
+{% autoescape off %}
 <!DOCTYPE html>
 <html>
 	<head>
@@ -128,6 +129,9 @@
                 border: 1px solid #000;
                 border-top-left-radius: calc(10 / 581 * 100vh);
                 border-bottom-left-radius: calc(10 / 581 * 100vh);
+                display: flex;
+                justify-content: space-evenly;
+                align-items: center;
             }
 
             .subcontainer{
@@ -274,7 +278,8 @@
 		<div id="global-container">
 			<ul id="container">
 				<li id="main" class="main-area">
-					<button id="exit"><</button>	
+                    
+					<a href={% url 'users:logout' %} id="exit"><p><</p></a>	
 					<ul class="menu">
 						<li><a class="menu" href="#" onclick="viewMyCourses('Мои курсы', '.menu')">Мои курсы</a></li>
 						<li><a class="menu" href="#" onclick="viewMyPage('Моя страница', '.menu')">Моя страница</a></li>
@@ -286,7 +291,7 @@
                         <li id="sub-top" class="top-sub-area">
                             <ul id="courses" class="courses">
                                 {% for course in page_obj %}
-                                    <li><a class="courses" href="#" onclick="viewTests('{{ course.name_cource }}', '{{ course.slug }}', '.courses')">{{ course.name_cource }}</a></li>
+                                    <li><a class="courses" href="#" onclick="viewTests('{{ course.name_course }}', '{{ course.slug }}', '.courses')">{{ course.name_course }}</a></li>
                                 {% endfor %}
                             </ul>
                             <div id="userID">
@@ -318,7 +323,7 @@
                             {% for course in page_obj %}
                                 <ul id="{{ course.slug }}" class="tests">
                                     {% for test in course.tests %}    
-                                    <li><a class="test-name" href="{% url 'posts:display_quiz' test.id %}"">{{ test.name }}</a></li>
+                                    <li><a class="test-name" href="{% url 'posts:display_quiz' test.id %}">{{ test.name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             {% endfor %}
@@ -341,5 +346,6 @@
         {% endif %}
 	</body>
 </html>
+{% endautoescape %}
 
     

@@ -23,8 +23,10 @@ def courses(request):
         page_obj = Course.objects.filter(group_in_course=user_group)
 
         for obj in page_obj:
-            cource = Course.objects.filter(slug=obj.slug)
-            obj.tests = Test.objects.filter(test_in_cource=cource[0])
+            course = Course.objects.filter(slug=obj.slug)
+            print(course)
+            obj.tests = Test.objects.filter(test_in_course=course[0])
+            print(obj.tests)
 
         context = {
             'group': group,
