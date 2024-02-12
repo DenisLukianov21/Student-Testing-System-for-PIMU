@@ -4,50 +4,342 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Мои курсы</title>
-		<link rel="stylesheet" href="{% static 'css/courses_style.css' %}">
-	    <link rel="icon" href="{% static 'image/favicon.ico' %}">
+		<title>Система электронного обучения</title>
+		<link rel="icon" href="image/favicon.ico">
+        <style>
+           body{
+                margin: 0;
+                padding: 0;	
+                background-image: url("image/PIMU_background.png");
+            }
+
+            #global-container{
+                width: 100vw;
+                height: 100vh;
+                display: flex;
+                justify-content: space-evenly;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+
+            #container{
+                display: flex;
+                justify-content: space-between;
+                width: calc(446 / 989 * 100vw);
+                height: calc(464 / 581 * 100vh);
+                /*position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);*/
+            }
+
+            ul{
+                margin: 0;
+                padding: 0;
+            }
+
+            li{
+                list-style-type: none;
+                text-align: center;
+                border-radius: calc(10 / 581 * 100vh);
+                position: relative;
+            }
+
+            a{
+                text-decoration-line: none;
+                display: block;
+            }
+
+            .main-area{
+                width: calc(214 / 989 * 100vw);
+                height: 100%;
+                background-color: rgb(255, 75, 73, 1.0);
+                /*background-color: rgb(235, 235, 235, 1.0);*/
+                border: 1px solid #000;
+                display: flex;
+            }
+
+            ul.menu{
+                width: calc(100% - 40 / 989 * 100vw);
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+
+            a.menu{
+                font: 30px Glober;
+                color: white;
+                /*color: rgb(211, 81, 80, 1.0);	*/
+            }
+
+            ul.courses, ul.tests, ul.statistics, ul.questions{
+                width: 100%;
+                height: 100%;
+                display: none;
+                justify-content: center;
+                align-items: center;
+                flex-wrap: wrap;
+                overflow-x: hidden;
+                overflow-y: auto;
+            }
+
+            a.courses, a.test-name{
+                width: calc(214 / 989 * 100vw);
+                font: 30px Glober;
+                color: white;
+                /*color: rgb(211, 81, 80, 1.0);	*/
+            }
+
+            p.statistics, a.statistics, a.questions{
+                width: calc(214 / 989 * 100vw);
+                font: 25px Glober;
+                color: white;
+                margin: 0;
+            }
+
+            #userID{
+                width: 100%;
+                height: 100%;
+                display: none;
+            }
+
+            #textWelcome{
+                width: calc(214 / 989 * 100vw);
+                font: 25px Glober;
+                color: rgb(211, 81, 80, 1.0);
+                position: absolute;
+                bottom: 0;
+            }
+
+            img{
+                margin: 0;
+                width: 85%;
+                position: absolute;
+                left: 0;
+            }
+
+            #exit{
+                width: calc(40 / 989 * 100vw);
+                font: 40px Glober;
+                background-color: white;
+                color: black;
+                border: 1px solid #000;
+                border-top-left-radius: calc(10 / 581 * 100vh);
+                border-bottom-left-radius: calc(10 / 581 * 100vh);
+            }
+
+            .subcontainer{
+                width: calc(214 / 989 * 100vw);
+                height: 100%;
+                display: block;
+            }
+
+            .top-sub-area, .bottom-sub-area{
+                width: 100%;
+                height: calc(227 / 581 * 100vh);
+                background-color: rgb(235, 235, 235, 1.0);
+                border: 1px solid #000;
+            }
+
+            .bottom-sub-area{
+                bottom: 0;
+                position: absolute;
+            }
+
+            #help-video{
+                width: 100%;
+                height: 100%;
+                display: none;
+            }
+
+            .play{
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-25px, -50%);
+                border: 50px solid transparent;
+                border-left: 70px solid white;
+            }
+        </style>
 	</head>
-	<body onload="centering()">
-		<img class="general-img" src="{% static 'image/spine.png' %}">
-		{% if user.is_authenticated %}
-			{% with middle_len_courses=middle_len_cource %}
-			{% for course in page_obj %}
-				{% if forloop.counter <= middle_len_courses %}
-					{% if forloop.counter == 1 %}
-						<ul style="left: 0;">
-					{% endif %}
-						<li class="left-sections">
-							<div class="left-frames">
-								<a href={% url 'posts:slug' course.slug %}><p class="content">{{ course.name_course }}</p></a>
+	<body>
+		<script>
+            function viewTopSubArea(valueChooseElem, classElem) {
+                changeColorElem(valueChooseElem, classElem);
+
+                let subTopArea = document.getElementById('sub-top');
+                subTopArea.style.background = 'rgb(255, 75, 73, 1.0)';
+                subTopArea.style.display = 'block';   
+            }
+
+            function viewBottomSubArea(valueChooseElem, classElem) {
+                changeColorElem(valueChooseElem, classElem);
+
+                let subBottomArea = document.getElementById('sub-bottom');
+                subBottomArea.style.background = 'rgb(255, 75, 73, 1.0)';
+                subBottomArea.style.display = 'block';
+
+                if (document.getElementById('courses').style.display === 'none') {
+                    document.getElementById('help-video').style.display = 'block';
+                }   
+            }
+
+            function changeColorElem(textCurrElem, classElem) {
+                let allElem = document.querySelectorAll(classElem);
+
+                for(let elem of allElem) {
+                    if (textCurrElem == elem.textContent) {
+                        elem.style.color = 'rgb(211, 81, 80, 1.0)';
+                    } else {
+                        elem.style.color = '#FF9966';
+                    }
+                }
+
+                document.getElementById('main').style.background = 'rgb(235, 235, 235, 1.0)';
+                document.getElementById('sub-top').style.background = 'rgb(235, 235, 235, 1.0)';
+                document.getElementById('sub-bottom').style.background = 'rgb(235, 235, 235, 1.0)';
+                document.getElementById('exit').style.background = '#66CCCC';
+                document.getElementById('exit').style.color = 'white';
+            }
+
+            function viewMyCourses(valueChooseElem, classElem) {
+                viewTopSubArea(valueChooseElem, classElem);
+
+                let courses = document.querySelectorAll('.courses');
+
+                for(let course of courses) {
+                    course.style.color = 'white';
+                }
+                document.getElementById('courses').style.display = 'flex';
+                document.getElementById('userID').style.display = 'none';
+                document.getElementById('statistics').style.display = 'none';
+                document.getElementById('questions').style.display = 'none';
+                document.getElementById('help-video').style.display = 'none';
+            }
+
+            function viewMyPage(valueChooseElem, classElem) {
+                viewBottomSubArea(valueChooseElem, classElem);
+
+                for(let test of document.querySelectorAll('.tests')) {
+                    test.style.display = 'none';
+                }
+
+                document.getElementById('courses').style.display = 'none';
+                document.getElementById('userID').style.display = 'block';
+                document.getElementById('statistics').style.display = 'flex';
+                document.getElementById('questions').style.display = 'none';
+                document.getElementById('help-video').style.display = 'none';
+            }
+
+            function viewInfo(valueChooseElem, classElem) {
+                viewTopSubArea(valueChooseElem, classElem);
+                
+                let questions = document.querySelectorAll('.questions');
+
+                for(let question of questions) {
+                    question.style.color = 'white';
+                }
+
+                for(let test of document.querySelectorAll('.tests')) {
+                    test.style.display = 'none';
+                }
+
+                document.getElementById('courses').style.display = 'none';
+                document.getElementById('userID').style.display = 'none';
+                document.getElementById('statistics').style.display = 'none';
+                document.getElementById('questions').style.display = 'flex';
+            }
+
+            function viewTests(valueChooseElem, slug, classElem) {
+                viewBottomSubArea(valueChooseElem, classElem);
+
+                let subBottomArea = document.getElementById('sub-bottom');
+                subBottomArea.style.background = 'rgb(255, 75, 73, 1.0)';
+                subBottomArea.style.display = 'block';
+                
+                let tests = document.querySelectorAll('.tests');
+
+                for(let test of tests) {
+                    if (test === document.getElementById(slug)) {
+                        test.style.display = 'flex';
+                    } else {
+                        test.style.display = 'none';
+                    }
+                }
+            }
+        </script>
+        {% if user.is_authenticated %}
+		<div id="global-container">
+			<ul id="container">
+				<li id="main" class="main-area">
+					<button id="exit"><</button>	
+					<ul class="menu">
+						<li><a class="menu" href="#" onclick="viewMyCourses('Мои курсы', '.menu')">Мои курсы</a></li>
+						<li><a class="menu" href="#" onclick="viewMyPage('Моя страница', '.menu')">Моя страница</a></li>
+						<li><a class="menu" href="#" onclick="viewInfo('Справка', '.menu')">Справка</a></li>
+					</ul>
+				</li>
+                <li>
+                    <ul class="subcontainer">
+                        <li id="sub-top" class="top-sub-area">
+                            <ul id="courses" class="courses">
+                                {% for course in page_obj %}
+                                    <li><a class="courses" href="#" onclick="viewTests('{{ course.name_cource }}', '{{ course.slug }}', '.courses')">{{ course.name_cource }}</a></li>
+                                {% endfor %}
+                            </ul>
+                            <div id="userID">
+								<img src="image/ID.png">
+								<p id="textWelcome"></p>
+								<script>
+									let text = document.getElementById('textWelcome');
+
+								    const hours = new Date().getHours();
+								    if(hours > 18 || hours < 6){
+								        text.textContent = 'Добрый вечер!';   
+								    }
+								    else if(hours >= 6 && hours <= 10){
+								        text.textContent = 'Доброе утро!'; 
+								    }
+								    else if(hours > 10 && hours <= 18){
+								        text.textContent = 'Добрый день!';
+								    }
+								</script>
 							</div>
-						</li>
-						<hr class="left-lines">
-					{% if forloop.counter == middle_len_courses %}
-						</ul>
-					{% endif %}
-				{% else %}
-					{% if forloop.counter == middle_len_courses|add:1 %}
-						<ul style="right: 0;">
-					{% endif %}
-						<li class="right-sections">
-							<div class="right-frames">
-								<a href={% url 'posts:slug' course.slug %}><p class="content">{{ course.name_course }}</p></a>
-							</div>
-						</li>
-						<hr class="right-lines">
-					{% if forloop.counter == page_obj|length %}
-						</ul>
-					{% endif %}
-				{% endif %}
-			{% endfor %}
-			{% endwith %}
-		{% else %}
-	        <p>Please log in.</p>
-	    {% endif %}
-		<div class="central-box">
-			<p>Тут что-то написано</p>
-		</div>
+							<ul id="questions" class="questions">
+								<li><a class="questions" href="#" onclick="viewBottomSubArea('Как пользоваться системой?', '.questions')">Как пользоваться системой?</a></li>
+								<li><a class="questions" href="#" onclick="viewBottomSubArea('Как посмотреть подробную статистику?', '.questions')">Как посмотреть подробную статистику?</a></li>
+								<li><a class="questions" href="#" onclick="viewBottomSubArea('Как записать студентов на курс?', '.questions')">Как записать студентов на курс?</a></li>
+								<li><a class="questions" href="#" onclick="viewBottomSubArea('Как отчислить студентов с курса?', '.questions')">Как отчислить студентов с курса?</a></li>
+							</ul>
+                        </li>
+                        <li id="sub-bottom" class="bottom-sub-area">
+                            {% for course in page_obj %}
+                                <ul id="{{ course.slug }}" class="tests">
+                                    {% for test in course.tests %}    
+                                    <li><a class="test-name" href="{% url 'posts:display_quiz' test.id %}"">{{ test.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            {% endfor %}
+                            <ul id="statistics" class="statistics">
+								<li><p class="statistics">Подключённые курсы: 5</p></li>
+								<li><p class="statistics">Доступные тесты: 8</p></li>
+								<li><a class="statistics" href="#">Подробная статистика ></a></li>
+							</ul>
+							<a id="help-video" href="#">
+								<div class="play"></div>
+							</a>	
+                            <!--<p>{{ user.email }}</p>	-->
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        {% else %}
+            <p>Please log in.</p>
+        {% endif %}
 	</body>
 </html>
+
     

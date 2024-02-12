@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.db.models import F
 from django.shortcuts import get_object_or_404, redirect, render
@@ -17,14 +17,22 @@ def index(request):
 @login_required
 def courses(request):
     """ Показывает все курсы доступные пользователю. """
-    user_group = UserGroup.objects.filter(user=request.user)[0].group
-    page_obj = Course.objects.filter(group_in_course=user_group)
-    middle_len_course = round(len(page_obj)/2)
-    context = {
-        'page_obj': page_obj,
-        'middle_len_cource': middle_len_course
-    }
-    return render(request, 'posts/courses.html', context)
+    group = Group.objects.all()
+    if request.user.is_authenticated:
+        user_group = UserGroup.objects.filter(user=request.user)[0].group
+        page_obj = Course.objects.filter(group_in_course=user_group)
+
+        for obj in page_obj:
+            cource = Course.objects.filter(slug=obj.slug)
+            obj.tests = Test.objects.filter(test_in_cource=cource[0])
+
+        context = {
+            'group': group,
+            'page_obj': page_obj,
+        }
+        return render(request, 'posts/courses.html', context)
+    else:
+        return render(request, 'posts/courses.html')
 
 
 @login_required

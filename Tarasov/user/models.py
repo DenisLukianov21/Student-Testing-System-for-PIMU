@@ -44,6 +44,7 @@ class Course(models.Model):
     slug = models.SlugField(max_length=255, unique=True)
     group_in_course = models.ManyToManyField("Group",
                                              related_name='Group_in_course')
+    tests = 0
 
     def __str__(self):
         return self.name_course
