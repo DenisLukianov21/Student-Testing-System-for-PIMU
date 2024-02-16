@@ -212,6 +212,7 @@
                     
 				</li>
 				<li>
+                    <div id="question-feedback" class="col-12 mt-3 text-200 text-center"></div>
 					<div class="subcontainer">
 						<a id="prev-page" class="sub-area" href="javascript:history.back()">Предыдущий вопрос</a>
                         {% if next_question %}
@@ -226,4 +227,15 @@
 			</ul>
 		</div>
 	</body>
+    <script>
+        const form = document.getElementById("form-radio");
+       form.addEventListener("submit", (e) => {
+           e.preventDefault();
+           fetch(form.action, {method:'post', body: new FormData(form)})
+               .then((response) => response.text())
+               .then(text => {
+                   document.getElementById("question-feedback").innerHTML = text;
+               });
+       });
+       </script>
 </html>

@@ -11,7 +11,7 @@
            body{
                 margin: 0;
                 padding: 0;	
-                background-image: url("image/PIMU_background.png");
+                background-image: url("../../static/image/PIMU_background.png");
             }
 
             #global-container{
@@ -295,7 +295,7 @@
                                 {% endfor %}
                             </ul>
                             <div id="userID">
-								<img src="image/ID.png">
+								<img src={% static "image/ID.png" %}>
 								<p id="textWelcome"></p>
 								<script>
 									let text = document.getElementById('textWelcome');
