@@ -5,8 +5,8 @@ from . import views
 app_name = 'post'
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('course', views.courses, name='course'),
+    path('', views.courses, name='course'),
+    #path('course', views.courses, name='course'),
     path('course/<slug>', views.test_by_slug, name='slug'),
     path('statistic/', views.show_group, name='group'),
     path('statistic/<name_group>', views.show_static_group,
