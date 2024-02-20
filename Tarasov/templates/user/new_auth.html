@@ -28,9 +28,7 @@
 							<div class="input-area">
 								<form method="post" action="{% url 'users:login' %}">
 								{% csrf_token %}
-								<input autocomplete="on" maxlength="10" type="text" placeholder="ВАШ ЛОГИН">
 								{{ form.username }}
-								<input autocomplete="on" type="password" placeholder="ВАШ ПАРОЛЬ">
 								{{ form.password }}
 							</div>
 						</div>

@@ -1,0 +1,129 @@
+body{
+    margin: 0;
+    padding: 0;	
+    background-image: url("../image/PIMU_background.png");
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+#global-container{
+    width: calc(680 / 989 * 100vw);
+    height: 100vh;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.container{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: calc(446 / 989 * 100vw);
+    height: calc(464 / 581 * 100vh);
+}
+
+ul{
+    margin: 0;
+    padding: 0;
+}
+
+li{
+    list-style-type: none;
+    text-align: center;
+    border-radius: calc(10 / 581 * 100vh);
+    position: relative;
+}
+
+a{
+    text-decoration-line: none;
+    display: block;
+}
+
+p{
+    font-family: Glober;
+}
+
+#image-area{
+    width: calc(214 / 989 * 100vw);
+    height: calc(464 / 581 * 100vh);
+    background-color: rgb(235, 235, 235, 1.0);
+    border: 1px solid #000;
+    border-radius: calc(10 / 581 * 100vh);
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+img{
+    width: 100%;
+    margin: 0;
+}
+
+#question-area{
+    width: calc(446 / 989 * 100vw);
+    height: calc(227 / 581 * 100vh);
+    display: block;
+    background-color: rgb(255, 75, 73, 1.0);
+    border: 1px solid #000;
+}
+
+.subcontainer{
+    width: calc(446 / 989 * 100vw);
+    height: calc(227 / 581 * 100vh);
+    display: flex;
+    justify-content: space-between;
+}
+
+.sub-area{
+    width: calc(214 / 989 * 100vw);
+    height: calc(227 / 581 * 100vh);
+    background-color: #66CCCC;
+    border: 1px solid #000;
+    border-radius: calc(10 / 581 * 100vh);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+#result{
+    background-color: rgb(255, 75, 73, 1.0);
+    display: none;
+}
+
+label > input{
+visibility: hidden;
+position: absolute;
+}
+
+label > input + p{
+cursor:pointer;
+color: #66CC66;
+}
+
+label > input:checked + p{
+color: rgb(211, 81, 80, 1.0);
+}
+
+.question{
+    color: white;
+    font-size: 20px;
+}
+
+.text{
+    font-size: 18px;
+}
+
+#prev-page, #next-page, .submit{
+    font-family: Glober;
+    font-size: 30px;
+}
+
+.submit{
+    display: none;
+    padding: 0;
+    background-color: rgb(255, 75, 73, 1.0);
+}
