@@ -1,4 +1,9 @@
 asgiref==3.7.2
+deprecation==2.1.0
 Django==4.2.8
+django-email-verification==0.3.3
+packaging==24.1
 pillow==10.2.0
+PyJWT==2.8.0
 sqlparse==0.4.4
+validators==0.28.3

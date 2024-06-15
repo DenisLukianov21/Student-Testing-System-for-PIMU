@@ -6,7 +6,7 @@ from . import views
 app_name = 'users'
 
 urlpatterns = [
-    path('signup/', views.signup.as_view(), name='signup'),
+    path('signup/', views.registration, name='signup'),
     path('login/', LoginView.as_view(template_name='user/new_auth.html'),
          name='login'),
     path('logout/', LogoutView.as_view(template_name='user/logged_out.html'),

@@ -4,6 +4,7 @@ from django.db.models import F
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from user.models import Course, Group, UserGroup
+from django.http import HttpResponse
 
 from .models import Answer, Choice, Question, Result, Test
 
@@ -19,9 +20,13 @@ def courses(request):
     """ Показывает все курсы доступные пользователю. """
     group = Group.objects.all()
     if request.user.is_authenticated:
-        user_group = UserGroup.objects.filter(user=request.user)[0].group
-        page_obj = Course.objects.filter(group_in_course=user_group)
+        try:
+            user_group = UserGroup.objects.filter(user=request.user)[0].group
+        except:
+            print(f'{request.user}, не имеет группы')
+            return HttpResponse('<h1>У вас нету группы!</h1>')
 
+        page_obj = Course.objects.filter(group_in_course=user_group)
         for obj in page_obj:
             course = Course.objects.filter(slug=obj.slug)
             print(course)

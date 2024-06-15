@@ -1,0 +1,2 @@
+Пользователь {{ user.username }} - перейдите по ссылке {{ link }}
+Ссылка истечет {{ expiry|time:"TIME_FORMAT" }}

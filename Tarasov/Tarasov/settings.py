@@ -22,7 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_cleanup',
+    'django_email_verification',
     'user',
     'posts',
 ]
@@ -101,6 +101,40 @@ USE_I18N = True
 
 USE_TZ = True
 
+# Email
+
+
+def verified_callback(user):
+    user.is_active = True
+
+
+EMAIL_VERIFIED_CALLBACK = verified_callback
+
+# тема письма
+EMAIL_MAIL_SUBJECT = 'Confirm your email'
+# шаблон письма в html
+EMAIL_MAIL_HTML = 'mail_body.html'
+# текстовый шаблон
+EMAIL_MAIL_PLAIN = 'mail_body.txt'
+# время жизни ссылки
+EMAIL_MAIL_TOKEN_LIFE = 60 * 60
+# шаблон, который увидят после перехода по ссылке
+EMAIL_MAIL_PAGE_TEMPLATE = 'email/confirm_template.html'
+# домен для использования в ссылке
+EMAIL_PAGE_DOMAIN = 'http://mydomain.com/'
+EMAIL_MULTI_USER = True
+
+# настройки вашего SMTP сервера
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'mymail@gmail.com'
+EMAIL_FROM_ADDRESS = 'mymail@gmail.com'
+EMAIL_HOST_PASSWORD = 'mYC00lP4ssw0rd'
+EMAIL_USE_TLS = True
+
+# используется для тестирования
+# выводит письма в консоли
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # Static files (CSS, JavaScript, Images)
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
