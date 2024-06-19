@@ -1,4 +1,5 @@
-<html>
+{% load static %}
+<!--<html>
     <div class="col-lg-8">
         <div class="card p-3 h-100 card-soft-primary">
             <div class="profile-card-body">
@@ -43,4 +44,58 @@
                 </div>
             </div>
         </div>
+</html>-->
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Результаты {{ quiz }}</title>
+		<link rel="stylesheet" href="{% static 'css/new_new_auth_style.css' %}">
+		<link rel="stylesheet" href="{% static 'css/new_main_style.css' %}">
+        <link rel="stylesheet" href="{% static 'css/new_test_style.css' %}">
+		<link rel="icon" href="{% static 'image1/favicon.ico' %}">
+	</head>
+	<body>
+		<header>
+			<div class="subcontainer-header">
+				<img class="logo" src="{% static 'image1/logo.svg' %}" alt="">
+			</div>
+			<div class="subcontainer-header">
+				<p class="PIMU-text">ПИМУ</p>
+			</div>
+		</header>
+		<main style="width: 100%;">
+			<div class="main-container">
+				<h3 class="title-sign-up">Ваш результат</h3>
+				<hr class="underline">
+				<div class="main-subcontainer slider">
+					<div class="congratulate-logo-subcontainer info-subcontainer"></div>
+					<hr class="vertical-line">
+					<div class="info-subcontainer">
+						<div id="stat-result-page" class="slide-container stat-container">
+							<div class="link-block-stat">
+                                <p id="correct" style="display: none;">{{ correct }}</p>
+                                <p id="number" style="display: none;">{{ number }}</p>
+                                
+								<p class="text-stat-result"><font class="text-stat-result"></font>%</p>
+                                <script>
+                                    document.querySelector('font.text-stat-result').textContent = correct.textContent / number.textContent * 100;
+                                </script>
+							</div>
+							<div class="link-block-stat">
+								<a class="sign sign-in show-more-stat" href="{% url 'posts:course' %}">Вернуться на главную</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+		<footer>
+			<div class="footer-container"></div>
+		</footer>
+		<script src="{% static 'js/new_new_main_scripts.js' %}"></script>
+		<script>changeColorStatResult();</script>
+	</body>
 </html>

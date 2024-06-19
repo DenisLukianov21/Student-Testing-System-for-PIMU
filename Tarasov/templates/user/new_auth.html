@@ -1,5 +1,5 @@
 {% load static %}
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="utf-8">
@@ -38,5 +38,113 @@
 				</ul>
 			</li>
 		</ul>
+	</body>
+</html>-->
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Авторизация в системе электронного тестирования</title>
+		<link rel="stylesheet" href="{% static 'css/auth_style.css' %}">
+		<link rel="icon" href="{% static 'image1/favicon.ico' %}">
+	</head>
+	<body>
+		<header>
+			<div class="subcontainer-header">
+				<img class="logo" src="{% static 'image1/logo.svg' %}" alt="">
+			</div>
+			<div class="subcontainer-header">
+				<p class="PIMU-text">ПИМУ</p>
+			</div>
+		</header>
+		<main>
+			<div class="slider">
+				<form id="sign-up" class="slide-container" method="post" action="{% url 'users:signup' %}">
+					<div class="main-container">
+						<button class="title-sign-up" type="button">Зарегистрироваться</button>
+						<hr class="underline">
+						<div class="main-subcontainer">
+							<div class="info-subcontainer">
+								<p>Логин</p>
+								<p>Пароль</p>
+							</div>
+							<hr class="vertical-line">
+							<div class="info-subcontainer">
+								{% csrf_token %}
+								{{ form }}
+								<!--<input class="login-sign-up" autocomplete="on" maxlength="10" type="text" placeholder="ВАШ ЛОГИН" oninput="highlightLink('sign-up')">
+								<input class="pass-sign-up" autocomplete="on" type="password" placeholder="ВАШ ПАРОЛЬ" oninput="highlightLink('sign-up')">-->
+							</div>
+							<script>
+								id_username.placeholder = 'ВАШ ЛОГИН';
+								id_username.classList.add('login-sign-up');
+								id_username.autocomplete = 'on';
+								id_username.oninput = function() { highlightLink('sign-up'); };
+								id_username.id = 'id_login';
+
+								id_password.placeholder = 'ВАШ ПАРОЛЬ';
+								id_password.classList.add('pass-sign-up');
+								id_password.autocomplete = 'on';
+								id_password.oninput = function() { highlightLink('sign-up'); };
+								id_password.id = 'id_pass';
+							</script>
+						</div>
+					</div>
+				</form>
+				<div id="home" class="slide-container">
+					<div class="main-container">
+						<h1 class="title">Система электронных тестов</h1>
+						<hr class="underline">
+						<div class="main-subcontainer">
+							<div class="logo-subcontainer info-subcontainer"></div>
+							<hr class="vertical-line">
+							<div class="info-subcontainer">
+								<a class="sign sign-up" href="#sign-up" onclick="showSlides(0)">Регистрация</a>
+								<a class="sign sign-in" href="#sign-in" onclick="showSlides(2)">Авторизация</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<form id="sign-in" class="slide-container" method="post" action="{% url 'users:login' %}">
+					<div class="main-container">
+						<button class="title-sign-in" type="button">Войти</button>
+						<hr class="underline">
+						<div class="main-subcontainer">
+							<div class="info-subcontainer">
+								<p>Логин</p>
+								<p>Пароль</p>
+							</div>
+							<hr class="vertical-line">
+							<div class="info-subcontainer">
+								{% csrf_token %}
+								{{ form.username }}
+								{{ form.password }}
+							</div>
+							<script>
+								id_username.placeholder = 'ВАШ ЛОГИН';
+								id_username.classList.add('login-sign-in');
+								id_username.autocomplete = 'on';
+								id_username.oninput = function() { highlightLink('sign-in'); };
+
+								id_password.placeholder = 'ВАШ ПАРОЛЬ';
+								id_password.classList.add('pass-sign-in');
+								id_password.autocomplete = 'on';
+								id_password.oninput = function() { highlightLink('sign-in'); };
+							</script>
+						</div>
+					</div>
+				</form>
+			</div>
+		</main>
+		<footer>
+			<div class="footer-container">
+				<a class="dot-slide" href="#sign-up" title="Регистрация" onclick="showSlides(0)"></a>
+				<a class="dot-slide" href="#home" title="Главная" onclick="showSlides(1)"></a>
+				<a class="dot-slide" href="#sign-in" title="Авторизация" onclick="showSlides(2)"></a>
+			</div>
+		</footer>
+		<script src="{% static 'js/scripts.js' %}"></script>
 	</body>
 </html>

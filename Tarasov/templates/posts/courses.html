@@ -1,6 +1,6 @@
 {% load static %}
 {% autoescape off %}
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="utf-8">
@@ -76,11 +76,11 @@
                                 </li>
 								<li><a class="statistics" href="#">Подробная статистика ></a></li>
 							</ul>
-                            <!--Make the manual later-->
+                            Make the manual later
 							<a id="help-video" href="#">
 								<div class="play"></div>
 							</a>	
-                            <!--<p>{{ user.email }}</p>	-->
+                           <p>{{ user.email }}</p>	
                         </li>
                     </ul>
                 </li>
@@ -89,6 +89,300 @@
         {% else %}
             <p>Please log in.</p>
         {% endif %}
+	</body>
+</html>-->
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Система электронного тестирования</title>
+		<link rel="stylesheet" href="{% static 'css/new_new_auth_style.css' %}">
+		<link rel="stylesheet" href="{% static 'css/new_main_style.css' %}">
+		<link rel="icon" href="{% static 'image1/favicon.ico' %}">
+	</head>
+	<body>
+		<header>
+			<div class="subcontainer-header">
+				<img class="logo" src="{% static 'image1/logo.svg' %}" alt="">
+			</div>
+			<div class="subcontainer-header">
+				<p class="PIMU-text">ПИМУ</p>
+			</div>
+			<div class="subcontainer-header">
+				<a class="PIMU-text" href="{% url 'users:logout' %}">Выйти</a>
+			</div>
+		</header>
+		<main>
+			<div class="slider">
+				<div id="statistics" class="slide-container">
+					<div class="main-container">
+						<div class="title-container slider">
+							<h3 id="title-stat-start" class="slide-container">Заполните поля</h3>
+							<h3 id="title-stat-groups" class="slide-container">Выберите группу</h3>
+							<h3 id="title-stat-courses" class="slide-container">Выберите курс</h3>
+							<h3 id="title-stat-tests" class="slide-container">Выберите тест</h3>
+							<h3 id="title-stat-result" class="slide-container">Ваш результат</h3>
+							<!--<h3 id="title-stat-result" class="slide-container">Результат группы</h3>-->
+						</div>
+						<hr class="underline">
+						<div class="main-subcontainer">
+							<div class="info-subcontainer list-stat">
+								<div class="link-block-stat">
+									<a class="sign sign-up text-stat choice-stat-elem no-change" href="#stat-list-groups">Группа</a>
+									<a class="sign sign-up text-stat choice-stat-elem have-change" href="#stat-list-groups">Группа</a>
+								</div>
+								<div class="link-block-stat">
+									<a class="sign sign-up text-stat choice-stat-elem no-change" href="#stat-list-courses">Курс</a>
+									<a class="sign sign-up text-stat choice-stat-elem have-change" href="#stat-list-courses">Курс</a>
+								</div>
+								<div class="link-block-stat">
+									<a class="sign sign-up text-stat choice-stat-elem no-change" href="#stat-list-tests">Тест</a>
+									<a class="sign sign-up text-stat choice-stat-elem have-change" href="#stat-list-tests">Тест</a>
+								</div>
+							</div>
+							<hr class="vertical-line">
+							<div class="info-subcontainer slider list-stat">
+								<div id="empty-stat-page" class="slide-container stat-container"></div>
+								<form id="stat-list-groups" class="stat-groups slide-container stat-container">
+									<div class="link-block-stat block-stat-return">
+										<a class="sign sign-up text-stat stat-return" href="#">Скрыть</a>
+									</div>
+									<label class="link-block">
+										<input class="stat-groups" type="radio" name="ans" value="yes">
+										<p class="text">7121Б1ПИ1</p>
+									</label>
+									<label class="link-block">
+										<input class="stat-groups" type="radio" name="ans" value="yes">
+										<p class="text">7121Б1ПИ2</p>
+									</label>
+									<label class="link-block">
+										<input class="stat-groups" type="radio" name="ans" value="yes">
+										<p class="text">7122Б1ПИ</p>
+									</label>
+									<label class="link-block">
+										<input class="stat-groups" type="radio" name="ans" value="yes">
+										<p class="text">7123Б1ПИ</p>
+									</label>
+									<label class="link-block">
+										<input class="stat-groups" type="radio" name="ans" value="yes">
+										<p class="text">7121Б2ПИ</p>
+									</label>		
+								</form>	
+								<form id="stat-list-courses" class="stat-courses slide-container stat-container">
+									<div class="link-block-stat block-stat-return">
+										<a class="sign sign-up text-stat stat-return" href="#">Скрыть</a>
+									</div>
+									{% for course in page_obj %}
+									<label class="link-block">
+										<input id="{{ course.slug }}" class="stat-courses" type="radio" name="ans" value="yes">
+										<p class="text">{{ course.name_course }}</p>
+									</label>
+									{% endfor %}
+								</form>
+								<form id="stat-list-tests" class="stat-tests slide-container stat-container">
+									<div class="link-block-stat block-stat-return">
+										<a class="sign sign-up text-stat stat-return" href="#">Скрыть</a>
+									</div>
+									{% for course in page_obj %}
+										{% for test in course.tests %}  
+										<label class="link-block">
+											<input class="{{ course.slug }}-stat-tests stat-tests" type="radio" name="ans" value="yes">
+											<p class="text">{{ test.name }}</p>
+										</label>
+										{% endfor %}
+									{% endfor %}
+								</form>
+								<div id="stat-result-page" class="slide-container stat-container">
+									<div class="link-block-stat">
+										<p class="text-stat-result"><font class="text-stat-result">88</font>%</p>
+									</div>
+									<div class="link-block-stat">
+										<a class="sign sign-in show-more-stat" href="#">Посмотреть подробнее</a>
+									</div>
+								</div>
+								<!--<div id="stat-result-page" class="slide-container stat-container">
+									<div class="link-block-stat sign sign-in">
+										<p class="new-style-text-stat">Петров П.П.</p>
+										<p class="text-stat-result new-style-text-stat"><font class="text-stat-result new-style-text-stat">79</font>%</p>
+									</div>
+									<div class="link-block-stat sign sign-in">
+										<p class="new-style-text-stat">Сидоров С.С.</p>
+										<p class="text-stat-result new-style-text-stat"><font class="text-stat-result new-style-text-stat">60</font>%</p>
+									</div>
+									<div class="link-block-stat sign sign-in">
+										<p class="new-style-text-stat">Антонов А.А.</p>
+										<p class="text-stat-result new-style-text-stat"><font class="text-stat-result new-style-text-stat">40</font>%</p>
+									</div>
+									<div class="link-block-stat sign sign-in">
+										<p class="new-style-text-stat">Лухарев В.В.</p>
+										<p class="text-stat-result new-style-text-stat"><font class="text-stat-result new-style-text-stat">90</font>%</p>
+									</div>
+									<div class="link-block-stat sign sign-in">
+										<p class="new-style-text-stat">Синицин С.П.</p>
+										<p class="text-stat-result new-style-text-stat"><font class="text-stat-result new-style-text-stat">65</font>%</p>
+									</div>
+									<div class="link-block-stat sign sign-in">
+										<p class="new-style-text-stat">Довлатов Д.А.</p>
+										<p class="text-stat-result new-style-text-stat"><font class="text-stat-result new-style-text-stat">85</font>%</p>
+									</div>
+									<div class="link-block-stat sign sign-in">
+										<p class="new-style-text-stat">Ложкарёв С.Д.</p>
+										<p class="text-stat-result new-style-text-stat"><font class="text-stat-result new-style-text-stat">100</font>%</p>
+									</div>
+									<div class="link-block-stat sign sign-in">
+										<p class="new-style-text-stat">Преображенский А.А.</p>
+										<p class="text-stat-result new-style-text-stat"><font class="text-stat-result new-style-text-stat">0</font>%</p>
+									</div>
+								</div>-->
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="my-courses" class="slide-container">
+					<div class="main-container">
+						<div class="title-container slider">
+							<h3 id="help-title-courses" class="slide-container">Выберите курс</h3>
+							<h3 id="help-title-tests" class="slide-container">Выберите тест</h3>
+							<a id="title-add-course" class="slide-container" href="#"><h3>Добавить курс</h3></a>
+							<a id="title-edit-course" class="slide-container" href="#"><h3>Изменить курс</h3></a>
+							<h3 id="help-title-groups" class="slide-container">Выберите группу</h3>
+							<h3 id="help-delete-course" class="slide-container">Удалить выбранный курс?</h3>
+							<h3 id="help-delete-test" class="slide-container">Удалить выбранный тест?</h3>
+						</div>
+						<hr class="underline">
+						<div class="main-subcontainer">
+							<div class="info-subcontainer slider list-courses">
+								<div id="courses" class="slide-container">
+									<div class="main-link-block">
+										<div class="left-elem-link-block add-elem"></div>
+										<a class="sign sign-up course link-form-add-course" href="#title-add-course">Добавить курс</a>
+										<div class="right-elem-link-block add-elem"></div>
+									</div>
+									{% for course in page_obj %}
+									<div class="link-block">
+										<div class="main-link-block">
+											<a class="left-elem-link-block edit-elem link-form-edit-course course" href="#title-edit-course"></a>
+											<a id="{{ course.slug }}" class="sign sign-up course" href="#">{{ course.name_course }}</a>
+											<a class="right-elem-link-block remove-elem" href="#"></a>
+										</div>
+										<div class="delete-link-block">
+											<a class="sign sign-up conf-del" href="#">Да</a>
+											<a class="sign sign-in canc-del remove-course" href="#">Нет</a>
+										</div>
+									</div>
+									{% endfor %}
+								</div>
+								<div id="list-groups" class="slide-container">
+									<label class="link-block">
+										<input class="answer" type="checkbox" name="ans" value="yes">
+										<p class="text">7121Б1ПИ1</p>
+									</label>
+									<label class="link-block">
+										<input class="answer" type="checkbox" name="ans" value="yes">
+										<p class="text">7121Б1ПИ2</p>
+									</label>
+									<label class="link-block">
+										<input class="answer" type="checkbox" name="ans" value="yes">
+										<p class="text">7122Б1ПИ</p>
+									</label>
+									<label class="link-block">
+										<input class="answer" type="checkbox" name="ans" value="yes">
+										<p class="text">7123Б1ПИ</p>
+									</label>
+									<label class="link-block">
+										<input class="answer" type="checkbox" name="ans" value="yes">
+										<p class="text">7121Б2ПИ</p>
+									</label>
+								</div>
+							</div>
+							<hr class="vertical-line">
+							<div class="info-subcontainer slider tests">
+								<div class="slide-container"></div>
+								<div id="form-add-course" class="slide-container">
+									<p>Название курса:</p>
+									<input class="login-sign-up" autocomplete="on" maxlength="10" type="text" placeholder="Электронный курс">
+									<p>Идентификатор курса:</p>
+									<input class="login-sign-up" autocomplete="on" maxlength="10" type="text" placeholder="course_id">
+									<a class="sign sign-up open-list-groups" href="#">Открыть список подключенных групп</a>
+									<a class="sign sign-up close-list-groups" href="#">Закрыть список подключенных групп</a>
+								</div>
+								<div id="form-edit-course" class="slide-container">
+									<p>Название курса:</p>
+									<input id="input-edit-course" class="login-sign-up" autocomplete="on" maxlength="10" type="text" placeholder="Электронный курс">
+									<p>Идентификатор курса:</p>
+									<input id="input-edit-slug" class="login-sign-up" autocomplete="on" maxlength="10" type="text" placeholder="course_id">
+									<a class="sign sign-up open-list-groups" href="#">Открыть список подключенных групп</a>
+									<a class="sign sign-up close-list-groups" href="#">Закрыть список подключенных групп</a>
+								</div>
+								{% for course in page_obj %}
+								<div id="{{ course.slug }}-tests" class="slide-container test-container">
+									<div class="main-link-block">
+										<div class="right-elem-link-block add-elem"></div>
+										<a class="sign sign-up test" href="#">Добавить тест</a>
+										<div class="left-elem-link-block add-elem"></div>
+									</div>
+									{% for test in course.tests %} 
+									<div class="link-block">
+										<div class="main-link-block">
+											<a class="right-elem-link-block remove-elem" href="#"></a>
+											<a class="sign sign-up test" href="{% url 'posts:display_quiz' test.id %}">{{ test.name }}</a>
+											<a class="left-elem-link-block edit-elem" href="#"></a>
+										</div>
+										<div class="delete-link-block">
+											<a class="sign sign-up conf-del" href="#">Да</a>
+											<a class="sign sign-in canc-del" href="#">Нет</a>
+										</div>
+									</div>
+									{% endfor %}
+								</div>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="info" class="slide-container">
+					<div class="main-container">
+						<div class="title-container slider">
+							<h3 id="help-title-questions" class="slide-container">Какой у вас возник вопрос?</h3>
+							<h3 id="help-title-videos" class="slide-container">Посмотрите данное видео</h3>
+						</div>
+						<hr class="underline">
+						<div class="main-subcontainer">
+							<div class="info-subcontainer list-questions">
+								<p class="link-block"><a class="sign sign-up question" href="#">Как пользоваться системой?</a></p>
+								<p class="link-block"><a class="sign sign-up question" href="#">Как посмотреть подробную статистику?</a></p>
+								<p class="link-block"><a class="sign sign-up question" href="#">Как записать студентов на курс?</a></p>
+								<p class="link-block"><a class="sign sign-up question" href="#">Как отчислить студентов с курса?</a></p>
+							</div>
+							<hr class="vertical-line">
+							<div class="info-subcontainer slider videos">
+								<!--<div class="slide-container"></div>
+								<div id="question-1" class="slide-container">
+									<iframe width="100%" height="100%" src="https://www.youtube.com/embed/3aj1hzH1VA0?si=DnqUZva1xD9kBkuW&amp;start=20782" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+								</div>
+								<div id="question-2" class="slide-container">
+									<iframe width="100%" height="100%" src="https://www.youtube.com/embed/3aj1hzH1VA0?si=DnqUZva1xD9kBkuW&amp;start=20782" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+								</div>
+								<div id="question-3" class="slide-container">
+									<iframe width="100%" height="100%" src="https://www.youtube.com/embed/3aj1hzH1VA0?si=DnqUZva1xD9kBkuW&amp;start=20782" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+								</div>-->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+		<footer>
+			<div class="footer-container">
+				<a class="dot-slide" href="#statistics" title="Статистика" onclick="showSlides(0)"></a>
+				<a class="dot-slide" href="#my-courses" title="Мои курсы" onclick="showSlides(1)"></a>
+				<a class="dot-slide" href="#info" title="Справка" onclick="showSlides(2)"></a>
+			</div>
+		</footer>
+		<script src="{% static 'js/scripts.js' %}"></script>
+		<script src="{% static 'js/new_new_main_scripts.js' %}"></script>
 	</body>
 </html>
 {% endautoescape %}

@@ -1,0 +1,380 @@
+main {
+	width: 100%;
+}
+
+input, #timeInput {
+	font-size: calc(50 / 1440 * 100vw);
+	/*border: 1px solid;
+	border-radius: 10px;
+	border-color: white;*/
+	color: #A38C7A;
+}
+
+h3 {
+	margin: 0 auto;
+	color: #0D121A;
+}
+
+.main-container {
+	word-break: break-word;
+}
+
+.question {
+	overflow: hidden;
+}
+
+.answers-container {
+	direction: rtl;
+	padding-left: calc(10 / 1440 * 100vw);
+	display: flex;
+	justify-content: flex-end;
+}
+
+.answers-container::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #0D121A;
+}
+
+.dropdown-content::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #5E2121;
+}
+
+.answers-container::-webkit-scrollbar-thumb {
+	background-color: white;
+}
+
+.dropdown-content::-webkit-scrollbar-thumb {
+	background-color: #A6ABB5;
+}
+
+.answers-container::-webkit-scrollbar {
+	width: calc(3 / 1440 * 100vw);
+}
+
+.dropdown-content::-webkit-scrollbar {
+	width: calc(10 / 1440 * 100vw);
+}
+
+.link-block {
+	direction: ltr;
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+}
+
+input {
+	background-color: #2E121A;
+	color: #A38C7A;
+}
+
+input::placeholder {
+	font-size: 100%;
+	color: #A38C7A;
+}
+
+.text {
+	font-size: calc(35 / 1440 * 100vw);
+	text-align: justify;
+	font-family: Montserrat Alternates;
+}
+
+.logo-time {
+	max-width: 100%;
+	height: calc(56 / 1024 * 100vh);
+}
+
+.logo-subcontainer, .check-logo-subcontainer, .congratulate-logo-subcontainer {
+	background-image: url("../image1/questions.png");
+	background-size: 35%;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.check-logo-subcontainer {
+	background-image: url("../image1/check.png");
+}
+
+.congratulate-logo-subcontainer{
+	background-image: url("../image1/congratulation.png");
+}
+
+.stud-logo-subcontainer {
+	width: 80%;
+	height: 80%;
+	background-size: 35%;
+	background-position: center;
+	background-repeat: no-repeat;
+
+	&:hover + a.text.sign::before{
+		transform: scaleX(1);
+	}
+}
+
+.stud-logo-subcontainer {
+	background-image: url("../image1/photography.png");
+}
+
+.file-upload {
+    border: 0;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.question-input, .answer-input {
+    width: 100%;
+    margin: 1px;
+    padding: 0;
+    box-sizing: border-box;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    resize: none;
+    border: 0;
+    background: #A38C7A;
+    font-size: calc(35 / 1440 * 100vw);
+}
+
+.answer-input{
+	width: calc(535 / 1440 * 100vw);
+	margin: calc(10 / 1440 * 100vw);
+	color: white;
+}
+
+.question-input:focus, .answer-input:focus{
+	outline: 1px solid white;
+	border-radius: calc(5 / 1024 * 100vh);
+}
+
+.question-input::placeholder {
+	color: #0D121A;
+	font-size: calc(70 / 1440 * 100vw);
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	transform: translate(-50%);
+}
+
+.answer-input::placeholder {
+	color: #6E3B30;
+	text-align: center;
+}
+
+label {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.answer-checkbox{
+	width: 0;
+	height: 0;
+	visibility: hidden;
+}
+
+.answer-checkmark{
+	display: block;
+	position: relative;
+	height: calc(35 / 1440 * 100vw);
+	width: calc(35 / 1440 * 100vw);
+	background-color: #A38C7A;
+	border: 1px solid white;
+	border-radius: calc(30 / 1440 * 100vw);
+}
+
+.answer-checkbox:checked + .answer-checkmark:after {
+	content: "";
+	position: absolute;
+	left: calc(11 / 1440 * 100vw);
+	top: calc(5 / 1440 * 100vw);
+	width: calc(8 / 1440 * 100vw);
+	height: calc(14 / 1440 * 100vw);
+	border: solid #264A33;
+	border-width: 0 calc(5 / 1440 * 100vw) calc(5 / 1440 * 100vw) 0;
+	transform: rotate(45deg);
+}
+
+.answer-checkbox:checked + .answer-checkmark {
+	border-color: #264A33;
+}
+
+.del-ans{
+	display: flex;
+	justify-content: center;
+	align-self: center;
+	position: relative;
+	height: calc(35 / 1440 * 100vw);
+	width: calc(35 / 1440 * 100vw);
+	background-color: #A38C7A;
+	border: 1px solid white;
+	border-radius: calc(30 / 1440 * 100vw);
+	background-image: url("../image1/icons8-go-back2.png");
+	background-size: cover;
+}
+
+#link-add-ans {
+	margin: auto auto;
+}
+
+#num-question {
+	text-align: center;
+	font-size: calc(50 / 1024 * 100vh);
+	color: #A38C7A;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+	height: 100%;
+}
+
+/* Стилизация кнопки */
+.dropdown button {
+	width: 100%;
+	height: 100%;
+	
+	font-size: calc(40 / 1024 * 100vh);
+	text-align: center;
+	
+	border: none;
+	cursor: pointer;
+	outline: none;
+}
+
+#open-dropdown-content{
+	background-color: #2E121A;
+	color: #A38C7A;
+}
+
+/* Стилизация выпадающего контента */
+.dropdown-content {
+	display: none;
+	width: 100%;
+	max-height: calc(820 / 1024 * 100vh);
+	overflow-y: auto;
+	direction: rtl;
+	position: absolute;
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	z-index: 1;
+	border-bottom-left-radius: calc(5 / 1024 * 100vh);
+	border-bottom-right-radius: calc(5 / 1024 * 100vh);
+	opacity: 0;
+	transition: opacity 0.5s;
+}
+
+/* Стили для ссылок внутри выпадающего списка */
+.dropdown-content .dropdown-link {
+	color: #5E2121;
+	background-color: #C2BFB8;
+	text-align: center;
+	padding: 12px;
+	display: block;
+}
+
+/* Стили для наведения мыши на ссылки */
+.dropdown-content .dropdown-link:hover {
+	background-color: #A6ABB5;
+}
+
+/* Отображение выпадающего списка при наведении */
+.dropdown:hover .dropdown-content {
+	display: block;
+	opacity: 1;
+}
+
+/* Изменение фона кнопки при наведении */
+.dropdown:hover #open-dropdown-content {
+	background-color: #264A33;
+	color: white;
+}
+
+.logo-size {
+	width: calc(56 / 1024 * 100vh);
+	height: calc(56 / 1024 * 100vh);
+	background-size: cover;
+	background-position: center;
+}
+
+.logo-size:hover {
+	-webkit-animation: breathing 2s ease-out infinite normal;
+    animation: breathing 2s ease-out infinite normal;
+    -webkit-font-smoothing: antialiased;
+}
+
+#add-question {
+	background-image: url("../image1/icons8-плюс-100.png");
+}
+
+#del-question {
+	background-image: url("../image1/icons8-умножение-100.png");
+}
+
+.dot-slide:active {
+	background-color: white;
+}
+
+#progress {
+	height: calc(56 / 1024 * 100vh);
+	width: calc(310 / 1440 * 100vw);
+	border-radius: calc(30 / 1440 * 100vw);
+	background-color: #A38C7A;
+	background-size: 0%;
+	transition: background-size 0.5s ease;
+	background-repeat: no-repeat;
+	background-image: linear-gradient(to right, #264A33, #264A33);
+	border: none;
+	cursor: pointer;
+	outline: none;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: white;
+	font-size: calc(30 / 1024 * 100vh);
+	font-family: Montserrat Alternates;
+	margin: 0;
+}
+
+#progress span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 5%;
+  background-color: #264A33;
+  height: 100%;
+  border-radius: calc(30 / 1440 * 100vw);
+}
+
+#progress p {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: white;
+	font-size: calc(25 / 1024 * 100vh);
+}
+
+.link-block > .answer-check {
+	visibility: hidden;
+	position: absolute;
+}
+
+.link-block > .answer-check + .text {
+	cursor:pointer;
+	color: white;
+}
+
+.link-block > .answer-check:checked + .text {
+	color: #264A33;
+}
+
+label + p {
+	margin-left: calc(10 / 1440 * 100vw);
+}
+
+.true-ans {
+	color: #264A33;
+}
+
+.false-ans {
+	color: #6e3b30;
+}
