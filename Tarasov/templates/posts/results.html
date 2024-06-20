@@ -1,51 +1,4 @@
 {% load static %}
-<!--<html>
-    <div class="col-lg-8">
-        <div class="card p-3 h-100 card-soft-primary">
-            <div class="profile-card-body">
-                <div class="row mb-3">
-                    <div class="col-12">
-                        <a class="btn btn-danger rounded-pill btn-sm mb-3"
-                           href="{% url 'posts:course' %}"><i class="fa fa-arrow-circle-left"></i> К тестам</a>
-                        <h6 class="fw-bold fs-1 text-200 my-3">{{ question.name }}</h6>
-                    </div>
-                </div>
-                <div>
-                    <h5 class="text-200 fs--1">Результаты пользователя {{ request.user.username }}</h5>
-                    <h5 class="text-400">{{ quiz }}</h5>
-                    <div class="table-responsive mt-5">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col" class="text-primary text-center">Показатели</th>
-                                    <th scope="col" class="text-primary text-center">Результаты</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="text-200 fw-bold text-center">Всего вопросов в тесте</td>
-                                    <td class="text-200 fw-bold text-center">{{ number }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-200 fw-bold text-center">Правильные ответы</td>
-                                    <td class="text-200 fw-bold text-center">{{ correct }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-200 fw-bold text-center">Неправильные ответы</td>
-                                    <td class="text-200 fw-bold text-center">{{ wrong }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-200 fw-bold text-center">Пропущено вопросов</td>
-                                    <td class="text-200 fw-bold text-center">{{ skipped }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-</html>-->
-
 <!DOCTYPE html>
 <html>
 	<head>
@@ -76,13 +29,7 @@
 					<div class="info-subcontainer">
 						<div id="stat-result-page" class="slide-container stat-container">
 							<div class="link-block-stat">
-                                <p id="correct" style="display: none;">{{ correct }}</p>
-                                <p id="number" style="display: none;">{{ number }}</p>
-                                
-								<p class="text-stat-result"><font class="text-stat-result"></font>%</p>
-                                <script>
-                                    document.querySelector('font.text-stat-result').textContent = correct.textContent / number.textContent * 100;
-                                </script>
+                                <p class="text-stat-result"><font class="text-stat-result">{{ result }}</font>%</p>
 							</div>
 							<div class="link-block-stat">
 								<a class="sign sign-in show-more-stat" href="{% url 'posts:course' %}">Вернуться на главную</a>

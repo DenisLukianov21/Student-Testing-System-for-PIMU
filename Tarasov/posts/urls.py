@@ -12,10 +12,6 @@ urlpatterns = [
     path('statistic/<name_group>', views.show_static_group,
          name='static_group'),
     path('statistic/static/<quiz_id>', views.show_static, name='static'),
-    path('<int:quiz_id>/', views.display_quiz, name='display_quiz'),
-    path('<int:quiz_id>/questions/<int:question_id>',
-         views.display_question, name='display_question'),
-    path('<int:quiz_id>/questions/<int:question_id>/grade/',
-         views.grade_question, name='grade_question'),
-    path('results/<int:quiz_id>/', views.quiz_results, name='quiz_results'),
+    path('test/', views.display_quiz, name='display_quiz'),
+    path('results/', views.quiz_results, name='quiz_results'),
 ]

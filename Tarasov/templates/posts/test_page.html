@@ -4,68 +4,122 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Тест</title>
-		<link rel="stylesheet" href="{% static 'css/test_style.css' %}">
-		<link rel="icon" href="{% static 'image/favicon.ico' %}">
-        <script src="{% static 'js/test_scripts.js' %}"></script>
+		<title>Прохождение {{ quiz }}</title>
+		<link rel="stylesheet" href="{% static 'css/new_new_auth_style.css' %}">
+		<link rel="stylesheet" href="{% static 'css/new_test_style.css' %}">
+		<link rel="icon" href="{% static 'image1/favicon.ico' %}">
 	</head>
 	<body>
-		<div id="global-container">
-            {% if question.image %}                                   
-			    <div id="image-area"><img src="{{ question.image.url }}"></div>
-            {% else %}
-            {% endif %}
-			<ul class="container">
-				<li id="question-area">
-                    {% if question.qtype == 'single' %}
-                        <form id="form"  action="{% url 'posts:grade_question' quiz.id question.id %}" method="post">
-                                <p id="question" class="question">{{ question }}</p>
-                                {% csrf_token %}
-                                {% for answer in question.answer_set.all %}           
-                                    <label>
-                                        <input class="answer" type="radio" name="answer" value="{{ answer.id }}" onchange="checkRadiobox()">
-                                        <p class="text">{{ answer.name }}</p>
-                                    </label>
-                                {% endfor %}
-                        </form>
-                    {% else %}     
-                        <form id="form" action="{% url 'posts:grade_question' quiz.id question.id %}" method="post">
-                            <p id="question" class="question">{{ question }}</p>
-                            {% csrf_token %}
-                            {% for answer in question.answer_set.all %}
-                                <label>
-                                    <input class="answer" type="checkbox" name="answer" value="{{ answer.id }}" onchange="checkCheckbox()">
-                                    <p class="text">{{ answer.name }}</p>
-                                </label>
-                            {% endfor %}
-                        </form>
-                    {% endif %}
-                    
-				</li>
-				<li>
-					<div class="subcontainer">
-						<a id="prev-page" class="sub-area" href="javascript:history.back()">Предыдущий вопрос</a>
-                        {% if next_question %}
-						    <a id="next-page" class="sub-area" href="{% url 'posts:display_question' quiz.id next_question.id %}">Следующий вопрос</a>
-                        {% else %}
-                            <a id="next-page" class="sub-area" href="{% url 'posts:quiz_results' quiz.id %}">Это последний вопрос теста. После ответа нажмите кнопку</a>
-                        {% endif %}
-                        <input id="submit-form" class="sub-area submit" type="submit" form="form" placeholder="Ответить" onclick="showAndTimeoutResult()">
-                        <div id="result" class="sub-area"><p id="question-feedback"></p></div>
-                    </div>
-				</li>
-			</ul>
-		</div>
+		<header>
+			<div class="subcontainer-header">
+				<div class="dropdown">
+				    <button id="open-dropdown-content" class="text">Перейти к вопросу</button>
+				    <div id="dropdown-content" class="dropdown-content">
+						<script>
+							var numQuestion = 0;
+							let dropdownLink = document.getElementsByClassName('dropdown-link');
+						</script>
+						{% for question in questions %}
+				        <button class="text dropdown-link" value="#q{{ question.id }}" onclick="MoveToQuestion(this)"></button>
+						<script>
+							numQuestion++;
+							for (let i = 0; i < dropdownLink.length; i++) dropdownLink[i].textContent = 'Вопрос ' + numQuestion;
+						</script>
+						{% endfor %}
+				    </div>
+				</div>
+			</div>
+			<div class="subcontainer-header">
+				<p id="num-question" class="text">Вопрос 1</p>
+			</div>
+			<div class="subcontainer-header">
+				<img class="logo-time" src="{% static 'image1/icons8-песочные-часы-100.png' %}" alt="">
+				<p id="timeInput">03:00</p>
+			</div>
+		</header>
+		<main>
+			<form id="slider-questions" class="slider" action="{% url 'posts:quiz_results' quiz.id questions %}" method="post">
+				{% for question in questions %}
+				<div id="q{{ question.id }}" class="slide-container question">
+					<div class="main-container">
+						<h1 class="title text">{{ question }}</h1>
+						<hr class="underline">
+						<div class="main-subcontainer">
+							{% if question.image %}                                   
+							<div class="info-subcontainer">
+								<a class="stud-logo-subcontainer" href="{{ question.image.url }}" target="_blank"></a>
+								<a class="text sign" href="{{ question.image.url }}" target="_blank">Открыть фотографию</a>
+							</div>
+							{% else %}
+							<div class="logo-subcontainer info-subcontainer"></div>
+							{% endif %}
+							<hr class="vertical-line">
+							{% csrf_token %}
+							<div id="answers-container" class="info-subcontainer answers-container">
+								{% for answer in question.answer_set.all %}
+								<label class="link-block">
+									<input class="needed-input answer-check" type="checkbox" name="ans" value="{{ answer.id }}"" oninput="checkNeededInputs()">
+									<p class="text">{{ answer.name }}</p>
+								</label>
+								{% endfor %}
+								<!--<label class="link-block">
+									<input class="needed-input answer-check" type="checkbox" name="ans" value="yes" oninput="checkNeededInputs()">
+									<p class="text">2)	фолликулярными папулами на туловище и конечностях; </p>
+								</label>
+								<label class="link-block">
+									<input class="needed-input answer-check" type="checkbox" name="ans" value="yes" oninput="checkNeededInputs()">
+									<p class="text">3)	невоспалительными везикулами вблизи ходов;</p>
+								</label>
+								<label class="link-block">
+									<input class="needed-input answer-check" type="checkbox" name="ans" value="yes" oninput="checkNeededInputs()">
+									<p class="text">4)	расчесами и кровянистыми корочками.</p>
+								</label>-->	
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--<div id="q2" class="slide-container question">
+					<div class="main-container">
+						<h1 class="title text">Клиническая картина представлена</h1>
+						<hr class="underline">
+						<div class="main-subcontainer">
+							<div class="logo-subcontainer info-subcontainer"></div>
+							<div class="info-subcontainer">
+								<a class="stud-logo-subcontainer" href="image/icons8-песочные-часы-100.png" target="_blank"></a>
+								<a class="text sign" href="image/icons8-песочные-часы-100.png" target="_blank">Открыть фотографию</a>
+							</div>
+							<hr class="vertical-line">
+							<div id="answers-container" class="info-subcontainer answers-container">
+								<label class="link-block">
+									<input class="needed-input answer-check" type="checkbox" name="ans" value="yes" oninput="checkNeededInputs()">
+									<p class="text">1)	различными вариантами чесоточных ходов;</p>
+								</label>
+								<label class="link-block">
+									<input class="needed-input answer-check" type="checkbox" name="ans" value="yes" oninput="checkNeededInputs()">
+									<p class="text">2)	фолликулярными папулами на туловище и конечностях; </p>
+								</label>
+								<label class="link-block">
+									<input class="needed-input answer-check" type="checkbox" name="ans" value="yes" oninput="checkNeededInputs()">
+									<p class="text">3)	невоспалительными везикулами вблизи ходов;</p>
+								</label>
+								<label class="link-block">
+									<input class="needed-input answer-check" type="checkbox" name="ans" value="yes" oninput="checkNeededInputs()">
+									<p class="text">4)	расчесами и кровянистыми корочками.</p>
+								</label>	
+							</div>
+						</div>
+					</div>
+				</div>-->
+				{% endfor %}
+			</form>
+		</main>
+		<footer>
+			<div class="footer-container">
+				<a class="dot-slide" href="#" title="Предыдущий вопрос" onclick="goBackToQuestion()"></a>
+				<button id="progress" title="Заполненность необходимых полей" type="button" form="slider-questions">0%</button>
+				<a class="dot-slide" href="#" title="Следующий вопрос" onclick="goToQuestion()"></a>
+			</div>
+		</footer>
+		<script src="{% static 'js/new_test_scripts.js' %}"></script>
 	</body>
-    <script>
-        const form = document.getElementById("form");
-        form.addEventListener("submit", (e) => {
-            e.preventDefault();
-            fetch(form.action, {method:'post', body: new FormData(form)})
-                .then((response) => response.text())
-                .then(text => {
-                    document.getElementById("question-feedback").innerHTML = text;
-                });
-        });
-    </script>
 </html>

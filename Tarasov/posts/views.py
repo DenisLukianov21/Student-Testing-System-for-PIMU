@@ -53,9 +53,8 @@ def test_by_slug(request, slug):
     }
     return render(request, 'posts/tests.html', context)
 
-
 @login_required
-def display_quiz(request, quiz_id):
+def display_test(request, quiz_id):
     """
     Отображение вопроса.
     """
@@ -64,13 +63,24 @@ def display_quiz(request, quiz_id):
     return redirect(reverse('post:display_question', kwargs={
         'quiz_id': quiz_id, 'question_id': question.pk}))
 
+@login_required
+def display_quiz(request, quiz_id):
+    """
+    Отображение вопроса.
+    """
+    quiz = get_object_or_404(Test, pk=quiz_id)
+    questions = quiz.question_set.all()
+    context = {'quiz': quiz, 'quiz_id': quiz_id,
+               'questions': questions}
+    return render(request, 'posts/test_page.html', context)
 
+"""
 @login_required
 def display_question(request, quiz_id, question_id):
-    """
+    
     Вспомогательная функция отображение вопроса
     и переходу к следующему вопросу.
-    """
+    
     quiz = get_object_or_404(Test, pk=quiz_id)
     user_group = UserGroup.objects.get(user=request.user).group
     quiz_group = quiz.test_in_course.group_in_course.all()
@@ -87,14 +97,14 @@ def display_question(request, quiz_id, question_id):
     context = {'quiz': quiz, 'question': current_question,
                'next_question': next_question}
     return render(request, 'posts/test_page.html', context)
-
-
+"""
+"""
 @login_required
 def grade_question(request, quiz_id, question_id):
-    """
+    
     Вспомогательная функция перехода к следующему вопросу
     и проверки ответов.
-    """
+    
     question = get_object_or_404(Question, pk=question_id)
     quiz = get_object_or_404(Test, pk=quiz_id)
     can_answer = question.user_can_answer(request.user)
@@ -145,26 +155,64 @@ def grade_question(request, quiz_id, question_id):
                   {'is_correct': is_correct,
                    'correct_answer': correct_answer,
                    'question': question})
-
+"""
 
 @login_required
-def quiz_results(request, quiz_id):
+def quiz_results(request, quiz_id, questions):
     """
     Отображение результата теста.
     """
     profile = request.user
     quiz = get_object_or_404(Test, pk=quiz_id)
-    questions = quiz.question_set.all()
+
+    for question in enumerate(questions):
+        can_answer = question.user_can_answer(request.user)
+        if not can_answer:
+            return render(request, 'posts/partial.html',
+                            {'question': question,
+                            'error_message': 'Вы уже отвечали на этот вопрос.'})
+
+        if question.qtype == 'single':  # Тип теста где только один ответ
+            correct_answer = question.get_answers()
+            user_answer = question.answer_set.get(pk=request.POST['answer'])
+            choice = Choice(user=request.user, question=question,
+                            answer=user_answer)
+            choice.save()
+            is_correct = correct_answer == user_answer
+            result, created = Result.objects.get_or_create(user=request.user,
+                                                            quiz=quiz)
+            if is_correct is True:
+                result.correct = F('correct') + 1
+            else:
+                result.wrong = F('wrong') + 1
+            result.save()
+
+        elif question.qtype == 'multiple':  # Тип теста где множество ответов
+            correct_answer = question.get_answers()
+            answers_ids = request.POST.getlist('answer')
+            user_answers = []
+            if answers_ids:
+                for answer_id in answers_ids:
+                    user_answer = Answer.objects.get(pk=answer_id)
+                    user_answers.append(user_answer.name)
+                    choice = Choice(user=request.user,
+                                    question=question, answer=user_answer)
+                    choice.save()
+                is_correct = correct_answer == user_answers
+                result, created = Result.objects.get_or_create(
+                    user=request.user,
+                    quiz=quiz)
+                if is_correct is True:
+                    result.correct = F('correct') + 1
+                else:
+                    result.wrong = F('wrong') + 1
+                result.save()
+
     results = Result.objects.filter(user=request.user,
                                     quiz=quiz).values()
     correct = [i['correct'] for i in results][0]
-    wrong = [i['wrong'] for i in results][0]
     context = {'quiz': quiz,
-               'profile': profile,
-               'correct': correct,
-               'wrong': wrong,
-               'number': len(questions),
-               'skipped': len(questions) - (correct + wrong)}
+               'result': int(correct / len(questions) * 100)}
     return render(request, 'posts/results.html', context)
 
 

@@ -1,97 +1,5 @@
 {% load static %}
 {% autoescape off %}
-<!--<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Система электронного обучения</title>
-        <link rel="stylesheet" href="{% static 'css/main_style.css' %}">
-		<link rel="icon" href="{% static 'image/favicon.ico' %}">
-        <script src="{% static 'js/main_scripts.js' %}"></script>
-	</head>
-	<body>
-        {% if user.is_authenticated %}
-		<div id="global-container">
-			<ul id="container">
-				<li id="main" class="main-area">
-                    
-					<a href={% url 'users:logout' %} id="exit"><p><</p></a>	
-					<ul class="menu">
-						<li><a class="menu" href="#" onclick="viewMyCourses('Мои курсы', '.menu')">Мои курсы</a></li>
-						<li><a class="menu" href="#" onclick="viewMyPage('Моя страница', '.menu')">Моя страница</a></li>
-						<li><a class="menu" href="#" onclick="viewInfo('Справка', '.menu')">Справка</a></li>
-					</ul>
-				</li>
-                <li>
-                    <ul class="subcontainer">
-                        <li id="sub-top" class="top-sub-area">
-                            <ul id="courses" class="courses">
-                                {% for course in page_obj %}
-                                    <li><a class="courses" href="#" onclick="viewTests('{{ course.name_course }}', '{{ course.slug }}', '.courses')">{{ course.name_course }}</a></li>
-                                {% endfor %}
-                            </ul>
-                            <div id="userID">
-								<img src={% static "image/ID.png" %}>
-								<p id="textWelcome"></p>
-								<script>
-									let text = document.getElementById('textWelcome');
-
-								    const hours = new Date().getHours();
-								    if(hours > 18 || hours < 6){
-								        text.textContent = 'Добрый вечер!';   
-								    }
-								    else if(hours >= 6 && hours <= 10){
-								        text.textContent = 'Доброе утро!'; 
-								    }
-								    else if(hours > 10 && hours <= 18){
-								        text.textContent = 'Добрый день!';
-								    }
-								</script>
-							</div>
-							<ul id="questions" class="questions">
-								<li><a class="questions" href="#" onclick="viewBottomSubArea('Как пользоваться системой?', '.questions')">Как пользоваться системой?</a></li>
-								<li><a class="questions" href="#" onclick="viewBottomSubArea('Как посмотреть подробную статистику?', '.questions')">Как посмотреть подробную статистику?</a></li>
-								<li><a class="questions" href="#" onclick="viewBottomSubArea('Как записать студентов на курс?', '.questions')">Как записать студентов на курс?</a></li>
-								<li><a class="questions" href="#" onclick="viewBottomSubArea('Как отчислить студентов с курса?', '.questions')">Как отчислить студентов с курса?</a></li>
-							</ul>
-                        </li>
-                        <li id="sub-bottom" class="bottom-sub-area">
-                            {% for course in page_obj %}
-                                <ul id="{{ course.slug }}" class="tests">
-                                    {% for test in course.tests %}    
-                                    <li><a class="test-name" href="{% url 'posts:display_quiz' test.id %}">{{ test.name }}</a></li>
-                                    {% endfor %}
-                                </ul>
-                            {% endfor %}
-                            <ul id="statistics" class="statistics">
-								<li><p class="statistics">Подключённые курсы: {{ page_obj.count }}</p></li>
-								<li>
-                                    <p id="available-tests" class="statistics"></p>
-                                    <script>
-                                        var testsCount = document.querySelectorAll('.test-name').length;
-                                        
-                                        document.getElementById('available-tests').textContent = 'Доступные тесты: ' + testsCount;
-                                    </script>
-                                </li>
-								<li><a class="statistics" href="#">Подробная статистика ></a></li>
-							</ul>
-                            Make the manual later
-							<a id="help-video" href="#">
-								<div class="play"></div>
-							</a>	
-                           <p>{{ user.email }}</p>	
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        {% else %}
-            <p>Please log in.</p>
-        {% endif %}
-	</body>
-</html>-->
-
 <!DOCTYPE html>
 <html>
 	<head>
@@ -327,7 +235,7 @@
 									<div class="link-block">
 										<div class="main-link-block">
 											<a class="right-elem-link-block remove-elem" href="#"></a>
-											<a class="sign sign-up test" href="{% url 'posts:display_quiz' test.id %}">{{ test.name }}</a>
+											<a class="sign sign-up test" href="{% url 'posts:display_test' test.id %}">{{ test.name }}</a>
 											<a class="left-elem-link-block edit-elem" href="#"></a>
 										</div>
 										<div class="delete-link-block">
