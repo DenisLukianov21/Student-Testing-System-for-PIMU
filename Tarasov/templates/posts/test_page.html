@@ -15,17 +15,14 @@
 				<div class="dropdown">
 				    <button id="open-dropdown-content" class="text">Перейти к вопросу</button>
 				    <div id="dropdown-content" class="dropdown-content">
-						<script>
-							var numQuestion = 0;
-							let dropdownLink = document.getElementsByClassName('dropdown-link');
-						</script>
 						{% for question in questions %}
 				        <button class="text dropdown-link" value="#q{{ question.id }}" onclick="MoveToQuestion(this)"></button>
-						<script>
-							numQuestion++;
-							for (let i = 0; i < dropdownLink.length; i++) dropdownLink[i].textContent = 'Вопрос ' + numQuestion;
-						</script>
+						
 						{% endfor %}
+						<script>
+							let dropdownLink = document.getElementsByClassName('dropdown-link');
+							for (let i = 1; i <= dropdownLink.length; i++) dropdownLink[i - 1].textContent = 'Вопрос ' + i;
+						</script>
 				    </div>
 				</div>
 			</div>
@@ -38,7 +35,7 @@
 			</div>
 		</header>
 		<main>
-			<form id="slider-questions" class="slider" action="{% url 'posts:quiz_results' quiz.id questions %}" method="post">
+			<form id="slider-questions" class="slider" action="{% url 'posts:quiz_results' quiz.id %}" method="post">
 				{% for question in questions %}
 				<div id="q{{ question.id }}" class="slide-container question">
 					<div class="main-container">
