@@ -16,13 +16,12 @@ class Test(models.Model):
 
 class Question(models.Model):
     class qtype(models.TextChoices):
-        single = 'single'
         multiple = 'multiple'
 
     name = models.CharField(max_length=350)
     qtype = models.CharField(max_length=8,
                              choices=qtype.choices,
-                             default=qtype.single)
+                             default=qtype.multiple)
     test = models.ForeignKey(Test, on_delete=models.CASCADE)
     eplanation = models.CharField(max_length=550)
     image = models.ImageField(blank=True)

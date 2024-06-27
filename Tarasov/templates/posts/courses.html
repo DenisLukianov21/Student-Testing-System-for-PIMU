@@ -57,26 +57,12 @@
 									<div class="link-block-stat block-stat-return">
 										<a class="sign sign-up text-stat stat-return" href="#">Скрыть</a>
 									</div>
+									{% for obj in group %}
 									<label class="link-block">
 										<input class="stat-groups" type="radio" name="ans" value="yes">
-										<p class="text">7121Б1ПИ1</p>
+										<p class="text">{{ obj.name_group }}</p>
 									</label>
-									<label class="link-block">
-										<input class="stat-groups" type="radio" name="ans" value="yes">
-										<p class="text">7121Б1ПИ2</p>
-									</label>
-									<label class="link-block">
-										<input class="stat-groups" type="radio" name="ans" value="yes">
-										<p class="text">7122Б1ПИ</p>
-									</label>
-									<label class="link-block">
-										<input class="stat-groups" type="radio" name="ans" value="yes">
-										<p class="text">7123Б1ПИ</p>
-									</label>
-									<label class="link-block">
-										<input class="stat-groups" type="radio" name="ans" value="yes">
-										<p class="text">7121Б2ПИ</p>
-									</label>		
+									{% endfor %}	
 								</form>	
 								<form id="stat-list-courses" class="stat-courses slide-container stat-container">
 									<div class="link-block-stat block-stat-return">
@@ -183,26 +169,12 @@
 									{% endfor %}
 								</div>
 								<div id="list-groups" class="slide-container">
-									<label class="link-block">
-										<input class="answer" type="checkbox" name="ans" value="yes">
-										<p class="text">7121Б1ПИ1</p>
-									</label>
-									<label class="link-block">
-										<input class="answer" type="checkbox" name="ans" value="yes">
-										<p class="text">7121Б1ПИ2</p>
-									</label>
-									<label class="link-block">
-										<input class="answer" type="checkbox" name="ans" value="yes">
-										<p class="text">7122Б1ПИ</p>
-									</label>
-									<label class="link-block">
-										<input class="answer" type="checkbox" name="ans" value="yes">
-										<p class="text">7123Б1ПИ</p>
-									</label>
-									<label class="link-block">
-										<input class="answer" type="checkbox" name="ans" value="yes">
-										<p class="text">7121Б2ПИ</p>
-									</label>
+									{% for obj in groups%}
+										<label class="link-block">
+											<input class="answer" type="checkbox" name="ans" value="yes">
+											<p class="text">{{obj.name_group}}</p>
+										</label>
+									{% endfor %}
 								</div>
 							</div>
 							<hr class="vertical-line">

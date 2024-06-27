@@ -55,7 +55,7 @@
 							<div id="answers-container" class="info-subcontainer answers-container">
 								{% for answer in question.answer_set.all %}
 								<label class="link-block">
-									<input class="needed-input answer-check" type="checkbox" name="ans" value="{{ answer.id }}"" oninput="checkNeededInputs()">
+									<input class="needed-input answer-check" type="checkbox" name="ans" value="{{ answer.id }}" oninput="checkNeededInputs()">
 									<p class="text">{{ answer.name }}</p>
 								</label>
 								{% endfor %}

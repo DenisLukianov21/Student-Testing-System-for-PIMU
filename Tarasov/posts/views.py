@@ -159,7 +159,8 @@ def quiz_results(request, quiz_id):
 
     for question in questions:
         correct_answer = question.get_answers()
-        answers_ids = request.POST.getlist('answer')
+        answers_ids = request.POST.getlist('ans')
+        print(answers_ids)
         user_answers = []
         if answers_ids:
             for answer_id in answers_ids:
