@@ -1,8 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.db.models import F
-from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
+from django.shortcuts import get_object_or_404, render
 from user.models import Course, Group, UserGroup
 
 from .models import Answer, Choice, Question, Result, Test
@@ -53,6 +52,7 @@ def test_by_slug(request, slug):
     }
     return render(request, 'posts/tests.html', context)
 
+
 @login_required
 def display_quiz(request, quiz_id):
     """
@@ -63,96 +63,14 @@ def display_quiz(request, quiz_id):
 
     can_answer = questions[0].user_can_answer(request.user)
     if not can_answer:
-            return render(request, 'posts/partial.html', {'quiz': quiz, 
-                                                          'questions': questions,
-                                                          'user': request.user})
+        return render(request, 'posts/partial.html', {'quiz': quiz,
+                                                      'questions': questions,
+                                                      'user': request.user})
 
     context = {'quiz': quiz, 'quiz_id': quiz_id,
                'questions': questions}
     return render(request, 'posts/test_page.html', context)
 
-"""
-@login_required
-def display_question(request, quiz_id, question_id):
-    
-    Вспомогательная функция отображение вопроса
-    и переходу к следующему вопросу.
-    
-    quiz = get_object_or_404(Test, pk=quiz_id)
-    user_group = UserGroup.objects.get(user=request.user).group
-    quiz_group = quiz.test_in_course.group_in_course.all()
-    # Проверка доступа юзера
-    if user_group not in quiz_group:
-        raise PermissionDenied()
-    questions = quiz.question_set.all()
-    current_question, next_question = None, None
-    for ind, question in enumerate(questions):
-        if question.pk == question_id:
-            current_question = question
-            if ind != len(questions) - 1:
-                next_question = questions[ind + 1]
-    context = {'quiz': quiz, 'question': current_question,
-               'next_question': next_question}
-    return render(request, 'posts/test_page.html', context)
-"""
-"""
-@login_required
-def grade_question(request, quiz_id, question_id):
-    
-    Вспомогательная функция перехода к следующему вопросу
-    и проверки ответов.
-    
-    question = get_object_or_404(Question, pk=question_id)
-    quiz = get_object_or_404(Test, pk=quiz_id)
-    can_answer = question.user_can_answer(request.user)
-    try:
-        if not can_answer:
-            return render(request, 'posts/partial.html',
-                          {'question': question,
-                           'error_message': 'Вы уже отвечали на этот вопрос.'})
-
-        if question.qtype == 'single':  # Тип теста где только один ответ
-            correct_answer = question.get_answers()
-            user_answer = question.answer_set.get(pk=request.POST['answer'])
-            choice = Choice(user=request.user, question=question,
-                            answer=user_answer)
-            choice.save()
-            is_correct = correct_answer == user_answer
-            result, created = Result.objects.get_or_create(user=request.user,
-                                                           quiz=quiz)
-            if is_correct is True:
-                result.correct = F('correct') + 1
-            else:
-                result.wrong = F('wrong') + 1
-            result.save()
-
-        elif question.qtype == 'multiple':  # Тип теста где множество ответов
-            correct_answer = question.get_answers()
-            answers_ids = request.POST.getlist('answer')
-            user_answers = []
-            if answers_ids:
-                for answer_id in answers_ids:
-                    user_answer = Answer.objects.get(pk=answer_id)
-                    user_answers.append(user_answer.name)
-                    choice = Choice(user=request.user,
-                                    question=question, answer=user_answer)
-                    choice.save()
-                is_correct = correct_answer == user_answers
-                result, created = Result.objects.get_or_create(
-                    user=request.user,
-                    quiz=quiz)
-                if is_correct is True:
-                    result.correct = F('correct') + 1
-                else:
-                    result.wrong = F('wrong') + 1
-                result.save()
-    except ValueError:
-        return render(request, 'posts/partial.html', {'question': question})
-    return render(request, 'posts/partial.html',
-                  {'is_correct': is_correct,
-                   'correct_answer': correct_answer,
-                   'question': question})
-"""
 
 @login_required
 def quiz_results(request, quiz_id):
@@ -170,7 +88,6 @@ def quiz_results(request, quiz_id):
             for answer_id in answers_ids:
                 user_answer = Answer.objects.get(pk=answer_id)
                 user_answers.append(user_answer.name)
-                #user_answer.is_select = True
                 choice = Choice(user=request.user,
                                 question=question, answer=user_answer)
                 choice.save()
@@ -183,7 +100,7 @@ def quiz_results(request, quiz_id):
             else:
                 result.wrong = F('wrong') + 1
             result.save()
-
+    result = Result.objects.get(quiz=quiz)
     context = {'quiz': quiz,
                'result': int(result.correct / len(questions) * 100)}
     return render(request, 'posts/results.html', context)
