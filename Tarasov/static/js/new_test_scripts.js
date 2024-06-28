@@ -5,27 +5,46 @@ window.onload = function() {
     }
 };
 
-const timeInput = document.getElementById('timeInput');
 
-timeInput.addEventListener('input', function(e) {
-	// Удаляем все символы, кроме цифр
-	let value = e.target.value.replace(/[^\d]/g, '');
-
-	// Добавляем двоеточие после двух цифр
-	if (value.length === 2) {
-		e.target.value = value + ':';
-	} else if (value.length > 2) {
-	// Если введено больше двух цифр, форматируем как ЧЧ:ММ
-		e.target.value = value.slice(0, 2) + ':' + value.slice(2, 4);
-	}
-});
-
-// Предотвращаем ввод букв и других символов
-timeInput.addEventListener('keypress', function(e) {
-	if (!/\d/.test(e.key)) {
-		e.preventDefault();
-	}
-});
+if (document.getElementById('timeInput') != null) {
+	timeInput.addEventListener('input', function(e) {
+		// Удаляем все символы, кроме цифр
+		let value = e.target.value.replace(/[^\d]/g, '');
+	
+		// Добавляем двоеточие после двух цифр
+		if (value.length === 2) {
+			e.target.value = value + ':';
+		} else if (value.length > 2) {
+		// Если введено больше двух цифр, форматируем как ЧЧ:ММ
+			e.target.value = value.slice(0, 2) + ':' + value.slice(2, 4);
+		}
+	});
+	
+	// Предотвращаем ввод букв и других символов
+	timeInput.addEventListener('keypress', function(e) {
+		if (!/\d/.test(e.key)) {
+			e.preventDefault();
+		}
+	});
+	
+	let countdown = setInterval(function() {
+		let minutes = Number(timeInput.textContent.substring(0, 2));
+		let seconds = Number(timeInput.textContent.substring(3, 5));
+		let time = minutes * 60 + seconds;
+	
+		time--;
+	
+		minutes = Math.floor(time / 60);
+		seconds = time % 60;
+	
+		timeInput.innerHTML = (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
+	
+		if (time <= 0) {
+			clearInterval(countdown);
+			console.log("Время истекло!");
+		}
+	}, 1000);
+}
 
 function deleteAns(linkGoBack) {
 	linkGoBack.parentElement.remove();
@@ -301,21 +320,3 @@ function onTextInput(textElem) {
 	checkNeededInputs();
 	adjustHeight(textElem);
 }
-
-let countdown = setInterval(function() {
-	let minutes = Number(timeInput.textContent.substring(0, 2));
-	let seconds = Number(timeInput.textContent.substring(3, 5));
-	let time = minutes * 60 + seconds;
-
-	time--;
-
-	minutes = Math.floor(time / 60);
-	seconds = time % 60;
-
-	timeInput.innerHTML = (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
-
-	if (time <= 0) {
-		clearInterval(countdown);
-		console.log("Время истекло!");
-	}
-}, 1000);

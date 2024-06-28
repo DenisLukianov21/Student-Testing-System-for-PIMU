@@ -1,20 +1,107 @@
-{% if error_message %}
-    <span class="message-card bg-danger px-4 py-4 fw-bold">{{ error_message }}</span>
-{% elif is_correct %}
-    <span class="message-card bg-success px-4 py-4 fw-bold mb-3">Правильно.</span>
-    <span class="message-card bg-success px-4 py-4 fw-bold">{{ question.explanation }}</span>
-{% elif is_correct == None %}
-    <span class="message-card bg-warning px-4 py-4 fw-bold">Не выбран вариант ответа. Не забудьте ответить позже!</span>
-{% else %}
-    {% if correct_answer|length > 1 %}
-        <div class="message-card bg-danger px-4 py-4 fw-bold mb-3">
-            Неверно! Правильные ответы:
-            <ul class="list-unstyled mt-2">
-                {% for answer in correct_answer %}<li>{{ answer }}</li>{% endfor %}
-            </ul>
-        </div>
-    {% else %}
-        <span class="message-card bg-danger px-4 py-4 fw-bold  mb-3">Неверно! Правильный ответ: {{ correct_answer }}</span>
-    {% endif %}
-    <span class="message-card bg-success px-4 py-4 fw-bold">{{ question.explanation }}</span>
-{% endif %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Подробные результаты {{ quiz }}</title>
+		<link rel="stylesheet" href="{% static 'css/new_new_auth_style.css' %}">
+		<link rel="stylesheet" href="{% static 'css/new_test_style.css' %}">
+		<link rel="icon" href="{% static 'image1/favicon.ico' %}">
+	</head>
+	<body>
+		<header>
+			<div class="subcontainer-header">
+				<!--<img class="logo" src="image/logo.svg" alt="">-->
+				<div class="dropdown">
+				    <button id="open-dropdown-content" class="text">Перейти к вопросу</button>
+				    <div id="dropdown-content" class="dropdown-content">
+				        {% for question in questions %}
+				        <button class="text dropdown-link" value="#q{{ question.id }}" onclick="MoveToQuestion(this)"></button>
+						{% endfor %}
+						<script>
+							let dropdownLink = document.getElementsByClassName('dropdown-link');
+							for (let i = 1; i <= dropdownLink.length; i++) {
+                                dropdownLink[i - 1].textContent = 'Вопрос ' + i;
+                                dropdownLink[i - 1].value = '#q' + i;
+                            }
+						</script>
+				    </div>
+				</div>
+			</div>
+			<div class="subcontainer-header">
+				<p id="num-question" class="text">Вопрос 1</p>
+			</div>
+			<div class="subcontainer-header"></div>
+		</header>
+		<main>
+			<div id="slider-questions" class="slider">
+                {% for question in questions %}
+				<div id="q{{ question.id }}" class="slide-container question">
+					<div class="main-container">
+						<h3 class="title text">{{ question }}</h3>
+						<hr class="underline">
+						<div class="main-subcontainer">
+							<div class="check-logo-subcontainer info-subcontainer"></div>
+							<hr class="vertical-line">
+							<div id="answers-container" class="info-subcontainer answers-container">
+								{% for answer in question.answer_set.all %}
+                                    {% if answer.is_correct %}
+                                        {% if answer.is_select %}
+                                        <div class="link-block">
+                                            <label>
+                                                <input class="needed-input answer-checkbox" type="checkbox" name="correct" value="yes" checked disabled>
+                                                <span class="answer-checkmark"></span>
+                                            </label>
+                                            <p class="true-ans text">{{ answer.name }}</p>
+                                        </div>
+                                        {% else %}
+                                        <div class="link-block">
+                                            <label>
+                                                <input class="needed-input answer-checkbox" type="checkbox" name="correct" value="yes" checked disabled>
+                                                <span class="answer-checkmark"></span>
+                                            </label>
+                                            <p class="text">{{ answer.name }}</p>
+                                        </div>
+                                        {% endif %}
+                                    {% else %}
+                                        {% if answer.is_select %}
+                                        <div class="link-block">
+                                            <label>
+                                                <input class="needed-input answer-checkbox" type="checkbox" name="correct" value="yes" disabled>
+                                                <span class="answer-checkmark"></span>
+                                            </label>
+                                            <p class="false-ans text">{{ answer.name }}</p>
+                                        </div>
+                                        {% else %}
+                                        <div class="link-block">
+                                            <label>
+                                                <input class="needed-input answer-checkbox" type="checkbox" name="correct" value="yes" disabled>
+                                                <span class="answer-checkmark"></span>
+                                            </label>
+                                            <p class="text">{{ answer.name }}</p>
+                                        </div>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+							</div>
+						</div>
+					</div>
+				</div>
+                {% endfor %}
+                <script>
+                    let questions = document.getElementsByClassName('question');
+                    for (let i = 0; i < questions.length; i++) questions[i].id = 'q' + (i + 1);
+                </script>
+			</div>
+		</main>
+		<footer>
+			<div class="footer-container">
+				<a class="dot-slide" href="#" title="Предыдущий вопрос" onclick="goBackToQuestion()"></a>
+				<a id="progress" href="{% url 'posts:course' %}" title="Перейти на главную" style="background-size: 100%;">Завершить</a>
+				<a class="dot-slide" href="#" title="Следующий вопрос" onclick="goToQuestion()"></a>
+			</div>
+		</footer>
+		<script src="{% static 'js/new_test_scripts.js' %}"></script>
+	</body>
+</html>

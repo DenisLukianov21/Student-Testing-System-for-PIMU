@@ -60,6 +60,13 @@ def display_quiz(request, quiz_id):
     """
     quiz = get_object_or_404(Test, pk=quiz_id)
     questions = quiz.question_set.all()
+
+    can_answer = questions[0].user_can_answer(request.user)
+    if not can_answer:
+            return render(request, 'posts/partial.html', {'quiz': quiz, 
+                                                          'questions': questions,
+                                                          'user': request.user})
+
     context = {'quiz': quiz, 'quiz_id': quiz_id,
                'questions': questions}
     return render(request, 'posts/test_page.html', context)
@@ -152,20 +159,18 @@ def quiz_results(request, quiz_id):
     """
     Отображение результата теста.
     """
-    profile = request.user
     quiz = get_object_or_404(Test, pk=quiz_id)
     questions = quiz.question_set.all()
-    correct = 0
 
     for question in questions:
         correct_answer = question.get_answers()
         answers_ids = request.POST.getlist('ans')
-        print(answers_ids)
         user_answers = []
         if answers_ids:
             for answer_id in answers_ids:
                 user_answer = Answer.objects.get(pk=answer_id)
                 user_answers.append(user_answer.name)
+                #user_answer.is_select = True
                 choice = Choice(user=request.user,
                                 question=question, answer=user_answer)
                 choice.save()
@@ -175,15 +180,12 @@ def quiz_results(request, quiz_id):
                 quiz=quiz)
             if is_correct is True:
                 result.correct = F('correct') + 1
-                correct = correct + 1
             else:
                 result.wrong = F('wrong') + 1
             result.save()
 
-    results = Result.objects.filter(user=request.user,
-                                    quiz=quiz).values()
     context = {'quiz': quiz,
-               'result': int(correct / len(questions) * 100)}
+               'result': int(result.correct / len(questions) * 100)}
     return render(request, 'posts/results.html', context)
 
 

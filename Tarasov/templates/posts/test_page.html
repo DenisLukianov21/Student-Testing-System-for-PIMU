@@ -108,6 +108,10 @@
 					</div>
 				</div>-->
 				{% endfor %}
+				<script>
+                    let questions = document.getElementsByClassName('question');
+                    for (let i = 0; i < questions.length; i++) questions[i].id = 'q' + (i + 1);
+                </script>
 			</form>
 		</main>
 		<footer>
