@@ -1,10 +1,36 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.db.models import F
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from user.models import Course, Group, UserGroup
 
 from .models import Answer, Choice, Question, Result, Test
+
+
+def delete_course(request, pk):
+    Course.objects.filter(id=pk).delete()
+    return redirect("/")
+
+
+def delete_test(request, pk):
+    # TODO: подключить к urls и подкрутить это функцию к темплейту
+    Test.objects.filter(id=pk).delete()
+    return redirect("/")
+
+
+def add_course(request):
+    data_course = request.POST.getlist('add-edit-course')
+    print(data_course)
+    data_len = len(data_course)
+    new_course, created = Course.objects.get_or_create(
+        name_course=data_course[data_len - 2],
+        slug=data_course[data_len - 1]
+    )
+    select_groups = [group.id_group for group in Group.objects.filter(
+        name_group__in=data_course[0:data_len - 2])]
+    new_course.group_in_course.set(select_groups)
+    new_course.save()
+    return redirect("/")
 
 
 @login_required
@@ -23,30 +49,13 @@ def courses(request):
 
         for obj in page_obj:
             course = Course.objects.filter(slug=obj.slug)
-            print(course)
             obj.tests = Test.objects.filter(test_in_course=course[0])
-            print(obj.tests)
-
-        data_course = request.POST.getlist('add-edit-course')
-        data_len = len(data_course)
-
-        if data_len != 0:
-            new_course, created = Course.objects.get_or_create(
-                name_course=data_course[data_len - 2],
-                slug=data_course[data_len - 1])
-            select_groups = [group.id_group for group in Group.objects.filter(name_group__in=data_course[0:data_len - 2])]
-            new_course.group_in_course.set(select_groups)
-            new_course.save()
-
-        if len(request.POST.getlist('del-course')) != 0:
-            slug_del_course = request.POST.getlist('del-course')[0]
-            del_course = Course.objects.filter(slug=slug_del_course)
-            del_course.delete()
 
         if len(request.POST.getlist('del-test')) != 0:
             del_test_name = request.POST.getlist('del-test')[0]
             del_test = Test.objects.filter(name=del_test_name)
             del_test.delete()
+            return render(request, 'posts/courses.html')
 
         context = {
             'group': group,

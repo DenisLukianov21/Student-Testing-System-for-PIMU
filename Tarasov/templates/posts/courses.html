@@ -155,7 +155,7 @@
 										<div class="right-elem-link-block add-elem"></div>
 									</div>
 									{% for course in page_obj %}
-									<form id="del-course-{{ course.slug }}-form" class="link-block" action="{% url 'posts:course' %}" method="post">
+									<form id="del-course-{{ course.slug }}-form" class="link-block" action="{% url 'posts:delete_course' course.pk %}" method="post">
 										<div class="main-link-block">
 											<a class="left-elem-link-block edit-elem link-form-edit-course course" href="#"></a>
 											<a id="{{ course.slug }}" class="sign sign-up course" href="#">{{ course.name_course }}</a>
@@ -205,7 +205,7 @@
 
 											// Отправляем данные на сервер с помощью AJAX
 											let xhr = new XMLHttpRequest();
-											xhr.open("POST", "{% url 'posts:course' %}");
+											xhr.open("POST", "{% url 'posts:add_course' %}");
 											xhr.send(formData);
 
 											showTitleChooseElem('help-title-add-course');
