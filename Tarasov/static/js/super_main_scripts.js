@@ -201,11 +201,7 @@ function addEventListGroupsLinks() {
 		closeListGroups[i].addEventListener('click', () => {
 			setTimeout(() => location.href = '#courses', 0);
 
-			if (closeListGroups[i].parentElement.id != 'form-edit-course') {
-				showTitleChooseElem('title-add-course');
-			} else {
-				showTitleChooseElem('title-edit-course');
-			}
+			showTitleChooseElem('title-add-course');
 			
 			pseudoslideElems(closeListGroups[i], openListGroups[i]);		
 		});
@@ -226,7 +222,7 @@ function addEventElemPage(elemPage) {
 					elemPage[i].addEventListener('click', () => showTitleChooseElem('title-add-course'));
 				} else if (elemPage[i].classList.contains('link-form-edit-course')) {
 					elemPage[i].addEventListener('click', () => showFormEditCourse(elemPage[i + 1]));
-					elemPage[i].addEventListener('click', () => showTitleChooseElem('title-edit-course'));
+					elemPage[i].addEventListener('click', () => showTitleChooseElem('title-add-course'));
 				} else {
 					elemPage[i].addEventListener('click', () => showTitleChooseElem('help-title-tests'));
 				}
@@ -246,6 +242,12 @@ function showListGroups() {
 }
 
 function showFormAddCourse() {
+	inputCourse = document.getElementById('input-edit-course');
+	inputSlug = document.getElementById('input-edit-slug');
+
+	inputCourse.value = '';
+	inputSlug.value = '';
+
 	setTimeout(() => location.href = '#form-add-course', 0);
 }
 
@@ -256,7 +258,7 @@ function showFormEditCourse(editedCourse) {
 	inputCourse.value = editedCourse.textContent;
 	inputSlug.value = editedCourse.id;
 
-	setTimeout(() => location.href = '#form-edit-course', 0);
+	setTimeout(() => location.href = '#form-add-course', 0);
 }
 
 function showListTests(idCourse) {
@@ -297,6 +299,28 @@ function highlightActiveLink(isCoursesPage) {
 				elemPage[i].style.color = 'white';
 			}
 		}
+	}
+}
+
+function highlightLinkAddCourse() {
+	let name = document.getElementById('form-add-course').children[1];
+	let slug = document.getElementById('form-add-course').children[3];
+	let groups = document.getElementById('list-groups').children;
+	let buttonAddCourse = document.getElementById('title-add-course');
+
+	let flagForGropus = false, flagForNameAndSlug = false;
+
+	for (let i = 0; i < groups.length; i++) if (groups[i].children[0].checked) flagForGropus = true;
+	if (name.value != '' && slug.value != '') flagForNameAndSlug = true;
+
+	if (flagForGropus && flagForNameAndSlug) {
+		buttonAddCourse.style.color = '#264A33';
+		buttonAddCourse.type = 'submit';
+		buttonAddCourse.classList.add('blinking-text');
+	} else {
+		buttonAddCourse.style.color = '#0D121A';
+		buttonAddCourse.type = 'button';
+		buttonAddCourse.classList.remove('blinking-text');
 	}
 }
 

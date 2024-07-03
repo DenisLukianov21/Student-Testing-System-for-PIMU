@@ -27,6 +27,27 @@ def courses(request):
             obj.tests = Test.objects.filter(test_in_course=course[0])
             print(obj.tests)
 
+        data_course = request.POST.getlist('add-edit-course')
+        data_len = len(data_course)
+
+        if data_len != 0:
+            new_course, created = Course.objects.get_or_create(
+                name_course=data_course[data_len - 2],
+                slug=data_course[data_len - 1])
+            select_groups = [group.id_group for group in Group.objects.filter(name_group__in=data_course[0:data_len - 2])]
+            new_course.group_in_course.set(select_groups)
+            new_course.save()
+
+        if len(request.POST.getlist('del-course')) != 0:
+            slug_del_course = request.POST.getlist('del-course')[0]
+            del_course = Course.objects.filter(slug=slug_del_course)
+            del_course.delete()
+
+        if len(request.POST.getlist('del-test')) != 0:
+            del_test_name = request.POST.getlist('del-test')[0]
+            del_test = Test.objects.filter(name=del_test_name)
+            del_test.delete()
+
         context = {
             'group': group,
             'page_obj': page_obj,

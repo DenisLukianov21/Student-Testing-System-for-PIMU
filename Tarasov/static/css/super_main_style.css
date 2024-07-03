@@ -1,4 +1,4 @@
-h3, p.text-stat-result{
+h3, button, p.text-stat-result{
 	margin: 0 auto;
 	color: #0D121A;
 	font-family: Montserrat Alternates;
@@ -238,4 +238,27 @@ p.text-stat-result.new-style-text-stat{
 p.new-style-text-stat{
 	display: flex;
 	justify-content: flex-start;
+}
+
+button {
+	border: none;
+	cursor: pointer;
+	outline: none;
+	background-color: #A38C7A;
+}
+
+.blinking-text {
+	-webkit-animation: blinking 2s linear infinite;
+	animation: blinking 2s linear infinite;
+}
+
+@-webkit-keyframes blinking {
+	0% { color: rgb(13 18 26); }
+	50% { color: rgb(38, 74, 51); }
+	100% { color: rgb(13 18 26); }
+}
+@keyframes blinking {
+	0% { color: rgb(13 18 26); }
+	50% { color: rgb(38, 74, 51); }
+	100% { color: rgb(13 18 26); }
 }
