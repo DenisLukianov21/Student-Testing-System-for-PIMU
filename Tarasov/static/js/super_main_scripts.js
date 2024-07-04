@@ -10,6 +10,8 @@ addEventElemPage(courses);
 
 addEventDeleteElems();
 
+addEventCreateTestLinks();
+
 addEventListGroupsLinks();
 
 slideIndex = 2;
@@ -314,13 +316,33 @@ function highlightLinkAddCourse() {
 	if (name.value != '' && slug.value != '') flagForNameAndSlug = true;
 
 	if (flagForGropus && flagForNameAndSlug) {
-		buttonAddCourse.style.color = '#264A33';
 		buttonAddCourse.type = 'submit';
 		buttonAddCourse.classList.add('blinking-text');
 	} else {
-		buttonAddCourse.style.color = '#0D121A';
 		buttonAddCourse.type = 'button';
 		buttonAddCourse.classList.remove('blinking-text');
+	}
+}
+
+function addEventCreateTestLinks() {
+	let addTestLinks = document.getElementsByClassName('add-test');
+	for (let i = 0; i < addTestLinks.length; i++) {
+		addTestLinks[i].addEventListener('click', () => {
+			addTest(addTestLinks[i]);
+		}, { once: true });
+	}
+}
+
+function isEmptyTextarea(textarea) {
+	let titleAddTest = document.getElementById('title-add-test');
+	const submitForm = () => { textarea.parentElement.parentElement.submit(); };
+
+	if (textarea.value != '') {
+		titleAddTest.addEventListener('click', submitForm);
+		titleAddTest.classList.add('blinking-text');
+	} else {
+		titleAddTest.removeEventListener('click', submitForm);
+		titleAddTest.classList.remove('blinking-text');
 	}
 }
 

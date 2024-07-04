@@ -13,7 +13,6 @@ def delete_course(request, pk):
 
 
 def delete_test(request, pk):
-    # TODO: подключить к urls и подкрутить это функцию к темплейту
     Test.objects.filter(id=pk).delete()
     return redirect("/")
 
@@ -34,6 +33,20 @@ def add_course(request):
 
 
 @login_required
+def add_test(request):
+    data_test = request.POST.getlist('new-test-name')
+    print(data_test)
+    new_test, created = Test.objects.get_or_create(
+        name=data_test[1],
+        test_in_course=Course.objects.filter(slug=data_test[0])[0]
+    )
+    new_test.save()
+
+    context = { 'quiz_id': new_test.pk }
+    return render(request, 'posts/create_test.html', context)
+
+
+@login_required
 def index(request):
     """ Показывает главную страницу.1 """
     return render(request, 'posts/index.html')
@@ -50,12 +63,6 @@ def courses(request):
         for obj in page_obj:
             course = Course.objects.filter(slug=obj.slug)
             obj.tests = Test.objects.filter(test_in_course=course[0])
-
-        if len(request.POST.getlist('del-test')) != 0:
-            del_test_name = request.POST.getlist('del-test')[0]
-            del_test = Test.objects.filter(name=del_test_name)
-            del_test.delete()
-            return render(request, 'posts/courses.html')
 
         context = {
             'group': group,
@@ -81,6 +88,36 @@ def test_by_slug(request, slug):
         'page_obj': tests,
     }
     return render(request, 'posts/tests.html', context)
+
+
+@login_required
+def create_quiz(request, quiz_id):
+    iterator = 1
+    while request.POST.getlist('questions-q' + str(iterator)) != []:
+        data_question = request.POST.getlist('questions-q' + str(iterator))
+        data_correct_ans = request.POST.getlist('correct-ans-q' + str(iterator))
+        data_answers = request.POST.getlist('answers-q' + str(iterator))
+        data_image = request.FILES.get('photo-q' + str(iterator), None)
+        if data_image is None:
+            data_image = ''
+
+        new_question, created = Question.objects.get_or_create(
+            name=data_question[0], test=get_object_or_404(Test, pk=quiz_id),
+            eplanation=data_question[0], image=data_image
+        )
+        new_question.save()
+
+        for answer in data_answers:
+            new_ans, created = Answer.objects.get_or_create(
+                question=new_question, name=answer
+            )
+            for correct_ans in data_correct_ans:
+                if new_ans.name == correct_ans:
+                    new_ans.is_correct = True
+            new_ans.save()
+
+        iterator = iterator + 1
+    return redirect("/")
 
 
 @login_required

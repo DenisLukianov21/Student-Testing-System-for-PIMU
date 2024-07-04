@@ -6,7 +6,7 @@ h3, button, p.text-stat-result{
 	font-size: calc(70 / 1440 * 100vw);
 }
 
-.course, .test, .conf-del, .canc-del, .text-stat{
+.course, .test, .conf-del, .canc-del, .text-stat, textarea{
 	margin: 0;
 	color: white;
 	font-family: Montserrat Alternates, monospace;
@@ -261,4 +261,22 @@ button {
 	0% { color: rgb(13 18 26); }
 	50% { color: rgb(38, 74, 51); }
 	100% { color: rgb(13 18 26); }
+}
+
+textarea {
+	margin: 0 calc(5 / 1024 * 100vh);
+	padding: 0;
+	width: 100%;
+	background-color: #A38C7A;
+	border: 0;
+    resize: none;
+	direction: ltr;
+}
+
+textarea:focus{
+	outline-color: #A38C7A;
+}
+
+textarea::placeholder{
+	color: white;
 }

@@ -27,23 +27,25 @@ if (document.getElementById('timeInput') != null) {
 		}
 	});
 	
-	let countdown = setInterval(function() {
-		let minutes = Number(timeInput.textContent.substring(0, 2));
-		let seconds = Number(timeInput.textContent.substring(3, 5));
-		let time = minutes * 60 + seconds;
-	
-		time--;
-	
-		minutes = Math.floor(time / 60);
-		seconds = time % 60;
-	
-		timeInput.innerHTML = (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
-	
-		if (time <= 0) {
-			clearInterval(countdown);
-			console.log("Время истекло!");
-		}
-	}, 1000);
+	if (timeInput.nodeName != 'INPUT') {
+		let countdown = setInterval(function() {
+			let minutes = Number(timeInput.textContent.substring(0, 2));
+			let seconds = Number(timeInput.textContent.substring(3, 5));
+			let time = minutes * 60 + seconds;
+		
+			time--;
+		
+			minutes = Math.floor(time / 60);
+			seconds = time % 60;
+		
+			timeInput.innerHTML = (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
+		
+			if (time <= 0) {
+				clearInterval(countdown);
+				console.log("Время истекло!");
+			}
+		}, 1000);
+	}
 }
 
 function deleteAns(linkGoBack) {
@@ -59,6 +61,7 @@ function adjustHeight(textarea) {
 
 function createAns(linkAddAns) {
 	let ansContainer = linkAddAns.parentElement;
+	let numQuestion = ansContainer.parentElement.parentElement.parentElement.id;
 
 	let div = document.createElement('div');
     div.className = 'link-block';
@@ -68,8 +71,7 @@ function createAns(linkAddAns) {
     let input = document.createElement('input');
     input.className = 'needed-input answer-checkbox';
     input.type = 'checkbox';
-    input.name = 'correct';
-    input.value = 'yes';
+    input.name = 'correct-ans-' + numQuestion;
 
     let span = document.createElement('span');
     span.className = 'answer-checkmark';
@@ -77,6 +79,7 @@ function createAns(linkAddAns) {
 
     let textarea = document.createElement('textarea');
     textarea.className = 'needed-input answer-input text';
+	textarea.name = 'answers-' + numQuestion;
     textarea.maxLength = '64';
     textarea.placeholder = 'Введите ответ';
     textarea.spellcheck = false;
@@ -109,6 +112,7 @@ function addQuestion() {
 
     let questionInput = document.createElement('textarea');
     questionInput.className = 'needed-input question-input title text';
+	questionInput.name = 'questions-' + newQuestion.id;
     questionInput.maxLength = '256';
     questionInput.placeholder = 'Введите вопрос';
     questionInput.spellcheck = false;
@@ -133,7 +137,7 @@ function addQuestion() {
     inputUpload.id = 'file-upload';
     inputUpload.className = 'text';
     inputUpload.type = 'file';
-    inputUpload.name = 'photo';
+    inputUpload.name = 'photo-' + newQuestion.id;
     inputUpload.accept = 'image/*';
 
     let verticalLine = document.createElement('hr');
@@ -191,7 +195,7 @@ function checkCorrectHrefs() {
 
 function checkCorrectNumQuestion() {
 	if (document.getElementById('num-question').textContent.substring(7) > document.getElementsByClassName('dropdown-link').length) {
-		document.getElementById('num-question').textContent = 'Воспрос ' + document.getElementsByClassName('dropdown-link').length;
+		document.getElementById('num-question').textContent = 'Вопрос ' + document.getElementsByClassName('dropdown-link').length;
 	}
 }
 
@@ -281,7 +285,10 @@ function checkNeededInputs() {
 				if (neededInputs[j].checked == true) checkTrueAns = true;
 				checkTakeTest = true;
 			}
-			if (neededInputs[j].classList.contains('answer-checkbox') && neededInputs[j].checked == true) checkTrueAns = true;
+			if (neededInputs[j].classList.contains('answer-checkbox') && neededInputs[j].checked == true) {
+				checkTrueAns = true;
+				neededInputs[j].value = neededInputs[j].parentElement.parentElement.children[1].value;
+			}
 			if (neededInputs[j].classList.contains('question-input') && neededInputs[j].value != '') checkQuestion = true;
 			if (neededInputs[j].classList.contains('answer-input') && checkAnsNotEmpty) {
 				if (neededInputs[j].value != '') checkAns = true; else {
@@ -310,9 +317,11 @@ function checkNeededInputs() {
 	if (percentage == 100) {
 		progress.type = 'submit';
 		progress.textContent = 'Завершить';
+		if (questions[0].parentElement.nodeType == 'FORM') progress.addEventListener('click', submitForm);
 	} else {
 		progress.type = 'button';
 		progress.textContent = Math.round(percentage) + '%';
+		if (questions[0].parentElement.nodeType == 'FORM') progress.removeEventListener('click', submitForm);
 	}
 }
 

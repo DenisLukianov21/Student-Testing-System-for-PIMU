@@ -139,9 +139,9 @@
 						<div class="title-container slider">
 							<h3 id="help-title-courses" class="slide-container">Выберите курс</h3>
 							<h3 id="help-title-tests" class="slide-container">Выберите тест</h3>
+							<button id="title-add-test" class="slide-container" type="button">Добавить тест</button>
 							<button id="title-add-course" class="slide-container" type="button" onclick="submitFormsForCourse(this)">Добавить или изменить курс</button>
 							<h3 id="help-title-groups" class="slide-container">Выберите группу</h3>
-							<h3 id="help-title-add-course" class="slide-container">Перезагрузите страницу</h3>
 							<h3 id="help-delete-course" class="slide-container">Удалить выбранный курс?</h3>
 							<h3 id="help-delete-test" class="slide-container">Удалить выбранный тест?</h3>
 						</div>
@@ -199,7 +199,7 @@
 											let courseForm = document.getElementById('form-add-course');
 											
 											let formData = new FormData(groupForm);
-											for (var pair of new FormData(courseForm)) {
+											for (let pair of new FormData(courseForm)) {
 												formData.append(pair[0], pair[1]);
 											}
 
@@ -208,7 +208,7 @@
 											xhr.open("POST", "{% url 'posts:add_course' %}");
 											xhr.send(formData);
 
-											showTitleChooseElem('help-title-add-course');
+											window.location.href = "{% url 'posts:course' %}";
 										}
 									}
 								</script>
@@ -217,11 +217,14 @@
 								<div id="{{ course.slug }}-tests" class="slide-container test-container">
 									<div class="main-link-block">
 										<div class="right-elem-link-block add-elem"></div>
-										<a class="sign sign-up test" href="#">Добавить тест</a>
+										<a class="sign sign-up test add-test" href="#">Добавить тест</a>
 										<div class="left-elem-link-block add-elem"></div>
 									</div>
+									<form id="{{ course.slug }}-tests-form" class="link-block" action="{% url 'posts:add_test' %}" method="post" style="display: none;">
+										{% csrf_token %}
+									</form>
 									{% for test in course.tests %} 
-									<form id="del-test-{{ test.id }}-form" class="link-block" action="{% url 'posts:course' %}" method="post">
+									<form id="del-test-{{ test.id }}-form" class="link-block" action="{% url 'posts:delete_test' test.pk %}" method="post">
 										<div class="main-link-block">
 											<a class="right-elem-link-block remove-elem" href="#"></a>
 											<a class="sign sign-up test" href="{% url 'posts:display_quiz' test.id %}">{{ test.name }}</a>
@@ -237,6 +240,38 @@
 									{% endfor %}
 								</div>
 								{% endfor %}
+								{% block content2 %}
+								<script>
+									function addTest(linkAddTest) {
+										let testContainer = linkAddTest.parentElement.parentElement;
+
+										let form = testContainer.children[1];
+										form.style.display = 'flex';
+
+										let div = document.createElement('div');
+										div.className = 'main-link-block';
+
+										let textarea = document.createElement('textarea');
+										textarea.name = 'new-test-name';
+										textarea.maxLength = '64';
+										textarea.placeholder = 'Название теста';
+										textarea.spellcheck = false;
+
+										let input = document.createElement('input');
+										input.type = 'hidden';
+										input.name = textarea.name;
+										input.value = testContainer.id.substring(0, testContainer.id.length - 6);
+
+										textarea.oninput = function() { isEmptyTextarea(this); };
+										
+										div.appendChild(input);
+										div.appendChild(textarea);
+										form.appendChild(div);
+
+										showTitleChooseElem('title-add-test');
+									}
+								</script>
+								{% endblock %}
 							</div>
 						</div>
 					</div>
