@@ -17,11 +17,13 @@
 				    <div id="dropdown-content" class="dropdown-content">
 						{% for question in questions %}
 				        <button class="text dropdown-link" value="#q{{ question.id }}" onclick="MoveToQuestion(this)"></button>
-						
 						{% endfor %}
 						<script>
 							let dropdownLink = document.getElementsByClassName('dropdown-link');
-							for (let i = 1; i <= dropdownLink.length; i++) dropdownLink[i - 1].textContent = 'Вопрос ' + i;
+							for (let i = 1; i <= dropdownLink.length; i++) {
+                                dropdownLink[i - 1].textContent = 'Вопрос ' + i;
+                                dropdownLink[i - 1].value = '#q' + i
+                            }
 						</script>
 				    </div>
 				</div>

@@ -229,7 +229,7 @@
 											<a class="right-elem-link-block remove-elem" href="#"></a>
 											<a class="sign sign-up test" href="{% url 'posts:display_quiz' test.id %}">{{ test.name }}</a>
 											<input type="hidden" name="del-test" value="{{ test.name }}">
-											<a class="left-elem-link-block edit-elem" href="#"></a>
+											<a class="left-elem-link-block edit-elem" href="{% url 'posts:edit_test' test.id %}"></a>
 										</div>
 										<div class="delete-link-block">
 											<button class="sign sign-up conf-del" type="submit" form="del-test-{{ test.id }}-form">Да</button>

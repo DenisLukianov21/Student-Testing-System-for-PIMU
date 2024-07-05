@@ -47,6 +47,18 @@ def add_test(request):
 
 
 @login_required
+def edit_test(request, pk):
+    quiz = get_object_or_404(Test, pk=pk)
+    questions = quiz.question_set.all()
+
+    context = {
+        'quiz':quiz, 'quiz_id': pk,
+        'questions': questions
+    }
+    return render(request, 'posts/edit_test.html', context)
+
+
+@login_required
 def index(request):
     """ Показывает главную страницу.1 """
     return render(request, 'posts/index.html')
