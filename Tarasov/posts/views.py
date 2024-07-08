@@ -110,6 +110,7 @@ def create_quiz(request, quiz_id):
         data_correct_ans = request.POST.getlist('correct-ans-q' + str(iterator))
         data_answers = request.POST.getlist('answers-q' + str(iterator))
         data_image = request.FILES.get('photo-q' + str(iterator), None)
+        print(data_image)
         if data_image is None:
             data_image = ''
 
@@ -139,9 +140,8 @@ def display_quiz(request, quiz_id):
     """
     quiz = get_object_or_404(Test, pk=quiz_id)
     questions = quiz.question_set.all()
-    print(questions)
-
-    can_answer = questions[0].user_can_answer(request.user)
+    for question in questions:
+        can_answer = question.user_can_answer(request.user)
     if not can_answer:
         return render(request, 'posts/partial.html', {'quiz': quiz,
                                                       'questions': questions,

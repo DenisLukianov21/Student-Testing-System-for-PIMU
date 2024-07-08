@@ -8,7 +8,7 @@
             "name": "Python: Django",
             "type": "python",
             "request": "launch",
-            "pythonPath": "/Users/denis/DEV/Student-Testing-System-for-PIMU/venv/bin/python",
+            "python": "/Users/denis/DEV/Student-Testing-System-for-PIMU/venv/bin/python",
             "program": "${workspaceFolder}/Tarasov/manage.py",
             "args": [
                 "runserver",

@@ -32,7 +32,7 @@ class Question(models.Model):
 
     def user_can_answer(self, user):
         user_choices = user.choice_set.all()
-        done = user_choices.filter(question=self)
+        done = user_choices.filter(question=self.id)
         print(done)
         if done.exists():
             return False
