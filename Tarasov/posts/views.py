@@ -171,7 +171,8 @@ def quiz_results(request, quiz_id):
             choice = Choice(user=request.user,
                             question=question, answer=user_answer)
             choice.save()
-        is_correct = correct_answer == user_answers
+    for answer in user_answers:
+        is_correct = answer in correct_answer
         result, created = Result.objects.get_or_create(
             user=request.user,
             quiz=quiz)
