@@ -139,6 +139,7 @@ def display_quiz(request, quiz_id):
     """
     quiz = get_object_or_404(Test, pk=quiz_id)
     questions = quiz.question_set.all()
+    print(questions)
 
     can_answer = questions[0].user_can_answer(request.user)
     if not can_answer:
@@ -158,27 +159,27 @@ def quiz_results(request, quiz_id):
     """
     quiz = get_object_or_404(Test, pk=quiz_id)
     questions = quiz.question_set.all()
-
+    correct_answer = []
     for question in questions:
-        correct_answer = question.get_answers()
-        answers_ids = request.POST.getlist('ans')
-        user_answers = []
-        if answers_ids:
-            for answer_id in answers_ids:
-                user_answer = Answer.objects.get(pk=answer_id)
-                user_answers.append(user_answer.name)
-                choice = Choice(user=request.user,
-                                question=question, answer=user_answer)
-                choice.save()
-            is_correct = correct_answer == user_answers
-            result, created = Result.objects.get_or_create(
-                user=request.user,
-                quiz=quiz)
-            if is_correct is True:
-                result.correct = F('correct') + 1
-            else:
-                result.wrong = F('wrong') + 1
-            result.save()
+        correct_answer.append(question.get_answers()[0])
+    answers_ids = request.POST.getlist('ans')
+    user_answers = []
+    if answers_ids:
+        for answer_id in answers_ids:
+            user_answer = Answer.objects.get(pk=answer_id)
+            user_answers.append(user_answer.name)
+            choice = Choice(user=request.user,
+                            question=question, answer=user_answer)
+            choice.save()
+        is_correct = correct_answer == user_answers
+        result, created = Result.objects.get_or_create(
+            user=request.user,
+            quiz=quiz)
+        if is_correct is True:
+            result.correct = F('correct') + 1
+        else:
+            result.wrong = F('wrong') + 1
+        result.save()
     result = Result.objects.get(quiz=quiz)
     context = {'quiz': quiz,
                'result': int(result.correct / len(questions) * 100)}

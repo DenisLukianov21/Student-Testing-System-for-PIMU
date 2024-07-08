@@ -27,11 +27,8 @@ class Question(models.Model):
     image = models.ImageField(blank=True)
 
     def get_answers(self):
-        if self.qtype == 'single':
-            return self.answer_set.filter(is_correct=True).first()
-        else:
-            qs = self.answer_set.filter(is_correct=True).values()
-            return [i.get('name') for i in qs]
+        qs = self.answer_set.filter(is_correct=True).values()
+        return [i.get('name') for i in qs]
 
     def user_can_answer(self, user):
         user_choices = user.choice_set.all()
