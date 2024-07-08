@@ -35,7 +35,8 @@ class Question(models.Model):
 
     Methods:
         get_answers(): Returns the names of the correct answers.
-        user_can_answer(user): Checks if the user has already answered the question.
+        user_can_answer(user): Checks if the user has
+        already answered the question.
         __str__(): Returns the name of the question.
     """
     class qtype(models.TextChoices):

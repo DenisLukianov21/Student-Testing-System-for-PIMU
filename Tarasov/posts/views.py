@@ -7,6 +7,7 @@ from user.models import Course, Group, UserGroup
 from .models import Answer, Choice, Question, Result, Test
 
 
+@login_required
 def delete_course(request, pk):
     """
     Deletes a course based on the provided primary key.
@@ -20,6 +21,7 @@ def delete_course(request, pk):
     return redirect("/")
 
 
+@login_required
 def delete_test(request, pk):
     """
     Deletes a test from the database based on the provided primary key.
@@ -35,6 +37,7 @@ def delete_test(request, pk):
     return redirect("/")
 
 
+@login_required
 def add_course(request):
     """
     Adds a new course to the database.
@@ -111,6 +114,7 @@ def edit_test(request, pk):
     # Get all questions related to the test
     questions = quiz.question_set.all()
     # Create a context dictionary with the test and its questions
+    
     context = {
         'quiz': quiz,  # The test object
         'quiz_id': pk,  # The primary key of the test
