@@ -82,20 +82,41 @@
 									{% for course in page_obj %}
 										{% for test in course.tests %}  
 										<label class="link-block">
-											<input class="{{ course.slug }}-stat-tests stat-tests" type="radio" name="ans" value="yes">
+											<input class="{{ course.slug }}-stat-tests stat-tests" type="radio" name="ans" value="{{ test.id }}">
 											<p class="text">{{ test.name }}</p>
+											<a href="{% url 'posts:display_quiz' test.id %}" hidden></a>
 										</label>
 										{% endfor %}
 									{% endfor %}
 								</form>
 								<div id="stat-result-page" class="slide-container stat-container">
 									<div class="link-block-stat">
-										<p class="text-stat-result"><font class="text-stat-result">88</font>%</p>
+										<p class="text-stat-result"><font class="text-stat-result"></font>%</p>
 									</div>
 									<div class="link-block-stat">
 										<a class="sign sign-in show-more-stat" href="#">Посмотреть подробнее</a>
 									</div>
 								</div>
+								{% block content3 %}
+								<script>
+									async function submitAndGetStatResult() {
+										const submitUrl = "{% url 'posts:quiz_quick_results' %}";
+										const formTestID = new FormData();
+										formTestID.append('csrfmiddlewaretoken', "{{ csrf_token }}");
+										formTestID.append('test', testID);
+
+										fetch(submitUrl, {
+											method: 'POST',
+											body: formTestID,
+										})
+											.then(response => response.json())
+											.then(data => {
+												document.querySelector('font').textContent = data.stat_result;
+												document.querySelector('.show-more-stat').href = testLink;
+										});
+									}
+								</script>
+								{% endblock %}
 								<!--<div id="stat-result-page" class="slide-container stat-container">
 									<div class="link-block-stat sign sign-in">
 										<p class="new-style-text-stat">Петров П.П.</p>

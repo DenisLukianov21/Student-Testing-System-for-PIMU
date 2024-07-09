@@ -31,16 +31,16 @@
 		</header>
 		<main>
 			<form id="slider-questions" class="slider" action="{% url 'posts:create_quiz' quiz_id %}" method="post" enctype="multipart/form-data">
+				{% csrf_token %}
 				<div id="q1" class="slide-container question">
-					{% csrf_token %}
 					<div class="main-container">
 						<textarea class="needed-input question-input title text" name="questions-q1" maxlength="256" placeholder="Введите вопрос" spellcheck="false" oninput="onTextInput(this)"></textarea>
 						<hr class="underline">
 						<div class="main-subcontainer">
 							<div class="info-subcontainer">
 								<div class="stud-logo-subcontainer"></div>
-								<label for="file-upload" class="file-upload text">
-									<input id="file-upload" class="text" type="file" name="photo-q1" accept="image/*">
+								<label for="file-upload-q1" class="file-upload text">
+									<input id="file-upload-q1" class="text" type="file" name="photo-q1" accept="image/*">
 								</label>
 							</div>
 							<hr class="vertical-line">

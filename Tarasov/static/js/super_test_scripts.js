@@ -123,18 +123,18 @@ function addQuestion() {
     let mainSubcontainer = document.createElement('div');
     mainSubcontainer.className = 'main-subcontainer';
 
-    let leftSubcontainer = document.createElement('form');
+    let leftSubcontainer = document.createElement('div');
     leftSubcontainer.className = 'info-subcontainer';
 
     let picLogo = document.createElement('div');
     picLogo.className = 'stud-logo-subcontainer';
 
     let labelUpload = document.createElement('label');
-    labelUpload.htmlFor = 'file-upload';
+    labelUpload.htmlFor = 'file-upload-' + newQuestion.id;
     labelUpload.className = 'file-upload text';
 
     let inputUpload = document.createElement('input');
-    inputUpload.id = 'file-upload';
+    inputUpload.id = 'file-upload-' + newQuestion.id;
     inputUpload.className = 'text';
     inputUpload.type = 'file';
     inputUpload.name = 'photo-' + newQuestion.id;
@@ -313,15 +313,13 @@ function checkNeededInputs() {
 	let percentage = countNotEmptyInputs / countNeededInputs * 100;
 
 	progress.style.backgroundSize = percentage + '%';
-	
+
 	if (percentage == 100) {
 		progress.type = 'submit';
 		progress.textContent = 'Завершить';
-		if (questions[0].parentElement.nodeType == 'FORM') progress.addEventListener('click', submitForm);
 	} else {
 		progress.type = 'button';
 		progress.textContent = Math.round(percentage) + '%';
-		if (questions[0].parentElement.nodeType == 'FORM') progress.removeEventListener('click', submitForm);
 	}
 }
 

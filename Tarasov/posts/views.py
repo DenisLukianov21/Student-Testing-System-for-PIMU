@@ -3,6 +3,7 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import F
 from django.shortcuts import get_object_or_404, render, redirect
 from user.models import Course, Group, UserGroup
+from django.http import JsonResponse
 
 from .models import Answer, Choice, Question, Result, Test
 
@@ -306,6 +307,16 @@ def display_quiz(request, quiz_id):
 
     # Render the test_page.html page with the context
     return render(request, 'posts/test_page.html', context)
+
+
+@login_required
+def quiz_quick_results(request):
+    quiz_id = request.POST.get('test')
+    quiz = get_object_or_404(Test, pk=quiz_id)
+    questions = quiz.question_set.all()
+    result = Result.objects.get(quiz=quiz)
+    percentage = int(result.correct / len(questions) * 100)
+    return JsonResponse({'stat_result': percentage})
 
 
 @login_required
