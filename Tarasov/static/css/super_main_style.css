@@ -26,6 +26,8 @@ h3, button, p.text-stat-result{
 .slide-container, .list-questions{
 	overflow-y: auto;
 	overflow-x: hidden;
+	scrollbar-width: thin; /* Firefox */
+    scrollbar-color: white #0D121A; /* Firefox */
 }
 
 .question{

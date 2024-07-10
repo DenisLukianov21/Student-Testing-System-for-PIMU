@@ -58,16 +58,20 @@ def add_course(request):
     course_name = data_course[data_len - 2]
     slug = data_course[data_len - 1]
     # Get or create the course object
-    new_course, created = Course.objects.get_or_create(
-        name_course=course_name,
-        slug=slug
-    )
+    try:
+        course = Course.objects.get(slug=slug)
+        course.name_course = course_name
+    except Course.DoesNotExist:
+        course, created = Course.objects.get_or_create(
+            name_course=course_name,
+            slug=slug
+        )
     # Get the list of group IDs from the data list
     select_groups = [group.id_group for group in Group.objects.filter(
         name_group__in=data_course[0:data_len - 2])]
     # Set the course's group_in_course field to the selected groups
-    new_course.group_in_course.set(select_groups)
-    new_course.save()
+    course.group_in_course.set(select_groups)
+    course.save()
     return redirect("/")
 
 

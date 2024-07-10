@@ -1,5 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+@font-face {
+	font-family: 'Glober';
+	src: url('../fonts/glober.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
 :root{
 	--basic-color: brightness(0) saturate(100%) invert(56%) sepia(42%) saturate(187%) hue-rotate(344deg) brightness(93%) contrast(89%);
+	--central-logo-color: brightness(0) saturate(100%) invert(20%) sepia(95%) saturate(1326%) hue-rotate(333deg) brightness(95%) contrast(104%);
 }
 
 body{
@@ -107,6 +117,12 @@ input::placeholder{
 	max-width: 100%;
 	height: calc(56 / 1024 * 100vh);
 	filter: var(--basic-color);
+}
+
+.central-logo {
+	max-width: 100%;
+	height: 100%;
+	filter: var(--central-logo-color);
 }
 
 .PIMU-text{

@@ -238,9 +238,12 @@ function addEventElemPage(elemPage) {
 				if (elemPage[i].classList.contains('link-form-add-course')) {
 					elemPage[i].addEventListener('click', showFormAddCourse);
 					elemPage[i].addEventListener('click', () => showTitleChooseElem('title-add-course'));
+					elemPage[i].addEventListener('click', highlightLinkAddCourse);
 				} else if (elemPage[i].classList.contains('link-form-edit-course')) {
 					elemPage[i].addEventListener('click', () => showFormEditCourse(elemPage[i + 1]));
 					elemPage[i].addEventListener('click', () => showTitleChooseElem('title-add-course'));
+					elemPage[i].addEventListener('click', () => getListGroupsInCourse(elemPage[i + 1]));
+					elemPage[i].addEventListener('click', highlightLinkAddCourse);
 				} else {
 					elemPage[i].addEventListener('click', () => showTitleChooseElem('help-title-tests'));
 				}
@@ -360,6 +363,22 @@ function isEmptyTextarea(textarea) {
 		titleAddTest.removeEventListener('click', submitForm);
 		titleAddTest.classList.remove('blinking-text');
 	}
+}
+
+function getListGroupsInCourse(editedCourse) {
+	let listCourses = document.getElementById('stat-list-courses');
+	let listGroups = [];
+
+	for (let i = 1; i < listCourses.children.length; i++)
+		if (editedCourse.id == listCourses.children[i].children[0].id)
+			listGroups.push(listCourses.children[i].children[0].value);
+
+	let listConnedctedGroups = document.getElementById('list-groups');
+
+	for (let i = 0; i < listGroups.length; i++)
+		for (let j = 0; j < listConnedctedGroups.children.length; j++)
+			if (listGroups[i] == listConnedctedGroups.children[j].children[1].textContent)
+				listConnedctedGroups.children[j].children[0].checked = true;
 }
 
 /*function addAndRemoveEventListElem(isCoursesPage) {

@@ -16,7 +16,7 @@
 				<img class="logo" src="{% static 'image1/logo.svg' %}" alt="">
 			</div>
 			<div class="subcontainer-header">
-				<p class="PIMU-text">ПИМУ</p>
+				<img class="central-logo" src="{% static 'image1/pimu-logo.png' %}" alt="">
 			</div>
 			<div class="subcontainer-header">
 				<a class="PIMU-text" href="{% url 'users:logout' %}">Выйти</a>
@@ -89,7 +89,7 @@
 										{% for obj in group %}
 											{% for course in obj.courses %}
 												<label class="link-block">
-													<input id="{{ course.slug }}{{ obj.id_group }}" class="{{ obj.id_group }}-stat-courses stat-courses" type="radio" name="ans" value="yes">
+													<input id="{{ course.slug }}" class="{{ obj.id_group }}-stat-courses stat-courses" type="radio" name="ans" value="{{obj.name_group}}">
 													<p class="text">{{ course.name_course }}</p>
 												</label>
 											{% endfor %}
@@ -115,7 +115,7 @@
 											{% for course in obj.courses %}
 												{% for test in course.tests %}  
 												<label class="link-block">
-													<input class="{{ course.slug }}{{ obj.id_group }}-stat-tests stat-tests" type="radio" name="ans" value="{{ test.id }}">
+													<input class="{{ course.slug }}-stat-tests stat-tests" type="radio" name="ans" value="{{ test.id }}">
 													<p class="text">{{ test.name }}</p>
 													<a href="{% url 'posts:display_quiz' test.id %}" hidden></a>
 												</label>
