@@ -74,6 +74,7 @@ function addEventRadioboxes() {
 				checkStatGroups = true;
 				showChooseNameStatElem(nameRadiobox, blocksStatElem[0]);
 				addEventClosePageLinks();
+				showCourseChoosedGroup(radioboxes[i]);
 			});
 		} else if (radioboxes[i].classList.contains('stat-courses')) {
 			radioboxes[i].addEventListener('click', () => {
@@ -87,13 +88,22 @@ function addEventRadioboxes() {
 				testID = radioboxes[i].value;
 				testLink = radioboxes[i].parentElement.children[2].href;
 				submitAndGetStatResult();
-				setTimeout(changeColorStatResult, 100);
+				changeColorStatResult();
 
 				checkStatTests = true;
 				showChooseNameStatElem(nameRadiobox, blocksStatElem[2]);
 				addEventClosePageLinks();
 			});
 		}
+	}
+}
+
+function showCourseChoosedGroup(group) {
+	let course = document.querySelectorAll('input.stat-courses');
+
+	for (let i = 0; i < course.length; i++) {
+		if (course[i].classList.contains(group.id + '-stat-courses')) course[i].parentElement.style.display = 'flex';
+		else course[i].parentElement.style.display = 'none';
 	}
 }
 
@@ -128,16 +138,18 @@ async function changeColorStatResult() {
 	const startGreen = 59, endGreen = 74;
 	const startBlue = 48, endBlue = 51;
 
-	let valuesStatResult = document.querySelector('font.text-stat-result');
+	let valuesStatResult = document.querySelectorAll('font.text-stat-result');
 
-	const value = Number(valuesStatResult.textContent);
+	for (let i = 0; i < valuesStatResult.length; i++) {
+		const value = Number(valuesStatResult[i].textContent);
 
-	const red = getColorForValue(startValue, endValue, value, startRed, endRed);
-	const green = getColorForValue(startValue, endValue, value, startGreen, endGreen);
-	const blue = getColorForValue(startValue, endValue, value, startBlue, endBlue);
+		const red = getColorForValue(startValue, endValue, value, startRed, endRed);
+		const green = getColorForValue(startValue, endValue, value, startGreen, endGreen);
+		const blue = getColorForValue(startValue, endValue, value, startBlue, endBlue);
 
-	valuesStatResult.style.color = 'rgb(' + red + ', ' + green + ', ' + blue + ', 1.0)';
-	valuesStatResult.parentElement.style.color = 'rgb(' + red + ', ' + green + ', ' + blue + ', 1.0)';
+		valuesStatResult[i].style.color = 'rgb(' + red + ', ' + green + ', ' + blue + ', 1.0)';
+		valuesStatResult[i].parentElement.style.color = 'rgb(' + red + ', ' + green + ', ' + blue + ', 1.0)';
+	}	
 }
 
 function getColorForValue(startValue, endValue, value, startColor, endColor) {

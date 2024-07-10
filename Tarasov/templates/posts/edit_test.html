@@ -51,7 +51,7 @@
 								<div class="stud-logo-subcontainer"></div>
 								<label for="file-upload" class="file-upload text">
                                     {% if question.image %}
-									<input id="file-upload" class="text photo-upload" type="file" name="photo-q" accept="image/*" src="{{ question.image.url }}">
+									<input id="file-upload" class="text photo-upload" type="file" name="photo-q" accept="image/*" value="{{ question.image.url }}">
                                     {% else %}
 									<input id="file-upload" class="text photo-upload" type="file" name="photo-q" accept="image/*">
                                     {% endif %}

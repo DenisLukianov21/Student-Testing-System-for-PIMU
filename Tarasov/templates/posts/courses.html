@@ -31,8 +31,11 @@
 							<h3 id="title-stat-groups" class="slide-container">Выберите группу</h3>
 							<h3 id="title-stat-courses" class="slide-container">Выберите курс</h3>
 							<h3 id="title-stat-tests" class="slide-container">Выберите тест</h3>
+							{% if not user.is_staff %}
 							<h3 id="title-stat-result" class="slide-container">Ваш результат</h3>
-							<!--<h3 id="title-stat-result" class="slide-container">Результат группы</h3>-->
+							{% else %}
+							<h3 id="title-stat-result" class="slide-container">Результат группы</h3>
+							{% endif %}
 						</div>
 						<hr class="underline">
 						<div class="main-subcontainer">
@@ -57,41 +60,75 @@
 									<div class="link-block-stat block-stat-return">
 										<a class="sign sign-up text-stat stat-return" href="#">Скрыть</a>
 									</div>
-									{% for obj in group %}
+									{% if not user.is_staff %}
 									<label class="link-block">
-										<input class="stat-groups" type="radio" name="ans" value="yes">
-										<p class="text">{{ obj.name_group }}</p>
-									</label>
-									{% endfor %}	
+										<input id="{{ user_group }}" class="stat-groups" type="radio" name="ans" value="yes">
+										<p class="text">{{ user_group }}</p>
+									</label>		
+									{% else %}
+										{% for obj in group %}
+										<label class="link-block">
+											<input id="{{ obj.id_group }}" class="stat-groups" type="radio" name="ans" value="yes">
+											<p class="text">{{ obj.name_group }}</p>
+										</label>
+										{% endfor %}
+									{% endif %}
 								</form>	
 								<form id="stat-list-courses" class="stat-courses slide-container stat-container">
 									<div class="link-block-stat block-stat-return">
 										<a class="sign sign-up text-stat stat-return" href="#">Скрыть</a>
 									</div>
-									{% for course in page_obj %}
-									<label class="link-block">
-										<input id="{{ course.slug }}" class="stat-courses" type="radio" name="ans" value="yes">
-										<p class="text">{{ course.name_course }}</p>
-									</label>
-									{% endfor %}
+									{% if not user.is_staff %}
+										{% for course in page_obj %}
+										<label class="link-block">
+											<input id="{{ course.slug }}" class="{{ user_group }}-stat-courses stat-courses" type="radio" name="ans" value="yes">
+											<p class="text">{{ course.name_course }}</p>
+										</label>
+										{% endfor %}
+									{% else %}
+										{% for obj in group %}
+											{% for course in obj.courses %}
+												<label class="link-block">
+													<input id="{{ course.slug }}{{ obj.id_group }}" class="{{ obj.id_group }}-stat-courses stat-courses" type="radio" name="ans" value="yes">
+													<p class="text">{{ course.name_course }}</p>
+												</label>
+											{% endfor %}
+										{% endfor %}
+									{% endif %}
 								</form>
 								<form id="stat-list-tests" class="stat-tests slide-container stat-container">
 									<div class="link-block-stat block-stat-return">
 										<a class="sign sign-up text-stat stat-return" href="#">Скрыть</a>
 									</div>
-									{% for course in page_obj %}
-										{% for test in course.tests %}  
-										<label class="link-block">
-											<input class="{{ course.slug }}-stat-tests stat-tests" type="radio" name="ans" value="{{ test.id }}">
-											<p class="text">{{ test.name }}</p>
-											<a href="{% url 'posts:display_quiz' test.id %}" hidden></a>
-										</label>
+									{% if not user.is_staff %}
+										{% for course in page_obj %}
+											{% for test in course.tests %}  
+											<label class="link-block">
+												<input class="{{ course.slug }}-stat-tests stat-tests" type="radio" name="ans" value="{{ test.id }}">
+												<p class="text">{{ test.name }}</p>
+												<a href="{% url 'posts:display_quiz' test.id %}" hidden></a>
+											</label>
+											{% endfor %}
 										{% endfor %}
-									{% endfor %}
+									{% else %}
+										{% for obj in group %}
+											{% for course in obj.courses %}
+												{% for test in course.tests %}  
+												<label class="link-block">
+													<input class="{{ course.slug }}{{ obj.id_group }}-stat-tests stat-tests" type="radio" name="ans" value="{{ test.id }}">
+													<p class="text">{{ test.name }}</p>
+													<a href="{% url 'posts:display_quiz' test.id %}" hidden></a>
+												</label>
+												{% endfor %}
+											{% endfor %}
+										{% endfor %}
+									{% endif %}
 								</form>
+								{% if not user.is_staff %}
 								<div id="stat-result-page" class="slide-container stat-container">
 									<div class="link-block-stat">
 										<p class="text-stat-result"><font class="text-stat-result"></font>%</p>
+										<p class="text-stat-result" style="color: #6e3b30;">н/д</p>
 									</div>
 									<div class="link-block-stat">
 										<a class="sign sign-in show-more-stat" href="#">Посмотреть подробнее</a>
@@ -111,46 +148,74 @@
 										})
 											.then(response => response.json())
 											.then(data => {
-												document.querySelector('font').textContent = data.stat_result;
-												document.querySelector('.show-more-stat').href = testLink;
+												if (data.stat_result != 'н/д') {
+													document.querySelectorAll('p.text-stat-result')[0].style.display = 'block';
+													document.querySelectorAll('p.text-stat-result')[1].style.display = 'none';
+
+													document.querySelector('font').textContent = data.stat_result;
+													document.querySelector('.show-more-stat').textContent = 'Посмотреть подробнее';
+													document.querySelector('.show-more-stat').href = testLink;
+												} else {
+													document.querySelectorAll('p.text-stat-result')[0].style.display = 'none';
+													document.querySelectorAll('p.text-stat-result')[1].style.display = 'block';
+													
+													document.querySelector('.show-more-stat').textContent = 'Пройти тест';
+													document.querySelector('.show-more-stat').href = testLink;
+												}
+												
 										});
 									}
 								</script>
 								{% endblock %}
-								<!--<div id="stat-result-page" class="slide-container stat-container">
-									<div class="link-block-stat sign sign-in">
-										<p class="new-style-text-stat">Петров П.П.</p>
-										<p class="text-stat-result new-style-text-stat"><font class="text-stat-result new-style-text-stat">79</font>%</p>
-									</div>
-									<div class="link-block-stat sign sign-in">
-										<p class="new-style-text-stat">Сидоров С.С.</p>
-										<p class="text-stat-result new-style-text-stat"><font class="text-stat-result new-style-text-stat">60</font>%</p>
-									</div>
-									<div class="link-block-stat sign sign-in">
-										<p class="new-style-text-stat">Антонов А.А.</p>
-										<p class="text-stat-result new-style-text-stat"><font class="text-stat-result new-style-text-stat">40</font>%</p>
-									</div>
-									<div class="link-block-stat sign sign-in">
-										<p class="new-style-text-stat">Лухарев В.В.</p>
-										<p class="text-stat-result new-style-text-stat"><font class="text-stat-result new-style-text-stat">90</font>%</p>
-									</div>
-									<div class="link-block-stat sign sign-in">
-										<p class="new-style-text-stat">Синицин С.П.</p>
-										<p class="text-stat-result new-style-text-stat"><font class="text-stat-result new-style-text-stat">65</font>%</p>
-									</div>
-									<div class="link-block-stat sign sign-in">
-										<p class="new-style-text-stat">Довлатов Д.А.</p>
-										<p class="text-stat-result new-style-text-stat"><font class="text-stat-result new-style-text-stat">85</font>%</p>
-									</div>
-									<div class="link-block-stat sign sign-in">
-										<p class="new-style-text-stat">Ложкарёв С.Д.</p>
-										<p class="text-stat-result new-style-text-stat"><font class="text-stat-result new-style-text-stat">100</font>%</p>
-									</div>
-									<div class="link-block-stat sign sign-in">
-										<p class="new-style-text-stat">Преображенский А.А.</p>
-										<p class="text-stat-result new-style-text-stat"><font class="text-stat-result new-style-text-stat">0</font>%</p>
-									</div>
-								</div>-->
+								{% else %}
+								<div id="stat-result-page" class="slide-container stat-container"></div>
+								{% block content4 %}
+								<script>
+									async function submitAndGetStatResult() {
+										const submitUrl = "{% url 'posts:quiz_group_results' %}";
+										const formTestID = new FormData();
+										formTestID.append('csrfmiddlewaretoken', "{{ csrf_token }}");
+										formTestID.append('test', testID);
+
+										try {
+											const response = await fetch(submitUrl, {
+												method: 'POST',
+												body: formTestID,
+											});
+
+											const data = await response.json();
+
+											let resultContainers = document.querySelectorAll('#stat-result-page > div');
+											for (let i = 0; i < resultContainers.length; i++) resultContainers[i].remove();
+
+											for (let i = 0; i < data.users.length; i++) {
+											let resultContainer = document.createElement('div');
+											resultContainer.className = 'link-block-stat sign sign-in';
+
+											let user = document.createElement('p');
+											user.className = 'new-style-text-stat';
+											user.textContent = data.users[i];
+
+											let procentageText = document.createElement('p');
+											procentageText.className = 'text-stat-result new-style-text-stat';
+											
+											let procentage = document.createElement('font');
+											procentage.className = 'text-stat-result new-style-text-stat';
+											procentage.textContent = data.procentages[i];
+
+											procentageText.appendChild(procentage);
+											procentageText.appendChild(document.createTextNode('%'));
+											resultContainer.appendChild(user);
+											resultContainer.appendChild(procentageText);
+											document.getElementById('stat-result-page').appendChild(resultContainer);
+											}
+										} catch (error) {
+											console.error('Ошибка:', error);
+										}
+									}
+								</script>
+								{% endblock %}
+								{% endif %}
 							</div>
 						</div>
 					</div>
@@ -168,13 +233,16 @@
 						</div>
 						<hr class="underline">
 						<div class="main-subcontainer">
+							{% if user.is_staff %}
 							<div class="info-subcontainer slider list-courses">
 								<div id="courses" class="slide-container">
+									{% if user.is_staff %}
 									<div class="main-link-block">
 										<div class="left-elem-link-block add-elem"></div>
 										<a class="sign sign-up course link-form-add-course" href="#title-add-course">Добавить курс</a>
 										<div class="right-elem-link-block add-elem"></div>
 									</div>
+									{% endif %}
 									{% for course in page_obj %}
 									<form id="del-course-{{ course.slug }}-form" class="link-block" action="{% url 'posts:delete_course' course.pk %}" method="post">
 										<div class="main-link-block">
@@ -294,6 +362,30 @@
 								</script>
 								{% endblock %}
 							</div>
+							{% else %}
+							<div class="info-subcontainer slider list-courses">
+								<div id="courses" class="slide-container">
+									{% for course in page_obj %}
+									<div class="link-block" style="justify-content: center;">
+										<a id="{{ course.slug }}" class="sign sign-up course" href="#">{{ course.name_course }}</a>
+									</div>
+									{% endfor %}
+								</div>
+							</div>
+							<hr class="vertical-line">
+							<div class="info-subcontainer slider tests">
+								<div class="slide-container"></div>
+								{% for course in page_obj %}
+								<div id="{{ course.slug }}-tests" class="slide-container test-container">
+									{% for test in course.tests %} 
+									<div class="link-block" style="justify-content: center;">
+										<a class="sign sign-up test" href="{% url 'posts:display_quiz' test.id %}">{{ test.name }}</a>
+									</div>
+									{% endfor %}
+								</div>
+								{% endfor %}
+							</div>
+							{% endif %}
 						</div>
 					</div>
 				</div>

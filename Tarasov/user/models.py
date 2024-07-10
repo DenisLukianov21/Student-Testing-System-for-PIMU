@@ -19,6 +19,7 @@ class User(AbstractUser):
 class Group(models.Model):
     name_group = models.CharField(max_length=50)
     id_group = models.AutoField(primary_key=True)
+    courses = 0
 
     def __str__(self):
         return self.name_group

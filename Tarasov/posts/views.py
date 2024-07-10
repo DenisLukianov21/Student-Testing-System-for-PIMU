@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
+from django.core import serializers
 from django.db.models import F
 from django.shortcuts import get_object_or_404, render, redirect
 from user.models import Course, Group, UserGroup
@@ -153,7 +154,7 @@ def courses(request):
         HttpResponse: The rendered courses.html page with the courses' data.
     """
     # Get all groups
-    group = Group.objects.all()
+    groups = Group.objects.all()
 
     # Check if the user is authenticated
     if request.user.is_authenticated:
@@ -168,9 +169,15 @@ def courses(request):
             course = Course.objects.filter(slug=obj.slug)
             obj.tests = Test.objects.filter(test_in_course=course[0])
 
+        for group in groups:
+            group.courses = Course.objects.filter(group_in_course=group)
+            for group_course in group.courses:
+                group_course.tests = Test.objects.filter(test_in_course=group_course)
+
         # Create a context dictionary with the groups and courses
         context = {
-            'group': group,  # All groups
+            'group': groups,  # All groups
+            'user_group': user_group,
             'page_obj': page_obj,  # All courses in the user's group
         }
 
@@ -314,9 +321,31 @@ def quiz_quick_results(request):
     quiz_id = request.POST.get('test')
     quiz = get_object_or_404(Test, pk=quiz_id)
     questions = quiz.question_set.all()
-    result = Result.objects.get(quiz=quiz)
+
+    try:
+        result = Result.objects.get(quiz=quiz, user=request.user)
+    except ObjectDoesNotExist:
+        return JsonResponse({'stat_result': 'н/д'})
+
     percentage = int(result.correct / len(questions) * 100)
     return JsonResponse({'stat_result': percentage})
+
+
+@login_required
+def quiz_group_results(request):
+    quiz_id = request.POST.get('test')
+    test = get_object_or_404(Test, pk=quiz_id)
+    questions = len(Question.objects.filter(test=test))
+    results = Result.objects.filter(quiz=test)
+
+    users = []
+    procentages = []
+
+    for result in results:
+        procentage = int((result.correct / questions) * 100)
+        procentages.append(procentage)
+        users.append(result.user.username)
+    return JsonResponse({'users': users, 'procentages': procentages})
 
 
 @login_required
