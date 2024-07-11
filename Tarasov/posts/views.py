@@ -244,7 +244,7 @@ def create_quiz(request, quiz_id):
     """
     # Initialize the iterator
     iterator = 1
-
+    
     # Iterate over the questions
     while request.POST.getlist('questions-q' + str(iterator)) != []:
         # Get the data for the current question
@@ -280,6 +280,89 @@ def create_quiz(request, quiz_id):
         iterator = iterator + 1
 
     # Redirect to the homepage
+    return redirect("/")
+
+
+@login_required
+def edit_quiz(request, quiz_id):
+    quiz = get_object_or_404(Test, pk=quiz_id)
+    quiz_questions = Question.objects.filter(test=quiz)
+    count_questions = len(quiz_questions)
+
+    iterator = 1
+
+    while request.POST.getlist('questions-q' + str(iterator)) != []:
+        data_question = request.POST.getlist('questions-q' + str(iterator))
+        data_correct_ans = request.POST.getlist(
+            'correct-ans-q' + str(iterator))
+        data_answers = request.POST.getlist('answers-q' + str(iterator))
+        data_image = request.FILES.get('photo-q' + str(iterator), None)
+
+        if count_questions >= iterator:
+            question = Question.objects.get(
+                name=Question.objects.filter(test=quiz)[iterator - 1].name, test=quiz)
+            question.eplanation = data_question[0]
+            question.image = data_image
+            question.save()
+
+            if request.POST.getlist('questions-q' + str(iterator + 1)) == []:
+                for j in range(iterator, count_questions):
+                    question = Question.objects.get(
+                        name=Question.objects.filter(test=quiz)[j].name, test=quiz)
+                    question.delete()
+
+            answers = Answer.objects.filter(question=question)
+
+            if len(answers) >= len(data_answers):
+                for ans_iter in range(len(answers)):
+                    answer = answers[ans_iter]
+                    if ans_iter < len(data_answers):
+                        answer.name = data_answers[ans_iter]
+                        answer.is_correct = False
+                        for correct_ans in data_correct_ans:
+                            if answer.name == correct_ans:
+                                answer.is_correct = True
+                        answer.save()
+                    else:
+                        answer.delete()
+            else:
+                for ans_iter in range(len(data_answers)):
+                    if ans_iter < len(answers):
+                        answer = answers[ans_iter]
+                        answer.name = data_answers[ans_iter]
+                        answer.is_correct = False
+                        for correct_ans in data_correct_ans:
+                            if answer.name == correct_ans:
+                                answer.is_correct = True
+                        answer.save()
+                    else:
+                        answer, created = Answer.objects.get_or_create(
+                            question=question, name=data_answers[ans_iter]
+                        )
+
+                        for correct_ans in data_correct_ans:
+                            if answer.name == correct_ans:
+                                answer.is_correct = True
+                        answer.save()
+        else:
+            question, created = Question.objects.get_or_create(
+                name=data_question[0], test=get_object_or_404(Test, pk=quiz_id),
+                eplanation=data_question[0], image=data_image
+            )
+            question.save()
+
+            for answer in data_answers:
+                new_ans, created = Answer.objects.get_or_create(
+                    question=question, name=answer
+                )
+                # Set the correct answer
+                for correct_ans in data_correct_ans:
+                    if new_ans.name == correct_ans:
+                        new_ans.is_correct = True
+                new_ans.save()
+        
+        iterator = iterator + 1
+
     return redirect("/")
 
 

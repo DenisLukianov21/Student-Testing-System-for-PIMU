@@ -39,12 +39,12 @@
 			</div>
 		</header>
 		<main>
-			<form id="slider-questions" class="slider" action="{% url 'posts:create_quiz' quiz_id %}" method="post" enctype="multipart/form-data">
+			<form id="slider-questions" class="slider" action="{% url 'posts:edit_quiz' quiz_id %}" method="post" enctype="multipart/form-data">
 				{% for question in questions %}
                 <div id="q{{ question.id }}" class="slide-container question">
 					{% csrf_token %}
 					<div class="main-container">
-						<textarea class="needed-input question-input title text" name="questions-q" maxlength="256" placeholder="Введите вопрос" spellcheck="false" oninput="onTextInput(this)">{{ question }}</textarea>
+						<textarea class="needed-input question-input title text" name="questions-q" maxlength="256" placeholder="Введите вопрос" spellcheck="false" oninput="onTextInput(this)">{{ question.eplanation }}</textarea>
 						<hr class="underline">
 						<div class="main-subcontainer">
 							<div class="info-subcontainer">
@@ -81,12 +81,15 @@
                 {% endfor %}
                 <script>
                     let questions = document.getElementsByClassName('question');
-                    for (let i = 0; i < questions.length; i++) {
-                        questions[i].id = 'q' + (i + 1);
+					for (let i = 0; i < questions.length; i++) {
+						questions[i].id = 'q' + (i + 1);
 
-                        let neededInputs = document.querySelectorAll('#' + questions[i].id + ' > .needed-input', '#' + questions[i].id + ' > .photo-upload');
-                        for (let j = 0; j < neededInputs.length; j++) neededInputs.name = neededInputs.name + i
-                    }
+						let neededInputs = questions[i].querySelectorAll('.needed-input, .photo-upload');
+						for (let j = 0; j < neededInputs.length; j++) {
+							let input = neededInputs[j];
+							input.setAttribute('name', input.getAttribute('name') + (i + 1));
+						}
+					}
                 </script>
 			</form>
 		</main>
