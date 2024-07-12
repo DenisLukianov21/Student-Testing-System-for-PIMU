@@ -242,6 +242,11 @@ def create_quiz(request, quiz_id):
     Returns:
         HttpResponse: The redirect to the homepage.
     """
+
+    new_quiz = get_object_or_404(Test, pk=quiz_id)
+    new_quiz.lead_time = request.POST.get('time')
+    new_quiz.save()
+
     # Initialize the iterator
     iterator = 1
     
@@ -286,6 +291,9 @@ def create_quiz(request, quiz_id):
 @login_required
 def edit_quiz(request, quiz_id):
     quiz = get_object_or_404(Test, pk=quiz_id)
+    quiz.lead_time = request.POST.get('time')
+    quiz.save()
+
     quiz_questions = Question.objects.filter(test=quiz)
     count_questions = len(quiz_questions)
 
@@ -468,16 +476,24 @@ def quiz_results(request, quiz_id):
                             question=question, answer=user_answer)
             choice.save()
     # Calculate the number of correct and wrong answers
-    for answer in user_answers:
-        is_correct = answer in correct_answer
-        result, created = Result.objects.get_or_create(
-            user=request.user,
-            quiz=quiz)
-        if is_correct:
-            result.correct += F('correct') + 1
+    for i in range(len(questions)):
+        if i < len(user_answers):
+            is_correct = user_answers[i] in correct_answer[i]
+            result, created = Result.objects.get_or_create(
+                user=request.user,
+                quiz=quiz)
+            if is_correct:
+                result.correct += F('correct') + 1
+            else:
+                result.wrong += F('wrong') + 1
+            result.save()
         else:
+            result, created = Result.objects.get_or_create(
+                user=request.user,
+                quiz=quiz)
             result.wrong += F('wrong') + 1
-        result.save()
+            result.save()
+
     # Calculate the percentage of correct answers
     result = Result.objects.get(quiz=quiz)
     percentage = int(result.correct / len(questions) * 100)

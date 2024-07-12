@@ -10,55 +10,57 @@
 		<link rel="icon" href="{% static 'image1/favicon.ico' %}">
 	</head>
 	<body>
-		<header>
-			<div class="subcontainer-header">
-				<div class="dropdown">
-				    <button id="open-dropdown-content" class="text">Перейти к вопросу</button>
-				    <div id="dropdown-content" class="dropdown-content">
-				        <button class="text dropdown-link" value="#q1" onclick="MoveToQuestion(this)">Вопрос 1</button>
-				    </div>
+		<form action="{% url 'posts:create_quiz' quiz_id %}" method="post" enctype="multipart/form-data" style="overflow: hidden;">
+			<header>
+				<div class="subcontainer-header">
+					<div class="dropdown">
+						<button id="open-dropdown-content" class="text">Перейти к вопросу</button>
+						<div id="dropdown-content" class="dropdown-content">
+							<button class="text dropdown-link" value="#q1" onclick="MoveToQuestion(this)">Вопрос 1</button>
+						</div>
+					</div>
 				</div>
-			</div>
-			<div class="subcontainer-header">
-				<a id="add-question" class="logo-size" href="#" title="Добавить вопрос" onclick="addQuestion()"></a>
-				<p id="num-question" class="text">Вопрос 1</p>
-				<a id="del-question" class="logo-size" href="#" title="Удалить вопрос" onclick="delQuestion()"></a>
-			</div>
-			<div class="subcontainer-header">
-				<img class="logo-time" src="image/icons8-песочные-часы-100.png" alt="">
-				<input type="text" id="timeInput" placeholder="00:00" pattern="\d{2}:\d{2}" title="Время прохождения теста" oninput="checkNeededInputs()">
-			</div>
-		</header>
-		<main>
-			<form id="slider-questions" class="slider" action="{% url 'posts:create_quiz' quiz_id %}" method="post" enctype="multipart/form-data">
-				{% csrf_token %}
-				<div id="q1" class="slide-container question">
-					<div class="main-container">
-						<textarea class="needed-input question-input title text" name="questions-q1" maxlength="256" placeholder="Введите вопрос" spellcheck="false" oninput="onTextInput(this)"></textarea>
-						<hr class="underline">
-						<div class="main-subcontainer">
-							<div class="info-subcontainer">
-								<div class="stud-logo-subcontainer"></div>
-								<label for="file-upload-q1" class="file-upload text">
-									<input id="file-upload-q1" class="text" type="file" name="photo-q1" accept="image/*">
-								</label>
-							</div>
-							<hr class="vertical-line">
-							<div id="answers-container" class="info-subcontainer answers-container">
-								<a id="link-add-ans" class="sign sign-up text" href="#" onclick="createAns(this)">Добавьте вариант ответа</a>
+				<div class="subcontainer-header">
+					<a id="add-question" class="logo-size" href="#" title="Добавить вопрос" onclick="addQuestion()"></a>
+					<p id="num-question" class="text">Вопрос 1</p>
+					<a id="del-question" class="logo-size" href="#" title="Удалить вопрос" onclick="delQuestion()"></a>
+				</div>
+				<div class="subcontainer-header">
+					<img class="logo-time" src="image/icons8-песочные-часы-100.png" alt="">
+					<input type="text" id="timeInput" name="time" placeholder="00:00" pattern="\d{2}:\d{2}" title="Время прохождения теста" oninput="checkNeededInputs()">
+				</div>
+			</header>
+			<main>
+				<div id="slider-questions" class="slider">
+					{% csrf_token %}
+					<div id="q1" class="slide-container question">
+						<div class="main-container">
+							<textarea class="needed-input question-input title text" name="questions-q1" maxlength="256" placeholder="Введите вопрос" spellcheck="false" oninput="onTextInput(this)"></textarea>
+							<hr class="underline">
+							<div class="main-subcontainer">
+								<div class="info-subcontainer">
+									<div class="stud-logo-subcontainer"></div>
+									<label for="file-upload-q1" class="file-upload text">
+										<input id="file-upload-q1" class="text" type="file" name="photo-q1" accept="image/*">
+									</label>
+								</div>
+								<hr class="vertical-line">
+								<div id="answers-container" class="info-subcontainer answers-container">
+									<a id="link-add-ans" class="sign sign-up text" href="#" onclick="createAns(this)">Добавьте вариант ответа</a>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</form>
-		</main>
-		<footer>
-			<div class="footer-container">
-				<a class="dot-slide" href="#" title="Предыдущий вопрос" onclick="goBackToQuestion()"></a>
-				<button id="progress" title="Заполненность необходимых полей" type="button" form="slider-questions">0%</button>
-				<a class="dot-slide" href="#" title="Следующий вопрос" onclick="goToQuestion()"></a>
-			</div>
-		</footer>
+			</main>
+			<footer>
+				<div class="footer-container">
+					<a class="dot-slide" href="#" title="Предыдущий вопрос" onclick="goBackToQuestion()"></a>
+					<button id="progress" title="Заполненность необходимых полей" type="button">0%</button>
+					<a class="dot-slide" href="#" title="Следующий вопрос" onclick="goToQuestion()"></a>
+				</div>
+			</footer>
+		</form>
 		<script src="{% static 'js/super_test_scripts.js' %}"></script>
 	</body>
 </html>

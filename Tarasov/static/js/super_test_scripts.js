@@ -27,7 +27,7 @@ if (document.getElementById('timeInput') != null) {
 		}
 	});
 	
-	if (timeInput.nodeName != 'INPUT') {
+	if (timeInput.tagName != 'INPUT') {
 		let countdown = setInterval(function() {
 			let minutes = Number(timeInput.textContent.substring(0, 2));
 			let seconds = Number(timeInput.textContent.substring(3, 5));
@@ -43,6 +43,7 @@ if (document.getElementById('timeInput') != null) {
 			if (time <= 0) {
 				clearInterval(countdown);
 				console.log("Время истекло!");
+				document.getElementById('slider-questions').submit();
 			}
 		}, 1000);
 	}

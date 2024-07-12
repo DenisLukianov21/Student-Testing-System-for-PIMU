@@ -33,7 +33,7 @@
 			</div>
 			<div class="subcontainer-header">
 				<img class="logo-time" src="{% static 'image1/icons8-песочные-часы-100.png' %}" alt="">
-				<p id="timeInput">03:00</p>
+				<p id="timeInput">{{ quiz.lead_time }}</p>
 			</div>
 		</header>
 		<main>
@@ -61,54 +61,10 @@
 									<p class="text">{{ answer.name }}</p>
 								</label>
 								{% endfor %}
-								<!--<label class="link-block">
-									<input class="needed-input answer-check" type="checkbox" name="ans" value="yes" oninput="checkNeededInputs()">
-									<p class="text">2)	фолликулярными папулами на туловище и конечностях; </p>
-								</label>
-								<label class="link-block">
-									<input class="needed-input answer-check" type="checkbox" name="ans" value="yes" oninput="checkNeededInputs()">
-									<p class="text">3)	невоспалительными везикулами вблизи ходов;</p>
-								</label>
-								<label class="link-block">
-									<input class="needed-input answer-check" type="checkbox" name="ans" value="yes" oninput="checkNeededInputs()">
-									<p class="text">4)	расчесами и кровянистыми корочками.</p>
-								</label>-->	
 							</div>
 						</div>
 					</div>
 				</div>
-				<!--<div id="q2" class="slide-container question">
-					<div class="main-container">
-						<h1 class="title text">Клиническая картина представлена</h1>
-						<hr class="underline">
-						<div class="main-subcontainer">
-							<div class="logo-subcontainer info-subcontainer"></div>
-							<div class="info-subcontainer">
-								<a class="stud-logo-subcontainer" href="image/icons8-песочные-часы-100.png" target="_blank"></a>
-								<a class="text sign" href="image/icons8-песочные-часы-100.png" target="_blank">Открыть фотографию</a>
-							</div>
-							<hr class="vertical-line">
-							<div id="answers-container" class="info-subcontainer answers-container">
-								<label class="link-block">
-									<input class="needed-input answer-check" type="checkbox" name="ans" value="yes" oninput="checkNeededInputs()">
-									<p class="text">1)	различными вариантами чесоточных ходов;</p>
-								</label>
-								<label class="link-block">
-									<input class="needed-input answer-check" type="checkbox" name="ans" value="yes" oninput="checkNeededInputs()">
-									<p class="text">2)	фолликулярными папулами на туловище и конечностях; </p>
-								</label>
-								<label class="link-block">
-									<input class="needed-input answer-check" type="checkbox" name="ans" value="yes" oninput="checkNeededInputs()">
-									<p class="text">3)	невоспалительными везикулами вблизи ходов;</p>
-								</label>
-								<label class="link-block">
-									<input class="needed-input answer-check" type="checkbox" name="ans" value="yes" oninput="checkNeededInputs()">
-									<p class="text">4)	расчесами и кровянистыми корочками.</p>
-								</label>	
-							</div>
-						</div>
-					</div>
-				</div>-->
 				{% endfor %}
 				<script>
                     let questions = document.getElementsByClassName('question');

@@ -13,6 +13,7 @@ class Test(models.Model):
     """
     name = models.CharField(max_length=120)
     test_in_course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    lead_time = models.CharField(max_length=120)
 
     def __str__(self):
         return self.name

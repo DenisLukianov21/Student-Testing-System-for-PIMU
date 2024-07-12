@@ -10,99 +10,101 @@
 		<link rel="icon" href="{% static 'image1/favicon.ico' %}">
 	</head>
 	<body>
-		<header>
-			<div class="subcontainer-header">
-				<div class="dropdown">
-				    <button id="open-dropdown-content" class="text">Перейти к вопросу</button>
-				    <div id="dropdown-content" class="dropdown-content">
-				        {% for question in questions %}
-				        <button class="text dropdown-link" value="#q{{ question.id }}" onclick="MoveToQuestion(this)"></button>
-						{% endfor %}
-						<script>
-							let dropdownLink = document.getElementsByClassName('dropdown-link');
-							for (let i = 1; i <= dropdownLink.length; i++) {
-                                dropdownLink[i - 1].textContent = 'Вопрос ' + i;
-                                dropdownLink[i - 1].value = '#q' + i
-                            }
-						</script>
-				    </div>
-				</div>
-			</div>
-			<div class="subcontainer-header">
-				<a id="add-question" class="logo-size" href="#" title="Добавить вопрос" onclick="addQuestion()"></a>
-				<p id="num-question" class="text">Вопрос 1</p>
-				<a id="del-question" class="logo-size" href="#" title="Удалить вопрос" onclick="delQuestion()"></a>
-			</div>
-			<div class="subcontainer-header">
-				<img class="logo-time" src="image/icons8-песочные-часы-100.png" alt="">
-				<input type="text" id="timeInput" placeholder="00:00" pattern="\d{2}:\d{2}" title="Время прохождения теста" oninput="checkNeededInputs()">
-			</div>
-		</header>
-		<main>
-			<form id="slider-questions" class="slider" action="{% url 'posts:edit_quiz' quiz_id %}" method="post" enctype="multipart/form-data">
-				{% for question in questions %}
-                <div id="q{{ question.id }}" class="slide-container question">
-					{% csrf_token %}
-					<div class="main-container">
-						<textarea class="needed-input question-input title text" name="questions-q" maxlength="256" placeholder="Введите вопрос" spellcheck="false" oninput="onTextInput(this)">{{ question.eplanation }}</textarea>
-						<hr class="underline">
-						<div class="main-subcontainer">
-							<div class="info-subcontainer">
-								<div class="stud-logo-subcontainer"></div>
-								<label for="file-upload" class="file-upload text">
-                                    {% if question.image %}
-									<input id="file-upload" class="text photo-upload" type="file" name="photo-q" accept="image/*" value="{{ question.image.url }}">
-                                    {% else %}
-									<input id="file-upload" class="text photo-upload" type="file" name="photo-q" accept="image/*">
-                                    {% endif %}
-								</label>
-							</div>
-							<hr class="vertical-line">
-							<div id="answers-container" class="info-subcontainer answers-container">
-								<a id="link-add-ans" class="sign sign-up text" href="#" onclick="createAns(this)">Добавьте вариант ответа</a>
-                                {% for answer in question.answer_set.all %}
-                                <div class="link-block">
-									<label>
-                                        {% if answer.is_correct %}
-										<input class="needed-input answer-checkbox" type="checkbox" name="correct-ans-q" checked>
-                                        {% else %}
-                                        <input class="needed-input answer-checkbox" type="checkbox" name="correct-ans-q">
-                                        {% endif %}
-										<span class="answer-checkmark" title="Отметить правильный ответ"></span>
-									</label>
-									<textarea class="needed-input answer-input text" name="answers-q" maxlength="64" placeholder="Введите ответ" spellcheck="false" oninput="adjustHeight(this)">{{ answer.name }}</textarea>
-									<a class="del-ans" href="#" onclick="deleteAns(this)" title="Убрать ответ"></a>
-								</div>
-                                {% endfor %}
-                            </div>
+		<form action="{% url 'posts:edit_quiz' quiz_id %}" method="post" enctype="multipart/form-data" style="overflow: hidden;">
+			<header>
+				<div class="subcontainer-header">
+					<div class="dropdown">
+						<button id="open-dropdown-content" class="text">Перейти к вопросу</button>
+						<div id="dropdown-content" class="dropdown-content">
+							{% for question in questions %}
+							<button class="text dropdown-link" value="#q{{ question.id }}" onclick="MoveToQuestion(this)"></button>
+							{% endfor %}
+							<script>
+								let dropdownLink = document.getElementsByClassName('dropdown-link');
+								for (let i = 1; i <= dropdownLink.length; i++) {
+									dropdownLink[i - 1].textContent = 'Вопрос ' + i;
+									dropdownLink[i - 1].value = '#q' + i
+								}
+							</script>
 						</div>
 					</div>
 				</div>
-                {% endfor %}
-                <script>
-                    let questions = document.getElementsByClassName('question');
-					for (let i = 0; i < questions.length; i++) {
-						questions[i].id = 'q' + (i + 1);
+				<div class="subcontainer-header">
+					<a id="add-question" class="logo-size" href="#" title="Добавить вопрос" onclick="addQuestion()"></a>
+					<p id="num-question" class="text">Вопрос 1</p>
+					<a id="del-question" class="logo-size" href="#" title="Удалить вопрос" onclick="delQuestion()"></a>
+				</div>
+				<div class="subcontainer-header">
+					<img class="logo-time" src="image/icons8-песочные-часы-100.png" alt="">
+					<input type="text" id="timeInput" name="time" value="{{ quiz.lead_time }}" placeholder="00:00" pattern="\d{2}:\d{2}" title="Время прохождения теста" oninput="checkNeededInputs()">
+				</div>
+			</header>
+			<main>
+				<div id="slider-questions" class="slider">
+					{% for question in questions %}
+					<div id="q{{ question.id }}" class="slide-container question">
+						{% csrf_token %}
+						<div class="main-container">
+							<textarea class="needed-input question-input title text" name="questions-q" maxlength="256" placeholder="Введите вопрос" spellcheck="false" oninput="onTextInput(this)">{{ question.eplanation }}</textarea>
+							<hr class="underline">
+							<div class="main-subcontainer">
+								<div class="info-subcontainer">
+									<div class="stud-logo-subcontainer"></div>
+									<label for="file-upload" class="file-upload text">
+										{% if question.image %}
+										<input id="file-upload" class="text photo-upload" type="file" name="photo-q" accept="image/*" value="{{ question.image.url }}">
+										{% else %}
+										<input id="file-upload" class="text photo-upload" type="file" name="photo-q" accept="image/*">
+										{% endif %}
+									</label>
+								</div>
+								<hr class="vertical-line">
+								<div id="answers-container" class="info-subcontainer answers-container">
+									<a id="link-add-ans" class="sign sign-up text" href="#" onclick="createAns(this)">Добавьте вариант ответа</a>
+									{% for answer in question.answer_set.all %}
+									<div class="link-block">
+										<label>
+											{% if answer.is_correct %}
+											<input class="needed-input answer-checkbox" type="checkbox" name="correct-ans-q" checked>
+											{% else %}
+											<input class="needed-input answer-checkbox" type="checkbox" name="correct-ans-q">
+											{% endif %}
+											<span class="answer-checkmark" title="Отметить правильный ответ"></span>
+										</label>
+										<textarea class="needed-input answer-input text" name="answers-q" maxlength="64" placeholder="Введите ответ" spellcheck="false" oninput="adjustHeight(this)">{{ answer.name }}</textarea>
+										<a class="del-ans" href="#" onclick="deleteAns(this)" title="Убрать ответ"></a>
+									</div>
+									{% endfor %}
+								</div>
+							</div>
+						</div>
+					</div>
+					{% endfor %}
+					<script>
+						let questions = document.getElementsByClassName('question');
+						for (let i = 0; i < questions.length; i++) {
+							questions[i].id = 'q' + (i + 1);
 
-						let neededInputs = questions[i].querySelectorAll('.needed-input, .photo-upload');
-						for (let j = 0; j < neededInputs.length; j++) {
-							let input = neededInputs[j];
-							input.setAttribute('name', input.getAttribute('name') + (i + 1));
+							let neededInputs = questions[i].querySelectorAll('.needed-input, .photo-upload');
+							for (let j = 0; j < neededInputs.length; j++) {
+								let input = neededInputs[j];
+								input.setAttribute('name', input.getAttribute('name') + (i + 1));
+							}
 						}
-					}
-                </script>
-			</form>
-		</main>
-		<footer>
-			<div class="footer-container">
-				<a class="dot-slide" href="#" title="Предыдущий вопрос" onclick="goBackToQuestion()"></a>
-				<button id="progress" title="Заполненность необходимых полей" type="button" form="slider-questions">0%</button>
-				<a class="dot-slide" href="#" title="Следующий вопрос" onclick="goToQuestion()"></a>
-			</div>
-		</footer>
-		<script src="{% static 'js/super_test_scripts.js' %}"></script>
-        <script>
-            checkNeededInputs();
-        </script>
+					</script>
+				</div>
+			</main>
+			<footer>
+				<div class="footer-container">
+					<a class="dot-slide" href="#" title="Предыдущий вопрос" onclick="goBackToQuestion()"></a>
+					<button id="progress" title="Заполненность необходимых полей" type="button">0%</button>
+					<a class="dot-slide" href="#" title="Следующий вопрос" onclick="goToQuestion()"></a>
+				</div>
+			</footer>
+			<script src="{% static 'js/super_test_scripts.js' %}"></script>
+			<script>
+				checkNeededInputs();
+			</script>
+		</form>
 	</body>
 </html>
