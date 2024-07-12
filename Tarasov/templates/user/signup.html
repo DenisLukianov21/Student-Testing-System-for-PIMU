@@ -1,10 +1,148 @@
+{% load static %}
+<!DOCTYPE html>
 <html>
-    <h1>Форма Регистрации</h1>
-        <form method="post" action="{% url 'users:signup' %}">
-            {% csrf_token %}
-            <table>
-                {{ form }}
-            </table>
-            <input type="submit" value="Submit" />
-        </form>    
-</html> 
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Регистрация в системе тестирования</title>
+		<link rel="stylesheet" href="{% static 'css/new_new_auth_style.css' %}">
+		<link rel="stylesheet" href="{% static 'css/signup_style.css' %}">
+		<link rel="icon" href="{% static 'image1/favicon.ico' %}">
+	</head>
+	<body>
+		<header>
+			<div class="subcontainer-header">
+				<img class="logo" src="{% static 'image1/logo.svg' %}" alt="">
+			</div>
+			<div class="subcontainer-header">
+				<p class="PIMU-text">ПИМУ</p>
+			</div>
+		</header>
+		<main>
+			<div class="slider">
+				<div id="sign-up" class="slide-container">
+					<div class="main-container">
+						<button class="title-sign-up-stud title-sign-up" type="button" form="form-sign-up-stud">Завершение регистрации</button>
+						<hr class="underline">
+						<form id="form-sign-up-stud" class="main-subcontainer form-sign-up-stud"  action="{% url 'user:signup' %}" method="post">
+							{% csrf_token %}
+							<div class="info-subcontainer slider">
+								<div id="list-params" class="info-subcontainer slide-container">
+									<p class="main-text">Фамилия</p>
+									<p class="main-text">Имя</p>
+									<p class="main-text">Отчество</p>
+									<p class="main-text">Номер группы</p>
+								</div>
+								<div id="list-groups" class="info-subcontainer slide-container">
+									<div class="link-block">
+										<a class="sign main-text" href="#list-params">Скрыть</a>
+									</div>
+									{% for group in groups %}
+										{% if group.name_group != 'profs' %}
+										<label class="link-block">
+											<input class="sign-up-stud form-sign-up-stud" type="radio" name="group" value="{{ group.name_group }}">
+											<p class="main-text">{{ group.name_group }}</p>
+										</label>
+										{% endif %}
+									{% endfor %}
+								</div>
+							</div>
+							<hr class="vertical-line">
+							<div class="info-subcontainer">
+								{{ form.first_name }}
+								{{ form.last_name }}
+								{{ form.middle_name }}
+								<a class="main-text sign" href="#list-groups">Выбрать группу</a>
+							</div>
+							<script>
+								id_first_name.placeholder = 'ВАША ФАМИЛИЯ';
+								id_first_name.classList.add('sign-up-stud', 'main-text', 'form-sign-up-stud');
+								id_first_name.type = 'text';
+								id_first_name.autocomplete = 'on';
+								id_first_name.id = 'id_first_name_stud';
+
+								id_last_name.placeholder = 'ВАШЕ ИМЯ';
+								id_last_name.classList.add('sign-up-stud', 'main-text', 'form-sign-up-stud');
+								id_last_name.type = 'text';
+								id_last_name.autocomplete = 'on';
+								id_last_name.id = 'id_last_name_stud';
+
+								id_middle_name.placeholder = 'ВАШЕ ОТЧЕСТВО';
+								id_middle_name.classList.add('sign-up-stud', 'main-text', 'form-sign-up-stud');
+								id_middle_name.type = 'text';
+								id_middle_name.autocomplete = 'on';
+								id_middle_name.id = 'id_middle_name_stud';
+							</script>
+						</form>
+					</div>
+				</div>
+				<div id="home" class="slide-container">
+					<div class="main-container">
+						<h1 class="title">Зарегистрироваться как</h1>
+						<hr class="underline">
+						<div class="main-subcontainer">
+							<div class="info-subcontainer">
+								<a class="stud-logo-subcontainer" href="#" onclick="showSlides(0)"></a>
+								<a class="main-text sign" href="#" onclick="showSlides(0)">Студент</a>
+							</div>
+							<hr class="vertical-line">
+							<div class="info-subcontainer">
+								<a class="prof-logo-subcontainer" href="#" onclick="showSlides(2)"></a>
+								<a class="main-text sign" href="#" onclick="showSlides(2)">Преподаватель</a>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+				<div id="sign-in" class="slide-container">
+					<div class="main-container">
+						<button class="title-sign-up-prof title-sign-up" type="button" form="form-sign-up-prof">Завершение регистрации</button>
+						<hr class="underline">
+						<form id="form-sign-up-prof" class="main-subcontainer form-sign-up-prof" action="{% url 'user:signup' %}" method="post">
+							{% csrf_token %}
+							<div class="info-subcontainer">
+								<p class="main-text">Фамилия</p>
+								<p class="main-text">Имя</p>
+								<p class="main-text">Отчество</p>
+							</div>
+							<hr class="vertical-line">
+							<div class="info-subcontainer">
+								{{ form.first_name }}
+								{{ form.last_name }}
+								{{ form.middle_name }}
+							</div>
+							<script>
+								id_first_name.placeholder = 'ВАША ФАМИЛИЯ';
+								id_first_name.classList.add('sign-up-prof', 'main-text', 'form-sign-up-prof');
+								id_first_name.type = 'text';
+								id_first_name.autocomplete = 'on';
+								id_first_name.id = 'id_first_name_prof';
+
+								id_last_name.placeholder = 'ВАШЕ ИМЯ';
+								id_last_name.classList.add('sign-up-prof', 'main-text', 'form-sign-up-prof');
+								id_last_name.type = 'text';
+								id_last_name.autocomplete = 'on';
+								id_last_name.id = 'id_last_name_prof';
+
+								id_middle_name.placeholder = 'ВАШЕ ОТЧЕСТВО';
+								id_middle_name.classList.add('sign-up-prof', 'main-text', 'form-sign-up-prof');
+								id_middle_name.type = 'text';
+								id_middle_name.autocomplete = 'on';
+								id_middle_name.id = 'id_middle_name_prof';
+							</script>
+						</form>
+					</div>
+				</div>
+			</div>
+		</main>
+		<footer>
+			<div class="footer-container">
+				<a class="dot-slide" href="#sign-up" title="Зарегистрироваться как студент" onclick="showSlides(0)"></a>
+				<a class="dot-slide" href="#home" title="Выбор регистрации" onclick="showSlides(1)"></a>
+				<a class="dot-slide" href="#sign-in" title="Зарегистрироваться как преподаватель" onclick="showSlides(2)"></a>
+			</div>
+		</footer>
+		<script src="{% static 'js/scripts.js' %}"></script>
+		<script src="{% static 'js/signup_scripts.js' %}"></script>
+	</body>
+</html>

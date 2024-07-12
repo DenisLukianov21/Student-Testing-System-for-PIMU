@@ -1,17 +1,31 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 from .models import Group, User, UserGroup, Course
 
 
-@admin.register(User)
-class UserAdmin(UserAdmin):
-    list_display = (
-        'username',
-        'id',
-        'email',
+class UserAdmin(BaseUserAdmin):
+    # The fields to be used in displaying the User model.
+    # These override the definitions on the base UserAdmin
+    # that reference specific fields on auth.User.
+    list_display = ('email', 'is_staff', 'is_active')
+    list_filter = ('is_staff', 'is_active')
+    fieldsets = (
+        (None, {'fields': ('email', 'password')}),
+        ('Permissions', {'fields': ('is_staff', 'is_active')}),
     )
-    list_filter = ('email',)
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'password1', 'password2'),
+        }),
+    )
+    search_fields = ('email',)
+    ordering = ('email',)
+    filter_horizontal = ()
+
+# Now register the new UserAdmin...
+admin.site.register(User, UserAdmin)
 
 
 @admin.register(Group)

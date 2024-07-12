@@ -1,0 +1,83 @@
+.main-subcontainer > div.info-subcontainer.slider{
+	overflow-y: hidden;
+}
+
+#list-groups{
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.stud-logo-subcontainer, .prof-logo-subcontainer{
+	width: 80%;
+	height: 80%;
+	background-size: 35%;
+	background-position: center;
+	background-repeat: no-repeat;
+
+	&:hover + a.main-text.sign::before{
+		transform: scaleX(1);
+	}
+}
+
+.stud-logo-subcontainer{
+	background-image: url("../image1/student.png");
+}
+
+.prof-logo-subcontainer{
+	background-image: url("../image1/tutor.png");
+}
+
+.main-text{
+	font-size: calc(50 / 1440 * 100vw);
+}
+
+input{
+	font-size: calc(50 / 1440 * 100vw);
+	/*border: 1px solid;
+	border-radius: 10px;
+	border-color: white;*/
+	color: #264A33;
+}
+
+input::placeholder{
+	color: #6E3B30;
+}
+
+label > input{
+	visibility: hidden;
+	position: absolute;
+}
+
+label > input + p{
+	font-size: calc(50 / 1440 * 100vw);
+	cursor:pointer;
+	color: white;
+}
+
+label > input:checked + p{
+	color: #264A33;
+}
+
+.link-block{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+}
+
+.slide-container::-webkit-scrollbar-track{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #0D121A;
+}
+
+.slide-container::-webkit-scrollbar{
+	width: calc(3 / 1440 * 100vw);
+}
+
+.slide-container::-webkit-scrollbar-thumb{
+	background-color: white;
+}
+
+.vertical-line{
+	border-radius: 0;
+}
