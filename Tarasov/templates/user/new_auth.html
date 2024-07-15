@@ -33,7 +33,6 @@
 								{% csrf_token %}
 								{{ reg_form.email }}
 								{{ reg_form.password1 }}
-								<input type="hidden" name="register" value="1">
 							</div>
 							<script>
 								id_email.placeholder = 'ВАША ПОЧТА';
@@ -79,7 +78,6 @@
 								{% csrf_token %}
 								{{ login_form.email }}
 								{{ login_form.password }}
-								<input type="hidden" name="login" value="1">
 							</div>
 							<script>
 								id_email.placeholder = 'ВАШ ЛОГИН';

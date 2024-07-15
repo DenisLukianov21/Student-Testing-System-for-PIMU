@@ -184,30 +184,43 @@
 											});
 
 											const data = await response.json();
-
+											
 											let resultContainers = document.querySelectorAll('#stat-result-page > div');
 											for (let i = 0; i < resultContainers.length; i++) resultContainers[i].remove();
-
-											for (let i = 0; i < data.users.length; i++) {
-											let resultContainer = document.createElement('div');
-											resultContainer.className = 'link-block-stat sign sign-in';
-
-											let user = document.createElement('p');
-											user.className = 'new-style-text-stat';
-											user.textContent = data.users[i];
-
-											let procentageText = document.createElement('p');
-											procentageText.className = 'text-stat-result new-style-text-stat';
 											
-											let procentage = document.createElement('font');
-											procentage.className = 'text-stat-result new-style-text-stat';
-											procentage.textContent = data.procentages[i];
+											if (data.users.length != 0) {
+												for (let i = 0; i < data.users.length; i++) {
+													let resultContainer = document.createElement('div');
+													resultContainer.className = 'link-block-stat sign sign-in';
 
-											procentageText.appendChild(procentage);
-											procentageText.appendChild(document.createTextNode('%'));
-											resultContainer.appendChild(user);
-											resultContainer.appendChild(procentageText);
-											document.getElementById('stat-result-page').appendChild(resultContainer);
+													let user = document.createElement('p');
+													user.className = 'new-style-text-stat';
+													user.textContent = data.users[i];
+
+													let procentageText = document.createElement('p');
+													procentageText.className = 'text-stat-result new-style-text-stat';
+													
+													let procentage = document.createElement('font');
+													procentage.className = 'text-stat-result new-style-text-stat';
+													procentage.textContent = data.procentages[i];
+
+													procentageText.appendChild(procentage);
+													procentageText.appendChild(document.createTextNode('%'));
+													resultContainer.appendChild(user);
+													resultContainer.appendChild(procentageText);
+													document.getElementById('stat-result-page').appendChild(resultContainer);
+												}
+											} else {
+												let NDContainer = document.createElement('div');
+												NDContainer.className = 'link-block-stat';
+
+												let textND = document.createElement('p');
+												textND.className = 'text-stat-result';
+												textND.style.color = '#6e3b30';
+												textND.textContent = 'н/д';
+
+												NDContainer.appendChild(textND);
+												document.getElementById('stat-result-page').appendChild(NDContainer);
 											}
 										} catch (error) {
 											console.error('Ошибка:', error);

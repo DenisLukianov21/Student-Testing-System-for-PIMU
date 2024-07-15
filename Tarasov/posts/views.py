@@ -439,7 +439,8 @@ def quiz_group_results(request):
     for result in results:
         procentage = int((result.correct / questions) * 100)
         procentages.append(procentage)
-        users.append(result.user.username)
+        #TODO: change email to full name
+        users.append(result.user.email)
     return JsonResponse({'users': users, 'procentages': procentages})
 
 

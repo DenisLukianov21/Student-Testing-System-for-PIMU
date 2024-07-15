@@ -72,22 +72,14 @@ def authentication(request):
     login_form = LoginForm()
 
     if request.method == 'POST':
-        if 'register' in request.POST:
-            registration_form = InitialRegistrationForm(request.POST)
-            if registration_form.is_valid():
-                user = registration_form.save(commit=False)
-                user.set_password(registration_form.cleaned_data['password1'])
-                user.save()
-                return redirect('user/signup.html')
-        elif 'login' in request.POST:
-            login_form = LoginForm(request.POST)
-            if login_form.is_valid():
-                email = login_form.cleaned_data.get('email')
-                password = login_form.cleaned_data.get('password')
-                user = authenticate(request, username=email, password=password)
-                if user is not None:
-                    login(request, user)
-                    return redirect('/')
+        login_form = LoginForm(request.POST)
+        if login_form.is_valid():
+            email = login_form.cleaned_data.get('email')
+            password = login_form.cleaned_data.get('password')
+            user = authenticate(request, username=email, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('/')
 
     return render(request, 'user/new_auth.html',
                   {'reg_form': registration_form, 'login_form': login_form})
