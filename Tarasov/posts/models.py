@@ -126,5 +126,4 @@ class Result(models.Model):
     """
     quiz = models.ForeignKey(Test, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    correct = models.IntegerField(default=0)
-    wrong = models.IntegerField(default=0)
+    correct = models.FloatField(default=0)

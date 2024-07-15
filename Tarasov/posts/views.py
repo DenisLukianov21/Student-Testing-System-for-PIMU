@@ -459,43 +459,45 @@ def quiz_results(request, quiz_id):
     quiz = get_object_or_404(Test, pk=quiz_id)
     # Get all questions related to the quiz
     questions = quiz.question_set.all()
-    # Get the correct answers for each question
-    correct_answer = []
-    for question in questions:
-        correct_answer.append(question.get_answers()[0])
-    # Get the user's answers from the request
-    answers_ids = request.POST.getlist('ans')
-    user_answers = []
-    if answers_ids:
-        for answer_id in answers_ids:
-            # Get the user's answer from the database
-            user_answer = Answer.objects.get(pk=answer_id)
-            user_answers.append(user_answer.name)
-            # Create a Choice object to save the user's answer
-            choice = Choice(user=request.user,
-                            question=question, answer=user_answer)
-            choice.save()
-    # Calculate the number of correct and wrong answers
-    for i in range(len(questions)):
-        if i < len(user_answers):
-            is_correct = user_answers[i] in correct_answer[i]
+    count_questions = len(questions)
+    print(request.POST)
+    
+    for i in range(count_questions):
+        answers_ids = request.POST.getlist('ans-q' + str(i + 1))
+        count_ids = len(answers_ids)
+        if answers_ids and i < count_ids:
+            correct_answer = questions[i].get_answers()
+            count_uncorrect_answers = len(questions[i].answer_set.all()) - len(correct_answer)
+            procent_answer = 1 / len(correct_answer)
+            procent_question = 0
+
+            for answer_id in answers_ids:
+                user_answer = Answer.objects.get(pk=answer_id)
+                
+                if user_answer.name in correct_answer:
+                    procent_question += procent_answer
+                else:
+                    procent_question -= 1 / count_uncorrect_answers
+
+                choice = Choice(user=request.user,
+                                question=questions[i], answer=user_answer)
+                choice.save()
+
+            if procent_question < 0: procent_question = 0
+
             result, created = Result.objects.get_or_create(
                 user=request.user,
                 quiz=quiz)
-            if is_correct:
-                result.correct += F('correct') + 1
-            else:
-                result.wrong += F('wrong') + 1
+            result.correct += procent_question
             result.save()
         else:
             result, created = Result.objects.get_or_create(
                 user=request.user,
                 quiz=quiz)
-            result.wrong += F('wrong') + 1
             result.save()
 
     # Calculate the percentage of correct answers
-    result = Result.objects.get(quiz=quiz)
+    result = Result.objects.get(quiz=quiz, user=request.user)
     percentage = int(result.correct / len(questions) * 100)
     # Create a context dictionary with the quiz and its results
     context = {

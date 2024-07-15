@@ -68,7 +68,13 @@
 				{% endfor %}
 				<script>
                     let questions = document.getElementsByClassName('question');
-                    for (let i = 0; i < questions.length; i++) questions[i].id = 'q' + (i + 1);
+                    for (let i = 0; i < questions.length; i++) {
+						questions[i].id = 'q' + (i + 1);
+
+						let answers = document.querySelectorAll('#q' + (i + 1) + ' .answer-check');
+						for (let j = 0; j < answers.length; j++) answers[j].name += '-' + questions[i].id;
+					}
+					
                 </script>
 			</form>
 		</main>

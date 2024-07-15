@@ -131,7 +131,7 @@ function showChooseNameStatElem(nameChooseRadiobox, blockStatElem) {
 }
 
 async function changeColorStatResult() {
-	await submitAndGetStatResult();
+	if (typeof submitAndGetStatResult === 'function') await submitAndGetStatResult();
 
 	const startValue = 50, endValue = 100;
 	const startRed = 110, endRed = 38;
