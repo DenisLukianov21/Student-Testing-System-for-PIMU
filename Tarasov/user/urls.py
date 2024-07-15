@@ -10,7 +10,5 @@ urlpatterns = [
     path('user/signup/', additional_info, name='signup'),
     path('login/', authentication, name='login'),
     path('logout/', LogoutView.as_view(template_name='user/logged_out.html'),
-         name='logout'),
-    path('about', views.about_user, name='about')
-
+         name='logout')
 ]

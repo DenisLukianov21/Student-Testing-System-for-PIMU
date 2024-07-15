@@ -148,14 +148,14 @@ def index(request):
 @login_required
 def courses(request):
     """
-    Renders the courses.html template and displays all the courses
+    Renders the main.html template and displays all the courses
     available to the user.
 
     Parameters:
         request (HttpRequest): The request object.
 
     Returns:
-        HttpResponse: The rendered courses.html page with the courses' data.
+        HttpResponse: The rendered main.html page with the courses' data.
     """
     # Get all groups
     groups = Group.objects.all()
@@ -185,11 +185,11 @@ def courses(request):
             'page_obj': page_obj,  # All courses in the user's group
         }
 
-        # Render the courses.html page with the context
-        return render(request, 'posts/courses.html', context)
+        # Render the main.html page with the context
+        return render(request, 'posts/main.html', context)
     else:
-        # Render the courses.html if the user is not authenticated
-        return render(request, 'posts/courses.html')
+        # Render the main.html if the user is not authenticated
+        return render(request, 'posts/main.html')
 
 
 @login_required
@@ -384,7 +384,7 @@ def display_quiz(request, quiz_id):
         quiz_id (int): The primary key of the quiz.
 
     Returns:
-        HttpResponse: The rendered test_page.html page with the quiz data.
+        HttpResponse: The rendered take_test.html page with the quiz data.
     """
     # Get the quiz object with the given primary key
     quiz = get_object_or_404(Test, pk=quiz_id)
@@ -395,8 +395,8 @@ def display_quiz(request, quiz_id):
     for question in questions:
         can_answer = question.user_can_answer(request.user)
     if not can_answer:
-        # If the user cannot answer, render the partial.html page
-        return render(request, 'posts/partial.html', {'quiz': quiz,
+        # If the user cannot answer, render the test_results.html page
+        return render(request, 'posts/test_results.html', {'quiz': quiz,
                                                       'questions': questions,
                                                       'user': request.user})
 
@@ -407,8 +407,8 @@ def display_quiz(request, quiz_id):
         'questions': questions  # All questions related to the quiz
     }
 
-    # Render the test_page.html page with the context
-    return render(request, 'posts/test_page.html', context)
+    # Render the take_test.html page with the context
+    return render(request, 'posts/take_test.html', context)
 
 
 @login_required
@@ -454,7 +454,7 @@ def quiz_results(request, quiz_id):
         quiz_id (int): The primary key of the quiz.
 
     Returns:
-        HttpResponse: The rendered results.html page with the quiz data.
+        HttpResponse: The rendered test_final.html page with the quiz data.
     """
     # Get the quiz object with the given primary key
     quiz = get_object_or_404(Test, pk=quiz_id)
@@ -505,5 +505,5 @@ def quiz_results(request, quiz_id):
         'quiz': quiz,  # The quiz object
         'result': percentage  # The percentage of correct answers
     }
-    # Render the results.html page with the context
-    return render(request, 'posts/results.html', context)
+    # Render the test_final.html page with the context
+    return render(request, 'posts/test_final.html', context)

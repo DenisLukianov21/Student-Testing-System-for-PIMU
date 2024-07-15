@@ -25,7 +25,7 @@ def initial_registration(request):
             return HttpResponseRedirect(reverse('user:signup'))
     else:
         form = InitialRegistrationForm()
-    return render(request, 'user/new_auth.html',
+    return render(request, 'user/authentication.html',
                   {'reg_form': form, 'login_form': LoginForm()})
 
 def additional_info(request):
@@ -81,12 +81,5 @@ def authentication(request):
                 login(request, user)
                 return redirect('/')
 
-    return render(request, 'user/new_auth.html',
+    return render(request, 'user/authentication.html',
                   {'reg_form': registration_form, 'login_form': login_form})
-
-def about_user(request):
-    page_obj = request.user
-    context = {
-        'page_obj': page_obj
-    }
-    return render(request, 'user/user.html', context)

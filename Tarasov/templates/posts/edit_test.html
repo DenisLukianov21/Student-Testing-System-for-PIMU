@@ -5,9 +5,9 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Редактирование {{ quiz }}</title>
-		<link rel="stylesheet" href="{% static 'css/new_new_auth_style.css' %}">
-		<link rel="stylesheet" href="{% static 'css/new_test_style.css' %}">
-		<link rel="icon" href="{% static 'image1/favicon.ico' %}">
+		<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+		<link rel="stylesheet" href="{% static 'css/test_style.css' %}">
+		<link rel="icon" href="{% static 'images/favicon.ico' %}">
 	</head>
 	<body>
 		<form action="{% url 'posts:edit_quiz' quiz_id %}" method="post" enctype="multipart/form-data" style="overflow: hidden;">
@@ -101,7 +101,7 @@
 					<a class="dot-slide" href="#" title="Следующий вопрос" onclick="goToQuestion()"></a>
 				</div>
 			</footer>
-			<script src="{% static 'js/super_test_scripts.js' %}"></script>
+			<script src="{% static 'js/test_scripts.js' %}"></script>
 			<script>
 				checkNeededInputs();
 			</script>

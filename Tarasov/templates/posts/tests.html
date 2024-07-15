@@ -1,9 +1,0 @@
-<html>
-    {% if user.is_authenticated %}
-        {% for tests in page_obj %}
-        <h3> <a href={% url 'posts:display_quiz' tests.id %}> {{ tests.name }} </a> </h3>
-        {% endfor %}
-    {% else %}
-        <p>Please log in.</p>
-    {% endif %}
-</html>
