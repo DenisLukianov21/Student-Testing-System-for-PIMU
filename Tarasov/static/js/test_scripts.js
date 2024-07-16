@@ -155,6 +155,7 @@ function addQuestion() {
 
     let linkInDropdown = document.createElement('button');
     linkInDropdown.className = 'text dropdown-link';
+	linkInDropdown.type = 'button';
     linkInDropdown.value = '#' + newQuestion.id;
     linkInDropdown.textContent = 'Вопрос ' + (document.getElementsByClassName('question').length + 1);
 
