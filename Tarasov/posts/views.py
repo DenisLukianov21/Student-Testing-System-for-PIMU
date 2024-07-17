@@ -368,7 +368,7 @@ def edit_quiz(request, quiz_id):
                     if new_ans.name == correct_ans:
                         new_ans.is_correct = True
                 new_ans.save()
-        
+
         iterator = iterator + 1
 
     return redirect("/")
@@ -439,8 +439,9 @@ def quiz_group_results(request):
     for result in results:
         procentage = int((result.correct / questions) * 100)
         procentages.append(procentage)
-        #TODO: change email to full name
-        users.append(result.user.email)
+        # TODO: change email to full name
+        usr = f'{result.user.last_name} {result.user.first_name}.{result.user.middle_name}'
+        users.append(usr)
     return JsonResponse({'users': users, 'procentages': procentages})
 
 
@@ -462,10 +463,9 @@ def quiz_results(request, quiz_id):
     questions = quiz.question_set.all()
     count_questions = len(questions)
     print(request.POST)
-    
+    count_ids = len(request.POST.dict().keys()) - 1
     for i in range(count_questions):
         answers_ids = request.POST.getlist('ans-q' + str(i + 1))
-        count_ids = len(answers_ids)
         if answers_ids and i < count_ids:
             correct_answer = questions[i].get_answers()
             count_uncorrect_answers = len(questions[i].answer_set.all()) - len(correct_answer)
@@ -474,7 +474,7 @@ def quiz_results(request, quiz_id):
 
             for answer_id in answers_ids:
                 user_answer = Answer.objects.get(pk=answer_id)
-                
+
                 if user_answer.name in correct_answer:
                     procent_question += procent_answer
                 else:

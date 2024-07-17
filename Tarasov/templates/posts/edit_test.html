@@ -17,7 +17,7 @@
 						<button id="open-dropdown-content" class="text">Перейти к вопросу</button>
 						<div id="dropdown-content" class="dropdown-content">
 							{% for question in questions %}
-							<button class="text dropdown-link" value="#q{{ question.id }}" onclick="MoveToQuestion(this)"></button>
+							<button class="text dropdown-link" type="button" value="#q{{ question.id }}" onclick="MoveToQuestion(this)"></button>
 							{% endfor %}
 							<script>
 								let dropdownLink = document.getElementsByClassName('dropdown-link');
