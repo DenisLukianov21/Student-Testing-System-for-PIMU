@@ -461,11 +461,10 @@ def quiz_results(request, quiz_id):
     # Get all questions related to the quiz
     questions = quiz.question_set.all()
     count_questions = len(questions)
-    print(request.POST)
+    count_ids = len(list(filter(lambda ans_id: "ans" in ans_id, request.POST)))
     
     for i in range(count_questions):
         answers_ids = request.POST.getlist('ans-q' + str(i + 1))
-        count_ids = len(answers_ids)
         if answers_ids and i < count_ids:
             correct_answer = questions[i].get_answers()
             count_uncorrect_answers = len(questions[i].answer_set.all()) - len(correct_answer)
