@@ -3,9 +3,11 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('user.urls', namespace='user')),
+    path('verify/', include('django_email_verification.urls')),
     path('', include('posts.urls', namespace='posts')),
 ]
 if settings.DEBUG:

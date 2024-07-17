@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_email_verification',
     'user',
     'posts',
 ]
@@ -70,7 +71,33 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+# Email verification
+def email_verified_callback(user):
+    user.is_active = True
 
+# Global Package Settings
+EMAIL_FROM_ADDRESS = 'herfyfuf@gmail.com'  # mandatory
+EMAIL_PAGE_DOMAIN = 'http://127.0.0.1:8000'  # mandatory (unless you use a custom link)
+EMAIL_MULTI_USER = False  # optional (defaults to False)
+
+# Email Verification Settings (mandatory for email sending)
+EMAIL_MAIL_SUBJECT = 'Confirm your email {{ user.username }}'
+EMAIL_MAIL_HTML = 'email/mail_body.html'
+EMAIL_MAIL_PLAIN = 'email/mail_body.txt'
+EMAIL_MAIL_TOKEN_LIFE = 60 * 60  # one hour
+
+# Email Verification Settings (mandatory for builtin view)
+EMAIL_MAIL_PAGE_TEMPLATE = 'email_success_template.html'
+EMAIL_MAIL_CALLBACK = email_verified_callback
+
+
+# For Django Email Backend
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'herfyfuf@gmail.com'
+EMAIL_HOST_PASSWORD = 'Kiedis228a04'  # os.environ['password_key'] suggested
+EMAIL_USE_TLS = True
 
 # Password validation
 

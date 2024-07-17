@@ -3,6 +3,9 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .forms import InitialRegistrationForm, AdditionalInfoForm, LoginForm
 from django.contrib.auth import authenticate, login
+from django_email_verification import send_email
+from django.http import HttpResponse
+from django_email_verification import verify_email, verify_email_view
 
 from .models import User, UserGroup
 from user.models import Group
@@ -13,7 +16,9 @@ def initial_registration(request):
         if form.is_valid():
             user = form.save(commit=False)
             user.set_password(form.cleaned_data['password1'])
+            user.is_active = False
             user.save()
+            send_email(user)
 
             user.backend = 'django.contrib.auth.backends.ModelBackend'  # Указываем используемый бэкенд
             login(request, user)
@@ -83,3 +88,8 @@ def authentication(request):
 
     return render(request, 'user/authentication.html',
                   {'reg_form': registration_form, 'login_form': login_form})
+
+@verify_email_view
+def confirm_view(request, token):
+    success, user = verify_email(token)
+    return HttpResponse(f'Account verified, {user.username}' if success else 'Invalid token')
