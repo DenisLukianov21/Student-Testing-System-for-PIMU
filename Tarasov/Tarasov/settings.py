@@ -87,7 +87,7 @@ EMAIL_MAIL_PLAIN = 'email/mail_body.txt'
 EMAIL_MAIL_TOKEN_LIFE = 60 * 60  # one hour
 
 # Email Verification Settings (mandatory for builtin view)
-EMAIL_MAIL_PAGE_TEMPLATE = 'email_success_template.html'
+EMAIL_MAIL_PAGE_TEMPLATE = 'email/email_success_template.html'
 EMAIL_MAIL_CALLBACK = email_verified_callback
 
 

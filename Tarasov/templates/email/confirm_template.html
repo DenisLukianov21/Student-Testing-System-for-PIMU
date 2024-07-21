@@ -1,5 +1,55 @@
-{% if success %}
-{{ user.username }} все ок
-{% else %}
-Что-то не так
-{% endif %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Подтверждение пользователя</title>
+		<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+		<link rel="stylesheet" href="{% static 'css/main_style.css' %}">
+        <link rel="stylesheet" href="{% static 'css/test_style.css' %}">
+		<link rel="icon" href="{% static 'images/favicon.ico' %}">
+	</head>
+	<body>
+		<header>
+			<div class="subcontainer-header">
+				<img class="logo" src="{% static 'images/logo.svg' %}" alt="">
+			</div>
+			<div class="subcontainer-header">
+				<p class="PIMU-text">ПИМУ</p>
+			</div>
+		</header>
+		<main style="width: 100%;">
+			<div class="main-container">
+                {% if success %}
+				<h3 class="title-sign-up">Подтверждение уже на почте</h3>
+				<hr class="underline">
+				<div class="main-subcontainer slider">
+					<div class="email-logo-subcontainer info-subcontainer"></div>
+					<hr class="vertical-line">
+					<div class="info-subcontainer">
+						<div class="link-block-stat">
+							<a class="sign" href="" style="text-align: center;">Повторить отправку</a>
+						</div>
+					</div>
+				</div>
+                {% else %}
+                <h3 class="title-sign-up">Проблемы с подтверждением</h3>
+				<hr class="underline">
+				<div class="main-subcontainer slider">
+					<div class="warning-logo-subcontainer info-subcontainer"></div>
+					<hr class="vertical-line">
+					<div class="info-subcontainer">
+						<div class="link-block-stat">
+							<a class="sign" href="" style="text-align: center;">Попробуйте снова</a>
+						</div>
+					</div>
+				</div>
+                {% endif %}
+			</div>
+		</main>
+		<footer>
+			<div class="footer-container"></div>
+		</footer>
+	</body>
+</html>

@@ -11,5 +11,6 @@ urlpatterns = [
     path('email/<str:token>/', confirm_view),
     path('login/', authentication, name='login'),
     path('logout/', LogoutView.as_view(template_name='user/logged_out.html'),
-         name='logout')
+         name='logout'),
+    path('confirm/', views.confirm_view, name='confirm'),
 ]

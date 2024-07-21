@@ -50,7 +50,7 @@ def additional_info(request):
             user = form.save(commit=False)
             user.is_active = True  # Активируем пользователя
             user.save()
-            
+
             if 'group' in request.POST:
                 user_group, created = UserGroup.objects.get_or_create(
                     user=user, group=Group.objects.get(name_group=request.POST.get('group'))
@@ -61,16 +61,17 @@ def additional_info(request):
                     user=user, group=Group.objects.get(name_group='profs')
                 )
                 user_group.save()
-                
+
                 user.is_staff = True
                 user.save()
 
-            return redirect('/')
+            return redirect('http://127.0.0.1:8000/accounts/confirm/')
 
     context = {
         'form': form, 'groups': groups
     }  
     return render(request, 'user/signup.html', context)
+
 
 def authentication(request):
     registration_form = InitialRegistrationForm()
@@ -89,7 +90,6 @@ def authentication(request):
     return render(request, 'user/authentication.html',
                   {'reg_form': registration_form, 'login_form': login_form})
 
-@verify_email_view
-def confirm_view(request, token):
-    success, user = verify_email(token)
-    return HttpResponse(f'Account verified, {user.username}' if success else 'Invalid token')
+
+def confirm_view(request):
+    return render(request, 'email/confirm_template.html')
