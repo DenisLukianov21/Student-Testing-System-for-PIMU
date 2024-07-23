@@ -27,20 +27,20 @@ def initial_registration(request):
 
             # Добавить логику для отправки email с подтверждением
 
-            return HttpResponseRedirect(reverse('user:signup'))
+            return HttpResponseRedirect(reverse('users:confirm'))
     else:
         form = InitialRegistrationForm()
     return render(request, 'user/authentication.html',
                   {'reg_form': form, 'login_form': LoginForm()})
 
+
 def additional_info(request):
-    user = 0
+    user_id = request.user.id
     if 'user_id' in request.session:
         user_id = request.session['user_id']
         user = User.objects.get(id=user_id)
     else:
         return HttpResponseRedirect(reverse('user:login'))
-    print(user)
     form = AdditionalInfoForm()
     groups = Group.objects.all()
 
@@ -65,7 +65,7 @@ def additional_info(request):
                 user.is_staff = True
                 user.save()
 
-            return redirect('http://127.0.0.1:8000/accounts/confirm/')
+            return redirect('/')
 
     context = {
         'form': form, 'groups': groups
@@ -92,4 +92,5 @@ def authentication(request):
 
 
 def confirm_view(request):
-    return render(request, 'email/confirm_template.html')
+    # TODO : добавить проверку отправилось ли письмо или нет
+    return render(request, 'email/confirm_template.html', {'success': True})
