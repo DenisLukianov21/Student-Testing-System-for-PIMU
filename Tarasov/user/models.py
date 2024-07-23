@@ -41,7 +41,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
 
     def __str__(self):
-        return self.email
+        return self.email    
 
 
 class Group(models.Model):
@@ -77,3 +77,10 @@ class Course(models.Model):
 
     def __str__(self):
         return self.name_course
+    
+
+try:
+    Group.objects.get(name_group='profs')
+except:
+    prof_group = Group('profs')
+    prof_group.save()
