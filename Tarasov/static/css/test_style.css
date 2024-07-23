@@ -85,7 +85,7 @@ input::placeholder {
 }
 
 .logo-subcontainer, .check-logo-subcontainer, .congratulate-logo-subcontainer, .email-logo-subcontainer, .warning-logo-subcontainer {
-	background-image: url("../image/questions.png");
+	background-image: url("../images/questions.png");
 	background-size: 35%;
 	background-position: center;
 	background-repeat: no-repeat;
@@ -96,16 +96,16 @@ input::placeholder {
 }
 
 .congratulate-logo-subcontainer{
-	background-image: url("../image/congratulation.png");
+	background-image: url("../images/congratulation.png");
 }
 
 
 .email-logo-subcontainer {
-	background-image: url("../image/email.png");
+	background-image: url("../images/email.png");
 }
 
 .warning-logo-subcontainer {
-	background-image: url("../image/warning.png");
+	background-image: url("../images/warning.png");
 }
 
 .stud-logo-subcontainer {
