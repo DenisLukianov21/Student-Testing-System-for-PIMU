@@ -1,5 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
-
+@font-face {
+	font-family: 'Montserrat Alternates';
+	src: url('../fonts/montserrat alternates regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
 @font-face {
 	font-family: 'Glober';
 	src: url('../fonts/glober.ttf') format('truetype');
